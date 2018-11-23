@@ -1,0 +1,12 @@
+img {
+	max-height: 267px; 
+	max-width: 400px;
+}
+
+.rented {
+	margin-left: 1rem;
+}
+
+.info {
+	float: right;
+}

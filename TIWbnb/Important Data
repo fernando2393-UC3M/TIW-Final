@@ -1,0 +1,47 @@
+Important Data to take into account in the project:
+
+ENSURE THAT EVERYONE IS USING THE SAME NAMING CONVENTIONS
+
+Payara server:
+
+	address: https://localhost:4848/
+	user: admin
+	password: admin
+
+For DB:
+
+	JDBC Connection Pool:
+
+	user: root
+	password: admin
+	database name: tiwbnb
+	URL and url: jdbc:mysql://localhost:3306/tiwbnb
+	
+	JDBC Resources:
+	
+	name: tiwbnb_ds
+	
+persistence.xml (TIWbnb):
+	@General
+	name: TIWbnb
+	
+	
+Database name in SPS (JPA Connection): TIWMySQL
+
+JMS: default configurations from aulaglobal
+@Resource(mappedName="tiwconnectionfactory")
+ConnectionFactory cf;
+
+@Resource(mappedName="tiwqueue")
+Queue queue;
+
+Extra info:
+Users
+1	mail@ibm.com 	secret
+2	mail@redsys.es	password
+
+Admins
+1	admin					admin
+2	ibm						admin
+3	tzarraon@inf.uc3m.es	admin
+	

@@ -1,2 +1,2 @@
-# TIW-REST
-Application Refactoring Using Microservices - 3rd Practice for TIW
+# Web-Technologies
+Computing Technologies for the Web from University Carlos III of Madrid
