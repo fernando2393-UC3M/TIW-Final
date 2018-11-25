@@ -3,6 +3,9 @@
 	<persistence-unit name="TIWbnb" transaction-type="JTA">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<jta-data-source>tiwbnb_ds</jta-data-source>
+		<class>model.Admin</class>
+		<class>model.Booking</class>
+		<class>model.Home</class>
 		<class>model.Message</class>
 		<class>model.MessagesAdmin</class>
 		<class>model.User</class>
