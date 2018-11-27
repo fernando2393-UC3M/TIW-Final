@@ -34,15 +34,13 @@ public class MessagesAdmin implements Serializable {
 	@Column(name="MESSAGE_READ")
 	private byte messageRead;
 
+	@Column(name="MESSAGE_USER_ID")
+	private int messageUserId;
+
 	//bi-directional many-to-one association to Admin
 	@ManyToOne
 	@JoinColumn(name="MESSAGE_ADMIN_ID")
 	private Admin admin;
-
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	@JoinColumn(name="MESSAGE_USER_ID")
-	private User user;
 
 	public MessagesAdmin() {
 	}
@@ -87,20 +85,20 @@ public class MessagesAdmin implements Serializable {
 		this.messageRead = messageRead;
 	}
 
+	public int getMessageUserId() {
+		return this.messageUserId;
+	}
+
+	public void setMessageUserId(int messageUserId) {
+		this.messageUserId = messageUserId;
+	}
+
 	public Admin getAdmin() {
 		return this.admin;
 	}
 
 	public void setAdmin(Admin admin) {
 		this.admin = admin;
-	}
-
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 }

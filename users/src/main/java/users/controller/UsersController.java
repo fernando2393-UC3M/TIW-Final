@@ -65,9 +65,6 @@ public class UsersController {
 		us.setUserSurname(pUser.getUserSurname());
 		us.setUserBirthdate(pUser.getUserBirthdate());
 		return daoUs.save(us);
-	}
-	
-	
-	
+	}	
 	
 }
