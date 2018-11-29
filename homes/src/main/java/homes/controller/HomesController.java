@@ -68,10 +68,10 @@ public class HomesController {
 		return daoHome.save(hm);
 	}
 	
+	/*
+	// TODO: Ask Telmo
 	
-	/* TODO: Ask Telmo
-	
-	findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(OffsetDateTime endDate, OffsetDateTime startDate);
+	//findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(OffsetDateTime endDate, OffsetDateTime startDate);
 	 
 	@RequestMapping("/homes/query")
 	public @ResponseBody List<Home> getHomebyQuery(@PathVariable @Validated Home phome){

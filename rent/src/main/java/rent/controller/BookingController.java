@@ -24,6 +24,8 @@ import model.Booking;
 import model.Home;
 import model.User;
 import rent.dao.BookingDao;
+import rent.dao.HomesDao;
+import rent.dao.UsersDao;
 
 @Controller
 @CrossOrigin
@@ -31,19 +33,26 @@ public class BookingController {
 
 	@Autowired
 	BookingDao daoBk;
+	@Autowired
+	UsersDao daoUs;
+	@Autowired
+	HomesDao daoHm;
+
 
 	@RequestMapping("/rents")
 	public @ResponseBody List<Booking> getUsers(){
 		return daoBk.findAll();
 	}
 	
-	@RequestMapping("/rents/home")
-	public @ResponseBody List<Booking> getBookingByHome(@RequestBody Home home){
+	@RequestMapping("/rents/homes/{id}")
+	public @ResponseBody List<Booking> getBookingByHomeId(@PathVariable @Validated Integer homeId){
+		Home home = daoHm.findById(homeId).orElse(null);
 		return daoBk.findByHome(home);
 	}
 	
-	@RequestMapping("/rents/user")
-	public @ResponseBody List<Booking> getBookingByUser(@RequestBody User user){
+	@RequestMapping("/rents/users/{id}")
+	public @ResponseBody List<Booking> getBookingByUserId(@PathVariable @Validated Integer userId){
+		User user = daoUs.findById(userId).orElse(null);
 		return daoBk.findByUser(user);
 	}
 
