@@ -27,6 +27,7 @@ public class UsersController {
 
 	@RequestMapping("/users")
 	public @ResponseBody List<User> getUsers(){
+		System.out.println("TU PTUA MADRE");
 		return daoUs.findAll();
 	}
 	
@@ -42,8 +43,7 @@ public class UsersController {
 		return response;
 	}
 	
-	//@RequestMapping("/users/{email}")
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value="/users", method = RequestMethod.GET)
 	public @ResponseBody List<User> getUserByUserEmail(@RequestParam(name="email") String email){
 		return daoUs.findByUserEmail(email);
 	}
