@@ -3,9 +3,9 @@
 	<persistence-unit name="TIWbnb" transaction-type="JTA">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<jta-data-source>tiwbnb_ds</jta-data-source>
-		<class>model.Message</class>
-		<class>model.MessagesAdmin</class>
-		<class>model.User</class>
+		<class>es.uc3m.tiw.users.model.Message</class>
+		<class>es.uc3m.tiw.users.model.MessagesAdmin</class>
+		<class>es.uc3m.tiw.users.model.User</class>
 		<properties>
 			<property name="javax.persistence.schema-generation.database.action" value="create"/>
 			<property name="eclipselink.logging.level" value="FINE"/>

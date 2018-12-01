@@ -1,10 +1,8 @@
-package users.dao;
+package es.uc3m.tiw.users.dao;
 
 import java.util.List;
-
 import org.springframework.data.repository.CrudRepository;
-
-import model.User;
+import es.uc3m.tiw.users.model.User;
 
 public interface UsersDao extends CrudRepository<User, Integer>{
 

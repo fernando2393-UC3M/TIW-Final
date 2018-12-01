@@ -1,7 +1,10 @@
-package model;
+package es.uc3m.tiw.users.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.Date;
 import java.util.List;
 
@@ -39,14 +42,17 @@ public class User implements Serializable {
 
 	//bi-directional many-to-one association to Message
 	@OneToMany(mappedBy="user1")
+	@JsonManagedReference
 	private List<Message> messages1;
 
 	//bi-directional many-to-one association to Message
 	@OneToMany(mappedBy="user2")
+	@JsonManagedReference
 	private List<Message> messages2;
 
 	//bi-directional many-to-one association to MessagesAdmin
 	@OneToMany(mappedBy="user")
+	@JsonManagedReference
 	private List<MessagesAdmin> messagesAdmins;
 
 	public User() {

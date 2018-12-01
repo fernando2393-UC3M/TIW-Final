@@ -1,7 +1,10 @@
-package model;
+package es.uc3m.tiw.users.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.util.Date;
 
 
@@ -40,6 +43,7 @@ public class MessagesAdmin implements Serializable {
 	//bi-directional many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="MESSAGE_USER_ID")
+	@JsonBackReference
 	private User user;
 
 	public MessagesAdmin() {

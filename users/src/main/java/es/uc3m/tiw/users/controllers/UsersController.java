@@ -1,4 +1,4 @@
-package com.example.demo;
+package es.uc3m.tiw.users.controllers;
 
 import java.util.List;
 
@@ -10,17 +10,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import model.User;
-import users.dao.UsersDao;
+import es.uc3m.tiw.users.model.User;
+import es.uc3m.tiw.users.dao.UsersDao;
 
 @Controller
 @CrossOrigin
 public class UsersController {
 
 	@Autowired
-	UsersDao daoUs;
+	private UsersDao daoUs;
 
 	@RequestMapping("/users")
 	public @ResponseBody List<User> getUsers(){
@@ -32,8 +33,9 @@ public class UsersController {
 		return daoUs.findById(id).orElse(null);
 	}
 	
-	@RequestMapping("/users/{email}")
-	public @ResponseBody List<User> getUserByUserEmail(@PathVariable String email){
+	//@RequestMapping("/users/{email}")
+	@RequestMapping(method = RequestMethod.GET)
+	public @ResponseBody List<User> getUserByUserEmail(@RequestParam(name="email") String email){
 		return daoUs.findByUserEmail(email);
 	}
 	
@@ -66,5 +68,5 @@ public class UsersController {
 		us.setUserBirthdate(pUser.getUserBirthdate());
 		return daoUs.save(us);
 	}	
-	
+
 }
