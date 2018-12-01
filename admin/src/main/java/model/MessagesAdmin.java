@@ -10,7 +10,7 @@ import java.util.Date;
  * 
  */
 @Entity
-@Table(name="MESSAGES_ADMIN")
+@Table(name="messages_admin")
 @NamedQuery(name="MessagesAdmin.findAll", query="SELECT m FROM MessagesAdmin m")
 public class MessagesAdmin implements Serializable {
 	private static final long serialVersionUID = 1L;
