@@ -3,6 +3,8 @@ package es.uc3m.tiw.users.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,8 +31,15 @@ public class UsersController {
 	}
 	
 	@RequestMapping("/users/{id}")
-	public @ResponseBody User getUserByUserId(@PathVariable int id){
-		return daoUs.findById(id).orElse(null);
+	public ResponseEntity<User> getUserByUserId(@PathVariable int id){
+		User user = daoUs.findById(id).orElse(null);
+		ResponseEntity<User> response;
+		if(user == null) {
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			response = new ResponseEntity<>(user, HttpStatus.OK);
+		}
+		return response;
 	}
 	
 	//@RequestMapping("/users/{email}")
@@ -45,12 +54,12 @@ public class UsersController {
 		return daoUs.findByUserEmailAndUserPassword(email, password);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value="/user")
+	@RequestMapping(method = RequestMethod.POST, value="/users")
 	public @ResponseBody User saveUser(@PathVariable @Validated User puser){
 		return daoUs.save(puser);
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value="/user/{id}")
+	@RequestMapping(method = RequestMethod.DELETE, value="/users/{id}")
 	public @ResponseBody void deleteUser(@PathVariable @Validated Integer id){
 		User us = daoUs.findById(id).orElse(null);
 		if (us != null){
@@ -58,7 +67,7 @@ public class UsersController {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value="/user/{id}")
+	@RequestMapping(method = RequestMethod.PUT, value="/users/{id}")
 	public @ResponseBody User updateUser(@PathVariable @Validated Integer id, @RequestBody User pUser){
 		User us = daoUs.findById(id).orElse(null);
 		us.setUserEmail(pUser.getUserEmail());
