@@ -27,7 +27,6 @@ public class UsersController {
 
 	@RequestMapping("/users")
 	public @ResponseBody List<User> getUsers(){
-		System.out.println("TU PTUA MADRE");
 		return daoUs.findAll();
 	}
 	
