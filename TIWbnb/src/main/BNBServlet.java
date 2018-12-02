@@ -39,8 +39,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import messages.ReadMessages;
 
@@ -177,7 +175,7 @@ public class BNBServlet extends HttpServlet {
 			if(status == 200){
 				req.setAttribute("Name", user.getUserName());
 				req.setAttribute("Surname", user.getUserSurname());			
-				req.setAttribute("Birthdate", (new SimpleDateFormat("yyyy-MM-dd")).format(user.getUserBirthdate()));
+				//req.setAttribute("Birthdate", (new SimpleDateFormat("yyyy-MM-dd")).format(user.getUserBirthdate()));
 				req.setAttribute("Password", user.getUserPassword());
 				
 				ReqDispatcher = req.getRequestDispatcher("registrado.jsp");
@@ -293,40 +291,43 @@ public class BNBServlet extends HttpServlet {
 			
 			int id = (int) session.getAttribute("user");
 			
+			Client client = ClientBuilder.newClient();
+			WebTarget webResource = client.target(USERS_API_URL).path("" + id);
+			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+			Response response = invocationBuilder.get();
 			
-			Registrado registradoInstance = new Registrado();
+			User result = response.readEntity(User.class);
 			
-			try {
-				ut.begin();
-			} catch (NotSupportedException | SystemException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			boolean updated = registradoInstance.updateUserData(id, req.getParameter("name"), req.getParameter("surname"), 
-					req.getParameter("birthdate"), req.getParameter("password"), req.getParameter("password1"), em);			
-
-			try {
-				ut.commit();
-			} catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
-					| HeuristicRollbackException | SystemException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			User user = em.find(User.class, id); // Select the user after commit
-
-			req.setAttribute("Name", user.getUserName());
-			req.setAttribute("Surname", user.getUserSurname());			
-			req.setAttribute("Birthdate", (new SimpleDateFormat("yyyy-MM-dd")).format(user.getUserBirthdate()));
-			req.setAttribute("Password", user.getUserPassword());
-			
-			if(updated) {
-				req.setAttribute("Updated", 1);
-			}
-			else {
+			if(response.getStatus() == 200 && req.getParameter("password").equals(req.getParameter("password1"))) {
+				// Password confirmed
+				result.setUserName(req.getParameter("name"));
+				result.setUserSurname(req.getParameter("surname"));
+				result.setUserPassword(req.getParameter("password"));
+				
+				try {
+					result.setUserBirthdate(new SimpleDateFormat("yyyy-MM-dd").parse(req.getParameter("birthdate")));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				response = invocationBuilder.put(Entity.entity(result, MediaType.APPLICATION_JSON));
+				
+				if(response.getStatus() == 200) {
+					req.setAttribute("Name", result.getUserName());
+					req.setAttribute("Surname", result.getUserSurname());			
+					req.setAttribute("Birthdate", (new SimpleDateFormat("yyyy-MM-dd")).format(result.getUserBirthdate()));
+					req.setAttribute("Password", result.getUserPassword());
+					
+					req.setAttribute("Updated", 1);
+				} else {
+					req.setAttribute("Updated", 2);
+				}
+				
+			} else {
 				req.setAttribute("Updated", 2);
 			}
+			
 
 			dispatcher.forward(req, res);			
 			
