@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -24,7 +25,7 @@ public class UsersController {
 	@Autowired
 	private UsersDao daoUs;
 
-	@RequestMapping("/users")
+	@RequestMapping(method=RequestMethod.GET, value="/users")
 	public ResponseEntity<List<User>> getUsers(){
 		List<User> userList = daoUs.findAll();
 		ResponseEntity<List<User>> response;
@@ -37,7 +38,7 @@ public class UsersController {
 		return response;
 	}
 	
-	@RequestMapping("/users/{id}")
+	@RequestMapping(method=RequestMethod.GET, value="/users/{id}")
 	public ResponseEntity<User> getUserByUserId(@PathVariable int id){
 		User user = daoUs.findById(id).orElse(null);
 		ResponseEntity<User> response;
@@ -49,7 +50,7 @@ public class UsersController {
 		return response;
 	}
 	
-	@RequestMapping(value="/users", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<User> getUserByUserEmail(@RequestParam(name="email") String email){
 		User user = daoUs.findByUserEmail(email).orElse(null);
 		ResponseEntity<User> response;
@@ -63,7 +64,7 @@ public class UsersController {
 		return response;
 	}
 	
-	@RequestMapping("/users/{email}/{password}")
+	@RequestMapping(method=RequestMethod.GET, value="/users/{email}/{password}")
 	public ResponseEntity<User> getUserByUserEmailAndUserPassword(@PathVariable String email,
 											@PathVariable String password){
 		User user = daoUs.findByUserEmailAndUserPassword(email, password).orElse(null);
@@ -79,7 +80,7 @@ public class UsersController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value="/users")
-	public ResponseEntity<User> saveUser(@PathVariable @Validated User pUser){
+	public ResponseEntity<User> saveUser(@RequestBody @Validated User pUser){
 		User us = daoUs.findById(pUser.getUserId()).orElse(null);
 		ResponseEntity<User> response;
 		

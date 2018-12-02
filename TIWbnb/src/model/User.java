@@ -21,9 +21,9 @@ public class User implements Serializable {
 	@Column(name="USER_ID")
 	private int userId;
 
-	@Temporal(TemporalType.DATE)
+	//@Temporal(TemporalType.DATE)
 	@Column(name="USER_BIRTHDATE")
-	private Date userBirthdate;
+	private String userBirthdate;
 
 	@Column(name="USER_EMAIL")
 	private String userEmail;
@@ -68,11 +68,11 @@ public class User implements Serializable {
 		this.userId = userId;
 	}
 
-	public Date getUserBirthdate() {
+	public String getUserBirthdate() {
 		return this.userBirthdate;
 	}
 
-	public void setUserBirthdate(Date userBirthdate) {
+	public void setUserBirthdate(String userBirthdate) {
 		this.userBirthdate = userBirthdate;
 	}
 
