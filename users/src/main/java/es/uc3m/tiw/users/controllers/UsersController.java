@@ -81,7 +81,7 @@ public class UsersController {
 
 	@RequestMapping(method = RequestMethod.POST, value="/users")
 	public ResponseEntity<User> saveUser(@RequestBody @Validated User pUser){
-		User us = daoUs.findById(pUser.getUserId()).orElse(null);
+		User us = daoUs.findByUserEmail(pUser.getUserEmail()).orElse(null);
 		ResponseEntity<User> response;
 		
 		if(us == null) {
