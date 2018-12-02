@@ -1,4 +1,4 @@
-package admin.controller;
+package es.uc3m.tiw.admin.controllers;
 
 import java.util.List;
 
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import model.Admin;
-import admin.dao.AdminDao;
+import es.uc3m.tiw.admin.dao.AdminDao;
+import es.uc3m.tiw.admin.model.Admin;
 
 @Controller
 @CrossOrigin

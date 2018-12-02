@@ -1,4 +1,4 @@
-package com.example.demo;
+package es.uc3m.tiw.admin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

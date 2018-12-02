@@ -1,10 +1,10 @@
-package admin.dao;
+package es.uc3m.tiw.admin.dao;
 
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
-import model.Admin;
+import es.uc3m.tiw.admin.model.Admin;
 
 public interface AdminDao extends CrudRepository<Admin, Integer>{
 
