@@ -336,30 +336,21 @@ public class BNBServlet extends HttpServlet {
 
 		else if(requestURL.toString().equals(path+"delete")) {
 			
-			dispatcher = req.getRequestDispatcher("index.jsp");
-
 			int id = (int) session.getAttribute("user");
-
-			DeleteUser delete = new DeleteUser();
-
-			try {
-				ut.begin();
-			} catch (NotSupportedException | SystemException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			String id_str = Integer.toString(id);
+			
+			Client client = ClientBuilder.newClient();
+			WebTarget webResource = client.target(USERS_API_URL).path(id_str);
+			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+			Response response = invocationBuilder.delete();
+			
+			if(response.getStatus() == 200) {
+				dispatcher = req.getRequestDispatcher("index.jsp");
+				session.removeAttribute("user"); // Remove user from session
 			}
-
-			delete.deletion(id, em); // Deletion method
-
-			try {
-				ut.commit();
-			} catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
-					| HeuristicRollbackException | SystemException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			else { // No user match
+				dispatcher = req.getRequestDispatcher("registrado.jsp");
 			}
-
-			session.removeAttribute("user"); // Remove user from session
 
 			dispatcher.forward(req, res);			
 
