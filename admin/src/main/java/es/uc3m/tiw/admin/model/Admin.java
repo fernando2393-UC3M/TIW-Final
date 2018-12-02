@@ -2,6 +2,9 @@ package es.uc3m.tiw.admin.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.util.List;
 
 
@@ -28,6 +31,7 @@ public class Admin implements Serializable {
 
 	//bi-directional many-to-one association to MessagesAdmin
 	@OneToMany(mappedBy="admin")
+	@JsonBackReference
 	private List<MessagesAdmin> messagesAdmins;
 
 	public Admin() {
