@@ -347,13 +347,12 @@ public class BNBServlet extends HttpServlet {
 			Response response = invocationBuilder.delete();
 			
 			if(response.getStatus() == 200) {
-				dispatcher = req.getRequestDispatcher("index.jsp");				
+				dispatcher = req.getRequestDispatcher("index.jsp");
+				session.removeAttribute("user"); // Remove user from session
 			}
 			else { // No user match
 				dispatcher = req.getRequestDispatcher("registrado.jsp");
 			}
-
-			session.removeAttribute("user"); // Remove user from session
 
 			dispatcher.forward(req, res);			
 
