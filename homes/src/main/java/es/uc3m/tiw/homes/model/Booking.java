@@ -1,4 +1,4 @@
-package model;
+package es.uc3m.tiw.homes.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -11,7 +11,7 @@ import java.math.BigInteger;
  * 
  */
 @Entity
-@Table(name="BOOKING")
+@Table(name="booking")
 @NamedQuery(name="Booking.findAll", query="SELECT b FROM Booking b")
 public class Booking implements Serializable {
 	private static final long serialVersionUID = 1L;

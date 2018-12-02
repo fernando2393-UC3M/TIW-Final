@@ -1,10 +1,12 @@
-package model;
+package es.uc3m.tiw.homes.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 /**
@@ -12,7 +14,7 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="HOME")
+@Table(name="home")
 @NamedQuery(name="Home.findAll", query="SELECT h FROM Home h")
 public class Home implements Serializable {
 	private static final long serialVersionUID = 1L;
