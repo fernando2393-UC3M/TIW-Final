@@ -1,4 +1,4 @@
-package rent.controller;
+package es.uc3m.tiw.rent.controller;
 
 import java.math.BigInteger;
 import java.util.Date;
@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import model.Booking;
-import model.Home;
-import model.User;
-import rent.dao.BookingDao;
-import rent.dao.HomesDao;
-import rent.dao.UsersDao;
+import es.uc3m.tiw.rent.dao.BookingDao;
+import es.uc3m.tiw.rent.dao.HomesDao;
+import es.uc3m.tiw.rent.dao.UsersDao;
+import es.uc3m.tiw.rent.model.Booking;
+import es.uc3m.tiw.rent.model.Home;
+import es.uc3m.tiw.rent.model.User;
 
 @Controller
 @CrossOrigin

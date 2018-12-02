@@ -1,9 +1,11 @@
-package model;
+package es.uc3m.tiw.rent.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
 import java.math.BigInteger;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 /**
@@ -11,7 +13,7 @@ import java.math.BigInteger;
  * 
  */
 @Entity
-@Table(name="BOOKING")
+@Table(name="booking")
 @NamedQuery(name="Booking.findAll", query="SELECT b FROM Booking b")
 public class Booking implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -43,11 +45,13 @@ public class Booking implements Serializable {
 
 	//bi-directional many-to-one association to Home
 	@ManyToOne
+	@JsonBackReference
 	@JoinColumn(name="BOOKING_HOME_ID")
 	private Home home;
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
+	@JsonBackReference
 	@JoinColumn(name="BOOKING_USER_ID")
 	private User user;
 

@@ -1,9 +1,11 @@
-package model;
+package es.uc3m.tiw.rent.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
 /**
@@ -11,7 +13,7 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="USER")
+@Table(name="users")
 @NamedQuery(name="User.findAll", query="SELECT u FROM User u")
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -39,22 +41,27 @@ public class User implements Serializable {
 
 	//bi-directional many-to-one association to Booking
 	@OneToMany(mappedBy="user")
+	@JsonManagedReference
 	private List<Booking> bookings;
 
 	//bi-directional many-to-one association to Home
 	@OneToMany(mappedBy="user")
+	@JsonManagedReference
 	private List<Home> homes;
 
 	//bi-directional many-to-one association to Message
 	@OneToMany(mappedBy="user1")
+	@JsonManagedReference
 	private List<Message> messages1;
 
 	//bi-directional many-to-one association to Message
 	@OneToMany(mappedBy="user2")
+	@JsonManagedReference
 	private List<Message> messages2;
 
 	//bi-directional many-to-one association to MessagesAdmin
 	@OneToMany(mappedBy="user")
+	@JsonManagedReference
 	private List<MessagesAdmin> messagesAdmins;
 
 	public User() {

@@ -1,8 +1,10 @@
-package homes.controller;
+package es.uc3m.tiw.homes.controller;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import model.User;
-import model.Home;
-import homes.dao.HomesDao;
+import es.uc3m.tiw.homes.dao.HomesDao;
+import es.uc3m.tiw.homes.model.Home;
+import es.uc3m.tiw.homes.model.User;
 
 @Controller
 @CrossOrigin
@@ -29,11 +31,18 @@ public class HomesController {
 	}
 	
 	@RequestMapping("/homes/{id}")
-	public @ResponseBody Home getHomeByHomeId(@PathVariable int id){
-		return daoHome.findById(id).orElse(null);
+	public ResponseEntity<Home> getHomeByHomeId(@PathVariable int id){
+		Home home = daoHome.findById(id).orElse(null);
+		ResponseEntity<Home> response;
+		if(home == null) {
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			response = new ResponseEntity<>(home, HttpStatus.OK);
+		}
+		return response;
 	}
 	
-	@RequestMapping("/homes/user")
+	@RequestMapping("/homes/{user}")
 	public @ResponseBody List<Home> getHomesByUser(@RequestBody User user){
 		return daoHome.findByUser(user);
 	}

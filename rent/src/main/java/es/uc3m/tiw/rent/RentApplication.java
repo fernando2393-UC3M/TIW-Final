@@ -1,12 +1,12 @@
-package com.example.demo;
+package es.uc3m.tiw.rent;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HomesApplication {
+public class RentApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(HomesApplication.class, args);
+		SpringApplication.run(RentApplication.class, args);
 	}
 }
