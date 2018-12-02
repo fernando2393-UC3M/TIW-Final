@@ -37,13 +37,13 @@ public class Message implements Serializable {
 	//bi-directional many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="MESSAGE_SENDER_ID")
-	@JsonBackReference
+	@JsonBackReference(value="messages1")
 	private User user1;
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="MESSAGE_RECEIVER_ID")
-	@JsonBackReference
+	@JsonBackReference(value="messages2")
 	private User user2;
 
 	public Message() {

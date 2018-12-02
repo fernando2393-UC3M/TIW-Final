@@ -271,9 +271,7 @@ public class BNBServlet extends HttpServlet {
 			newUser.setUserSurname(req.getParameter("registerSurname"));
 			newUser.setUserPassword(req.getParameter("registerPassword"));
 			newUser.setUserBirthdate(aux.toString());
-			
-			System.out.println("testing testing =" + newUser.getUserEmail()+newUser.getUserBirthdate());
-						
+									
 			Response response = invocationBuilder.post(Entity.entity(newUser, MediaType.APPLICATION_JSON));			
 			
 			if(response.getStatus() == 200){
