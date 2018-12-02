@@ -1,5 +1,6 @@
 package es.uc3m.tiw.users.controllers;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,11 +115,13 @@ public class UsersController {
 		ResponseEntity<User> response;
 		
 		if(us != null) {
-			us.setUserEmail(pUser.getUserEmail());
 			us.setUserPassword(pUser.getUserPassword());
 			us.setUserName(pUser.getUserName());
 			us.setUserSurname(pUser.getUserSurname());
-			us.setUserBirthdate(pUser.getUserBirthdate());
+			if(pUser.getUserBirthdate() == null)
+				us.setUserBirthdate(new Date(1970, 01, 01));
+			else
+				us.setUserBirthdate(pUser.getUserBirthdate());
 			
 			daoUs.save(us);
 			

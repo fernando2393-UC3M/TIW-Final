@@ -294,11 +294,10 @@ public class BNBServlet extends HttpServlet {
 			Client client = ClientBuilder.newClient();
 			WebTarget webResource = client.target(USERS_API_URL).path("" + id);
 			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
-			Response response = invocationBuilder.get();
 			
-			User result = response.readEntity(User.class);
 			
-			if(response.getStatus() == 200 && req.getParameter("password").equals(req.getParameter("password1"))) {
+			if(req.getParameter("password").equals(req.getParameter("password1"))) {
+				User result = new User();
 				// Password confirmed
 				result.setUserName(req.getParameter("name"));
 				result.setUserSurname(req.getParameter("surname"));
@@ -311,12 +310,13 @@ public class BNBServlet extends HttpServlet {
 					e.printStackTrace();
 				}
 				
-				response = invocationBuilder.put(Entity.entity(result, MediaType.APPLICATION_JSON));
+				Response response = invocationBuilder.put(Entity.entity(result, MediaType.APPLICATION_JSON));
 				
 				if(response.getStatus() == 200) {
 					req.setAttribute("Name", result.getUserName());
-					req.setAttribute("Surname", result.getUserSurname());			
-					req.setAttribute("Birthdate", (new SimpleDateFormat("yyyy-MM-dd")).format(result.getUserBirthdate()));
+					req.setAttribute("Surname", result.getUserSurname());	
+					req.setAttribute("Birthdate", "1970-01-01");
+					//req.setAttribute("Birthdate", (new SimpleDateFormat("yyyy-MM-dd")).format(result.getUserBirthdate()));
 					req.setAttribute("Password", result.getUserPassword());
 					
 					req.setAttribute("Updated", 1);
