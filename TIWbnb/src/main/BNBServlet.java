@@ -35,10 +35,11 @@ import javax.ws.rs.core.Response;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.sql.Date;
+import java.util.Date;
 
 import messages.ReadMessages;
 
@@ -303,20 +304,31 @@ public class BNBServlet extends HttpServlet {
 				result.setUserSurname(req.getParameter("surname"));
 				result.setUserPassword(req.getParameter("password"));
 				
+//				try {
+//					result.setUserBirthdate(new SimpleDateFormat("yyyy-MM-dd").parse(req.getParameter("birthdate")));
+//				} catch (ParseException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+				
+		        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				Date parsed = new Date(1970, 01, 01);
 				try {
-					result.setUserBirthdate(new SimpleDateFormat("yyyy-MM-dd").parse(req.getParameter("birthdate")));
+					parsed = format.parse(req.getParameter("birthdate"));
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
+				
+				result.setUserBirthdate(parsed);
 				
 				Response response = invocationBuilder.put(Entity.entity(result, MediaType.APPLICATION_JSON));
 				
 				if(response.getStatus() == 200) {
 					req.setAttribute("Name", result.getUserName());
-					req.setAttribute("Surname", result.getUserSurname());	
-					req.setAttribute("Birthdate", "1970-01-01");
-					//req.setAttribute("Birthdate", (new SimpleDateFormat("yyyy-MM-dd")).format(result.getUserBirthdate()));
+					req.setAttribute("Surname", result.getUserSurname());
+					
+					String myDate = format.format(parsed);
+							
+					req.setAttribute("Birthdate", myDate);
 					req.setAttribute("Password", result.getUserPassword());
 					
 					req.setAttribute("Updated", 1);
