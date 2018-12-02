@@ -58,11 +58,13 @@ public class Home implements Serializable {
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
+	@JsonBackReference
 	@JoinColumn(name="HOME_EMAIL")
 	private User user;
 
 	//bi-directional many-to-one association to Booking
 	@OneToMany(mappedBy="home")
+	@JsonManagedReference
 	private List<Booking> bookings;
 
 	public Home() {

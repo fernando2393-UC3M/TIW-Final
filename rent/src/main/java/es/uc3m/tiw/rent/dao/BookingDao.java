@@ -1,12 +1,12 @@
-package rent.dao;
+package es.uc3m.tiw.rent.dao;
 
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
-import model.Booking;
-import model.Home;
-import model.User;
+import es.uc3m.tiw.rent.model.Booking;
+import es.uc3m.tiw.rent.model.Home;
+import es.uc3m.tiw.rent.model.User;
 
 public interface BookingDao extends CrudRepository<Booking, Integer>{
 

@@ -1,16 +1,17 @@
-package model;
+package es.uc3m.tiw.rent.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
  * The persistent class for the ADMIN database table.
  * 
  */
 @Entity
-@Table(name="ADMIN")
+@Table(name="admin")
 @NamedQuery(name="Admin.findAll", query="SELECT a FROM Admin a")
 public class Admin implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -28,6 +29,7 @@ public class Admin implements Serializable {
 
 	//bi-directional many-to-one association to MessagesAdmin
 	@OneToMany(mappedBy="admin")
+	@JsonManagedReference
 	private List<MessagesAdmin> messagesAdmins;
 
 	public Admin() {

@@ -1,10 +1,10 @@
-package rent.dao;
+package es.uc3m.tiw.rent.dao;
 
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
-import model.User;
+import es.uc3m.tiw.rent.model.User;
 
 public interface UsersDao extends CrudRepository<User, Integer>{
 

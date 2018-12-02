@@ -1,4 +1,4 @@
-package model;
+package es.uc3m.tiw.rent.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -6,13 +6,16 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 /**
  * The persistent class for the HOME database table.
  * 
  */
 @Entity
-@Table(name="HOME")
+@Table(name="home")
 @NamedQuery(name="Home.findAll", query="SELECT h FROM Home h")
 public class Home implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -56,10 +59,12 @@ public class Home implements Serializable {
 
 	//bi-directional many-to-one association to Booking
 	@OneToMany(mappedBy="home")
+	@JsonManagedReference
 	private List<Booking> bookings;
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
+	@JsonBackReference
 	@JoinColumn(name="HOME_EMAIL")
 	private User user;
 

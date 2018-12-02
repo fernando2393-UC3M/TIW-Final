@@ -1,8 +1,12 @@
-package model;
+package es.uc3m.tiw.rent.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 /**
@@ -10,7 +14,7 @@ import java.util.Date;
  * 
  */
 @Entity
-@Table(name="MESSAGES")
+@Table(name="messages")
 @NamedQuery(name="Message.findAll", query="SELECT m FROM Message m")
 public class Message implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -33,11 +37,13 @@ public class Message implements Serializable {
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
+	@JsonBackReference
 	@JoinColumn(name="MESSAGE_SENDER_ID")
 	private User user1;
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
+	@JsonBackReference
 	@JoinColumn(name="MESSAGE_RECEIVER_ID")
 	private User user2;
 
