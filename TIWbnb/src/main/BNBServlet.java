@@ -24,6 +24,13 @@ import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 
@@ -56,6 +63,8 @@ import javax.jms.JMSException;
 public class BNBServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
+	
+	private static final String USERS_API_URL = "http://localhost:10001/users";
 
 	@PersistenceContext(unitName="TIWbnb")
 	protected EntityManager em;
@@ -76,17 +85,6 @@ public class BNBServlet extends HttpServlet {
 	
 	HttpSession session;
 	
-	public void persist(Object entity) {
-		try {
-			ut.begin();
-			em.persist(entity);
-			ut.commit();
-		} catch (SecurityException | IllegalStateException | NotSupportedException | SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException  e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
 	 
 ////////////////////////////////////////////////////////////////////////////////////////
 	public void init() {
@@ -105,10 +103,6 @@ public class BNBServlet extends HttpServlet {
 
 		String requestURL = req.getRequestURL().toString();
 
-//		if(requestURL.toString().equals(path+"admin")){
-//			ReqDispatcher =req.getRequestDispatcher("admin.jsp");
-//		}
-//		else 
 		if(requestURL.equals(path+"alojamiento")){
 			ReqDispatcher =req.getRequestDispatcher("alojamiento.jsp");
 		}
@@ -168,24 +162,27 @@ public class BNBServlet extends HttpServlet {
 		}
 		else if(requestURL.equals(path+"registrado")){
 			int id = (int) session.getAttribute("user");
-						
-			User user = em.find(User.class, id); // Select the user after commit
-
-			req.setAttribute("Name", user.getUserName());
-			req.setAttribute("Surname", user.getUserSurname());			
-			req.setAttribute("Birthdate", (new SimpleDateFormat("yyyy-MM-dd")).format(user.getUserBirthdate()));
-			req.setAttribute("Password", user.getUserPassword());
 			
-			ReqDispatcher =req.getRequestDispatcher("registrado.jsp");	
-		}
-		else if(requestURL.equals(path+"delete")){
-			ReqDispatcher =req.getRequestDispatcher("index.jsp");		
-		}
-		else if(requestURL.equals(path+"login")){
-			ReqDispatcher =req.getRequestDispatcher("index.jsp");
-		}
-		else if(requestURL.equals(path+"register")){
-			ReqDispatcher =req.getRequestDispatcher("index.jsp");
+			Client client = ClientBuilder.newClient();
+			WebTarget webResource = client.target(USERS_API_URL).path("" + id);
+			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+			
+			Response response = invocationBuilder.get();
+			
+			int status = response.getStatus();
+			
+			User user = response.readEntity(User.class);
+			
+			if(status == 200){
+				req.setAttribute("Name", user.getUserName());
+				req.setAttribute("Surname", user.getUserSurname());			
+				req.setAttribute("Birthdate", (new SimpleDateFormat("yyyy-MM-dd")).format(user.getUserBirthdate()));
+				req.setAttribute("Password", user.getUserPassword());
+				
+				ReqDispatcher = req.getRequestDispatcher("registrado.jsp");
+			} else {
+				ReqDispatcher = req.getRequestDispatcher("index.jsp");
+			}
 		}
 		else if(requestURL.equals(path+"renting")){
 			ReqDispatcher =req.getRequestDispatcher("renting.jsp");					
@@ -219,43 +216,32 @@ public class BNBServlet extends HttpServlet {
 		//------------------------PROFILE LOGIN------------------------
 		
 		if(requestURL.toString().equals(path+"login")){
-			Login loginInstance = new Login();
-			loginInstance.openConnection();
-			ResultSet result = loginInstance.CheckUser(req.getParameter("loginEmail"), req.getParameter("loginPassword"));
-
-			if (result != null) { //User match
-				dispatcher = req.getRequestDispatcher("registrado.jsp");
-				try {
-					req.setAttribute("Name", result.getString("USER_NAME"));
-					req.setAttribute("Surname", result.getString("USER_SURNAME"));
-					req.setAttribute("Birthdate", result.getString("USER_BIRTHDATE"));
-					req.setAttribute("Password", result.getString("USER_PASSWORD"));
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				// Save user in servlet session
+			
+			Client client = ClientBuilder.newClient();
+			WebTarget webResource = client.target(USERS_API_URL).path(req.getParameter("loginEmail")).path(req.getParameter("loginPassword"));
+			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+			Response response = invocationBuilder.get();
+			
+			User result = response.readEntity(User.class);
+			
+			if(response.getStatus() == 200) {
+				req.setAttribute("Name", result.getUserName());
+				req.setAttribute("Surname", result.getUserSurname());
+				req.setAttribute("Birthdate", result.getUserBirthdate());
+				req.setAttribute("Password", result.getUserPassword());
 				
 				session = req.getSession();
-
-				try {
-					session.setAttribute("user", result.getInt("USER_ID"));
-					session.setMaxInactiveInterval(30*60); // 30 mins
-					
-					Cookie user = new Cookie("id", Integer.toString(result.getInt("USER_ID")));
-					user.setMaxAge(30*60);
-					
-					res.addCookie(user);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} 
-
-				// Forward to requested URL by user
+				session.setAttribute("user", result.getUserId());
+				session.setMaxInactiveInterval(30*60); // 30 mins
+				
+				Cookie user = new Cookie("id", Integer.toString(result.getUserId()));
+				user.setMaxAge(30*60);
+				
+				res.addCookie(user);
+				
+				dispatcher = req.getRequestDispatcher("registrado.jsp");
 				dispatcher.forward(req, res);				
 			}
-
 			else { // No user match
 				dispatcher = req.getRequestDispatcher("index.jsp");
 				// Forward to requested URL by user
@@ -288,7 +274,7 @@ public class BNBServlet extends HttpServlet {
 				user.setUserPassword(req.getParameter("registerPassword"));
 				user.setUserBirthdate(aux);
 				
-				persist(user);
+				//persist(user);
 				
 				req.setAttribute("Registered", 1);
 			}
@@ -428,7 +414,7 @@ public class BNBServlet extends HttpServlet {
 				home.setHomeAvDateInit(parsedIDate);
 				home.setHomeAvDateFin(parsedFDate);
 
-				persist(home);
+				//persist(home);
 				
 				
 //				houseInstance.RegisterHouse(em, req.getParameter("houseName"), req.getParameter("houseCity"), req.getParameter("houseDesc"), req.getParameter("houseSubDesc")
