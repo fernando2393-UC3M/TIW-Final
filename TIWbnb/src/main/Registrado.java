@@ -56,7 +56,7 @@ public class Registrado {
 			
 			user.setUserName(name);
 			user.setUserSurname(surname);
-			user.setUserBirthdate(parsed);
+			user.setUserBirthdate(parsed.toString());
 			user.setUserPassword(password);
 			
 			em.merge(user);
