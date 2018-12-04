@@ -27,8 +27,16 @@ import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import model.Admin;
 import model.MessagesAdmin;
+import model.User;
 
 @WebServlet(urlPatterns = {
 		"/admin", "/resultados", "/casa", 
@@ -38,6 +46,8 @@ import model.MessagesAdmin;
 public class AdminServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 6176032171079275384L;
+	
+	private static final String ADMIN_API_URL = "http://localhost:10005/admin";
 
 	@PersistenceContext(unitName="TIWbnbAdmin")
 	protected EntityManager em;
@@ -154,34 +164,29 @@ public class AdminServlet extends HttpServlet {
 		// ------------------------ LOGIN CASE ------------------------------------------
 
 		if(requestURL.toString().equals(path+"login")){
-			Login loginInstance = new Login();
-			loginInstance.openConnection();
-			ResultSet result = loginInstance.CheckAdmin(req.getParameter("loginEmail"), req.getParameter("loginPassword"));
-
-			if (result != null) { //User match
-				dispatcher = req.getRequestDispatcher("admin.jsp");
-				
+			
+			Client client = ClientBuilder.newClient();
+			WebTarget webResource = client.target(ADMIN_API_URL).path(req.getParameter("loginEmail")).path(req.getParameter("loginPassword"));
+			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+			Response response = invocationBuilder.get();
+			
+			Admin result = response.readEntity(Admin.class);
+			
+			if(response.getStatus() == 200) {
+							
 				session = req.getSession();
+				session.setAttribute("admin", result.getAdminId());
+				session.setMaxInactiveInterval(30*60); // 30 mins
 				
-				// Save user in servlet context
-				try {
-					session.setAttribute("admin", result.getInt("ADMIN_ID"));
-					session.setMaxInactiveInterval(30*60); // 30 mins
-					
-					Cookie admin = new Cookie("id", Integer.toString(result.getInt("ADMIN_ID")));
-					admin.setMaxAge(30*60);
-					
-					res.addCookie(admin);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				// Forward to requested URL by user
+				Cookie admin = new Cookie("id", Integer.toString(result.getAdminId()));
+				admin.setMaxAge(30*60);
+				
+				res.addCookie(admin);
+				
+				dispatcher = req.getRequestDispatcher("admin.jsp");
 				dispatcher.forward(req, res);				
 			}
-
-			else { // No user match
+			else { // No admin match
 				dispatcher = req.getRequestDispatcher("index.jsp");
 				// Forward to requested URL by user
 				dispatcher.forward(req, res);
