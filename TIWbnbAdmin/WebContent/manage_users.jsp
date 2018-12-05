@@ -96,8 +96,8 @@
 					<nav id="fh5co-menu-wrap" role="navigation">
 						<ul class="sf-menu" id="fh5co-primary-menu">
 							<li class="active"><a href="admin.jsp">Home</a></li>
-							<li ><a href="manage_users.jsp">Administrar Usuarios</a></li>
-							<li ><a href="resultados.jsp">Administrar Alojamientos</a></li>
+							<li ><a href="manage_users">Administrar Usuarios</a></li>
+							<li ><a href="resultados">Administrar Alojamientos</a></li>
 							<li ><a href="mensajes">Mensajes</a></li>
 							<li><a href="logout" id="Login">Cerrar sesión</a></li>
 						</ul>
@@ -137,47 +137,14 @@
 		
 		<%
 		
-		Connection con = null;
-		Statement st = null;
+		List <User> users = (List <User>) request.getAttribute("users");
 		
-		// Open connection
-		
-		try {
-			// Load Driver
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			// Connect to the database
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/tiwbnb", "root", "admin");
-			System.out.println("Sucessful connection");
-		} catch (Exception e) {
-			System.out.println("Error when connecting to the database ");
-		}
-		
-		ResultSet rs = null;
-		
-		try {
-			// Create statement
-			st =con.createStatement();
-
-			//Once the statement is created, we need to get the user input for both user email and password
-
-			// Execute statement
-			// Here we obtain the full User table
-			String query = "SELECT * FROM USER";
-			rs = st.executeQuery(query);
-			
-		} catch (SQLException e) {
-			System.out.println("Error when opening table ");
-		}
-		
-		// List <User> userList = (List <User>) request.getAttribute("Users");
-		
-		while(rs.next()){
-			
+		for (int i = 0; i<users.size(); i++) {
 			out.println("<tr>");
-			out.println("<td>"+rs.getInt("USER_ID")+"</td><td>"+rs.getString("USER_NAME")+"</td><td>"+rs.getString("USER_SURNAME")+
-					"</td><td>"+rs.getString("USER_EMAIL")+"</td><td>"+rs.getString("USER_PASSWORD")+"</td><td>"+rs.getString("USER_BIRTHDATE")+"</td>");
+			out.println("<td>"+users.get(i).getUserId()+"</td><td>"+users.get(i).getUserName()+"</td><td>"+users.get(i).getUserSurname()+
+					"</td><td>"+users.get(i).getUserEmail()+"</td><td>"+users.get(i).getUserPassword()+"</td><td>"+users.get(i).getUserBirthdate()+"</td>");
 			out.println("</tr>");
-		}	
+		}
 		%>
 		</table>
 		</div>

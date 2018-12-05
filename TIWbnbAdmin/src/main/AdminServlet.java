@@ -31,6 +31,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -40,7 +41,7 @@ import model.User;
 
 @WebServlet(urlPatterns = {
 		"/admin", "/resultados", "/casa", 
-		"/manage_users", "/mensajes", "/modify", "/modify_place",
+		"/manage_users", "/mensajes", "/modify_place",
 		"/index", "/delete", "/delete_place", "/login", "/logout"
 		})
 public class AdminServlet extends HttpServlet {
@@ -48,6 +49,7 @@ public class AdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 6176032171079275384L;
 	
 	private static final String ADMIN_API_URL = "http://localhost:10005/admin";
+	private static final String USER_API_URL = "http://localhost:10001/users";
 
 	@PersistenceContext(unitName="TIWbnbAdmin")
 	protected EntityManager em;
@@ -103,7 +105,7 @@ public class AdminServlet extends HttpServlet {
 				
 				// Save messages in user session
 				if(messageList.size() > 0)
-					session.setAttribute("AdminMessages", messageList); 
+					req.setAttribute("AdminMessages", messageList); 
 				
 			} catch (JMSException | NotSupportedException | SystemException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
 				// Treat JMS/JPA Exception
@@ -118,13 +120,26 @@ public class AdminServlet extends HttpServlet {
 		else if(requestURL.equals(path+"resultados")){
 			ReqDispatcher =req.getRequestDispatcher("resultados.jsp");
 		}
-		else if(requestURL.equals(path+"modify")){
-			ReqDispatcher =req.getRequestDispatcher("manage_users.jsp");
-		}
 		else if(requestURL.equals(path+"modify_place")) {
 			ReqDispatcher =req.getRequestDispatcher("resultados.jsp");
 		}
-		else if(requestURL.equals(path+"manage_users")){			
+		
+		else if(requestURL.equals(path+"manage_users")){
+			
+			
+			Client client = ClientBuilder.newClient();
+			WebTarget webResource = client.target(USER_API_URL);
+			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+			Response response = invocationBuilder.get();
+			
+			List <User> result = (List<User>) response.readEntity(new GenericType<List<User>>(){});
+			
+			if(response.getStatus() == 200) {
+				
+				req.setAttribute("users", result);
+								
+			}
+			
 			ReqDispatcher =req.getRequestDispatcher("manage_users.jsp");
 		}
 		else if(requestURL.equals(path+"login")){
@@ -196,31 +211,22 @@ public class AdminServlet extends HttpServlet {
 		// --------------------- DELETE USER CASE -------------------------------------------
 		
 		else if (requestURL.toString().equals(path+"delete")) {
-			Delete delete = new Delete();
-			dispatcher = req.getRequestDispatcher("manage_users.jsp");
 			
-			try {
-				ut.begin();
-			} catch (NotSupportedException | SystemException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			Client client = ClientBuilder.newClient();
+			WebTarget webResource = client.target(USER_API_URL).path(req.getParameter("inputId"));
+			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+			Response response = invocationBuilder.delete();
+			
+			if(response.getStatus() == 200) {
+				
+				dispatcher = req.getRequestDispatcher("manage_users.jsp");
+				dispatcher.forward(req, res);				
 			}
-			
-			String aux = req.getParameter("inputId");
-			int id = Integer.parseInt(aux);
-			
-			delete.delete(em, id);
-			
-			try {
-				ut.commit();
-			} catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
-					| HeuristicRollbackException | SystemException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			dispatcher.forward(req, res);
-			
+			else { // Error in deletion
+				dispatcher = req.getRequestDispatcher("manage_users.jsp");
+				// Forward to requested URL by user
+				dispatcher.forward(req, res);
+			}			
 		}
 		
 		// --------------------- DELETE PLACE CASE -------------------------------------------
