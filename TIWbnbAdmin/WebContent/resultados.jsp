@@ -8,7 +8,7 @@
 	<%@ page contentType="text/html; charset=UTF-8" %>
 	<%@ page import="java.util.List" %>
 	<%@ page import="java.util.Date" %>
-	<%@ page import="model.User" %>
+	<%@ page import="model.Home" %>
 	<%@ page import="java.sql.DriverManager" %>
 	<%@ page import="java.sql.Connection" %>
 	<%@ page import="java.sql.Statement" %>
@@ -128,56 +128,22 @@
 		<table style="width:100%">
 			<tr>
 				<th>Home ID</th>
-				<th>Email</th>
+				<!-- <th>Email</th> -->
 				<th>Name</th>
 				<th>City</th>
 			</tr>
 		
 		<%
 		
-		Connection con = null;
-		Statement st = null;
+		List <Home> homes = (List <Home>) request.getAttribute("homes");
 		
-		// Open connection
-		
-		try {
-			// Load Driver
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			// Connect to the database
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/tiwbnb", "root", "admin");
-			System.out.println("Sucessful connection");
-		} catch (Exception e) {
-			System.out.println("Error when connecting to the database ");
-		}
-		
-		ResultSet rs = null;
-		
-		try {
-			// Create statement
-			st =con.createStatement();
-
-			//Once the statement is created, we need to get the user input for both user email and password
-
-			// Execute statement
-			// Here we obtain the full User table
-			String query = "SELECT * FROM HOME";
-			rs = st.executeQuery(query);
-			
-		} catch (SQLException e) {
-			System.out.println("Error when opening table ");
-		}
-		
-		// List <User> userList = (List <User>) request.getAttribute("Users");
-		
-		while(rs.next()){
-			
+		for (int i = 0; i<homes.size(); i++) {
 			out.println("<tr>");
-			out.println("<td>"+rs.getInt("HOME_ID")+"</td><td>"+rs.getString("HOME_EMAIL")+"</td><td>"+rs.getString("HOME_NAME")+"</td><td>"+rs.getString("HOME_CITY")+"</td>");
-					//"</td><td>"+rs.getString("USER_EMAIL")+"</td><td>"+rs.getString("USER_PASSWORD")+"</td><td>"+rs.getString("USER_BIRTHDATE")+"</td>");
+			out.println("<td>"+homes.get(i).getHomeId()+"</td><td>"+homes.get(i).getHomeName()+
+					"</td><td>"+homes.get(i).getHomeCity()+"</td>");
 			out.println("</tr>");
-		}	
-		
-		con.close();
+		}
+
 		%>
 		</table>
 		</div>

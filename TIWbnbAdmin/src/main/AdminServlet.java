@@ -40,11 +40,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import model.Admin;
+import model.Home;
 import model.MessagesAdmin;
 import model.User;
 
 @WebServlet(urlPatterns = {
-		"/admin", "/resultados", "/casa", 
+		"/admin", "/resultados", "/homes", 
 		"/manage_users", "/mensajes", "/modify_place", "/modify",
 		"/index", "/delete", "/delete_place", "/login", "/logout"
 		})
@@ -53,6 +54,7 @@ public class AdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 6176032171079275384L;
 	
 	private static final String ADMIN_API_URL = "http://localhost:10005/admin";
+	private static final String HOME_API_URL = "http://localhost:10002/homes";
 	private static final String USER_API_URL = "http://localhost:10001/users";
 
 	@PersistenceContext(unitName="TIWbnbAdmin")
@@ -122,6 +124,20 @@ public class AdminServlet extends HttpServlet {
 		//------------------------END READ MESSAGES------------------------
 		
 		else if(requestURL.equals(path+"resultados")){
+			
+			Client client = ClientBuilder.newClient();
+			WebTarget webResource = client.target(HOME_API_URL);
+			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+			Response response = invocationBuilder.get();
+			
+			List <Home> result = (List<Home>) response.readEntity(new GenericType<List<Home>>(){});
+			
+			if(response.getStatus() == 200) {
+				
+				req.setAttribute("homes", result);
+								
+			}		
+			
 			ReqDispatcher =req.getRequestDispatcher("resultados.jsp");
 		}
 		else if(requestURL.equals(path+"modify_place")) {

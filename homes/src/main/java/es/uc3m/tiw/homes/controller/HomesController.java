@@ -25,9 +25,17 @@ public class HomesController {
 	@Autowired
 	HomesDao daoHome;
 
-	@RequestMapping("/homes")
-	public @ResponseBody List<Home> getHomes(){
-		return daoHome.findAll();
+	@RequestMapping(method=RequestMethod.GET, value="/homes")
+	public ResponseEntity <List<Home>> getHomes(){
+		List<Home> homeList = daoHome.findAll();
+		ResponseEntity<List<Home>> response;
+		
+		if(homeList.size() == 0) {
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			response = new ResponseEntity<>(homeList, HttpStatus.OK);
+		}
+		return response;
 	}
 	
 	@RequestMapping("/homes/{id}")
