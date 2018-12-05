@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.jms.ConnectionFactory;
@@ -29,6 +32,7 @@ import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
@@ -41,7 +45,7 @@ import model.User;
 
 @WebServlet(urlPatterns = {
 		"/admin", "/resultados", "/casa", 
-		"/manage_users", "/mensajes", "/modify_place",
+		"/manage_users", "/mensajes", "/modify_place", "/modify",
 		"/index", "/delete", "/delete_place", "/login", "/logout"
 		})
 public class AdminServlet extends HttpServlet {
@@ -122,6 +126,9 @@ public class AdminServlet extends HttpServlet {
 		}
 		else if(requestURL.equals(path+"modify_place")) {
 			ReqDispatcher =req.getRequestDispatcher("resultados.jsp");
+		}
+		else if(requestURL.equals(path+"modify")) {
+			ReqDispatcher =req.getRequestDispatcher("manage_users.jsp");
 		}
 		
 		else if(requestURL.equals(path+"manage_users")){
@@ -263,31 +270,40 @@ public class AdminServlet extends HttpServlet {
 		
 		else if (requestURL.toString().equals(path+"modify")) {
 			
-			Modify modify = new Modify();
-			dispatcher = req.getRequestDispatcher("manage_users.jsp");
-			
-			try {
-				ut.begin();
-			} catch (NotSupportedException | SystemException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
 			String aux = req.getParameter("inputId");
 			int id = Integer.parseInt(aux);
 			
-			modify.updateUserData(id, req.getParameter("inputName"), req.getParameter("inputSurname"), 
-					req.getParameter("inputBirthdate"), req.getParameter("inputPassword"), em);
+			Client client = ClientBuilder.newClient();
+			WebTarget webResource = client.target(USER_API_URL).path(req.getParameter("inputId"));
+			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
 			
+			User result = new User();
+			// Password confirmed
+			result.setUserName(req.getParameter("inputName"));
+			result.setUserSurname(req.getParameter("inputSurname"));
+			result.setUserPassword(req.getParameter("inputPassword"));
+			
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			Date parsed = new Date(1970, 01, 01);
 			try {
-				ut.commit();
-			} catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
-					| HeuristicRollbackException | SystemException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				parsed = format.parse(req.getParameter("inputBirthdate"));
+			} catch (ParseException e) {
 			}
+
+			result.setUserBirthdate(parsed);
 			
-			dispatcher.forward(req, res);
+			Response response = invocationBuilder.put(Entity.entity(result, MediaType.APPLICATION_JSON));
+			
+			if(response.getStatus() == 200) {
+				
+				dispatcher = req.getRequestDispatcher("manage_users.jsp");
+				dispatcher.forward(req, res);				
+			}
+			else { // Error in update
+				dispatcher = req.getRequestDispatcher("manage_users.jsp");
+				// Forward to requested URL by user
+				dispatcher.forward(req, res);
+			}			
 			
 		} 
 		
