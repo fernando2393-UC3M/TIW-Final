@@ -35,7 +35,6 @@ import javax.ws.rs.core.Response;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -175,7 +174,7 @@ public class BNBServlet extends HttpServlet {
 			
 			if(status == 200){
 				req.setAttribute("Name", user.getUserName());
-				req.setAttribute("Surname", user.getUserSurname());			
+				req.setAttribute("Surname", user.getUserSurname());		
 				//req.setAttribute("Birthdate", (new SimpleDateFormat("yyyy-MM-dd")).format(user.getUserBirthdate()));
 				req.setAttribute("Password", user.getUserPassword());
 				
@@ -304,13 +303,6 @@ public class BNBServlet extends HttpServlet {
 				result.setUserSurname(req.getParameter("surname"));
 				result.setUserPassword(req.getParameter("password"));
 				
-//				try {
-//					result.setUserBirthdate(new SimpleDateFormat("yyyy-MM-dd").parse(req.getParameter("birthdate")));
-//				} catch (ParseException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-				
 		        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 				Date parsed = new Date(1970, 01, 01);
 				try {
@@ -337,9 +329,19 @@ public class BNBServlet extends HttpServlet {
 				}
 				
 			} else {
+
+				Response response = invocationBuilder.get();
+
+				User user = response.readEntity(User.class);
+
+				req.setAttribute("Name", user.getUserName());
+				req.setAttribute("Surname", user.getUserSurname());				
+				req.setAttribute("Birthdate", user.getUserBirthdate());
+				req.setAttribute("Password", user.getUserPassword());
+
 				req.setAttribute("Updated", 2);
 			}
-			
+
 
 			dispatcher.forward(req, res);			
 			
