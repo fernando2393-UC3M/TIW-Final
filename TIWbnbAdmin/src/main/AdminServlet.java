@@ -57,12 +57,13 @@ public class AdminServlet extends HttpServlet {
 	private static final String HOME_API_URL = "http://localhost:10002/homes";
 	private static final String USER_API_URL = "http://localhost:10001/users";
 
+	/*
 	@PersistenceContext(unitName="TIWbnbAdmin")
 	protected EntityManager em;
 	
 	@Resource
 	private UserTransaction ut;
-	
+	*/
 	String path = "http://localhost:8080/TIWbnbAdmin/";
 		
 	ServletContext context;
@@ -70,11 +71,13 @@ public class AdminServlet extends HttpServlet {
 	HttpSession session;
 
 	/* Attributes */
+	/*
 	@Resource(mappedName="tiwconnectionfactory")
 	ConnectionFactory cf;
 
 	@Resource(mappedName="tiwqueue")
 	Queue adminQueue;	
+	*/
 	
 	public void init() {
 
@@ -99,7 +102,7 @@ public class AdminServlet extends HttpServlet {
 		
 		else if(requestURL.equals(path+"mensajes")){		
 			//Get adminId from session (need parameter name to access)
-			int adminId = (Integer) session.getAttribute("admin"); 
+			/*int adminId = (Integer) session.getAttribute("admin"); 
 			
 			List<MessagesAdmin> messageList = null;
 			try {
@@ -115,7 +118,7 @@ public class AdminServlet extends HttpServlet {
 				
 			} catch (JMSException | NotSupportedException | SystemException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
 				// Treat JMS/JPA Exception
-			}
+			}*/
 			ReqDispatcher =req.getRequestDispatcher("mensajes.jsp");
 			
 			
@@ -257,7 +260,7 @@ public class AdminServlet extends HttpServlet {
 		else if (requestURL.toString().equals(path+"delete_place")) {
 
 			dispatcher = req.getRequestDispatcher("resultados.jsp");
-					
+			/*	
 			try {
 				ut.begin();
 			} catch (NotSupportedException | SystemException e) {
@@ -277,7 +280,7 @@ public class AdminServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-					
+			*/	
 			dispatcher.forward(req, res);
 					
 		}
@@ -327,9 +330,9 @@ public class AdminServlet extends HttpServlet {
 		
 		else if (requestURL.toString().equals(path+"modify_place")) {
 					
-			ModifyPlace modify = new ModifyPlace();
+			//ModifyPlace modify = new ModifyPlace();
 			dispatcher = req.getRequestDispatcher("resultados.jsp");
-					
+			/*	
 			try {
 				ut.begin();
 			} catch (NotSupportedException | SystemException e) {
@@ -367,11 +370,12 @@ public class AdminServlet extends HttpServlet {
 					| HeuristicRollbackException | SystemException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}*/
 					
 			dispatcher.forward(req, res);
 					
-		} else {
+		} 
+		else {
 			dispatcher.forward(req, res);
 		}
 	}

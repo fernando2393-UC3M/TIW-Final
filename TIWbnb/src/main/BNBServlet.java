@@ -64,7 +64,8 @@ public class BNBServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private static final String USERS_API_URL = "http://localhost:10001/users";
-
+	
+	/*
 	@PersistenceContext(unitName="TIWbnb")
 	protected EntityManager em;
 	
@@ -77,7 +78,7 @@ public class BNBServlet extends HttpServlet {
 	@Resource(mappedName="tiwqueue")
 	Queue queue;
 	Session transaction;
-	
+	*/
 	String path = "http://localhost:8080/TIWbnb/";
 	
 	ServletContext context;
@@ -113,7 +114,7 @@ public class BNBServlet extends HttpServlet {
 			//------------------------READ MESSAGES------------------------
 					
 			// Get userId from session (need parameter name to access)
-			int userId = (Integer) session.getAttribute("user"); 
+			/*int userId = (Integer) session.getAttribute("user"); 
 			
 			try {
 				ut.begin();
@@ -128,7 +129,7 @@ public class BNBServlet extends HttpServlet {
 				ReadMessages.setRead(userId, em);
 				ut.commit();
 				
-				/* Query messages from DB */
+				//Query messages from DB 
 				Query query = em.createQuery(
 					      "SELECT b "
 					      + " FROM Booking b "
@@ -139,8 +140,9 @@ public class BNBServlet extends HttpServlet {
 					      
 				@SuppressWarnings({ "unchecked" })
 				List<Booking> bookingList = query.setParameter("p", userId).setParameter("c", false).getResultList();
-				
+				*/
 				// Save messages in user session
+				/*
 				if(messageList.size() > 0)
 					session.setAttribute("UserMessages", messageList); 
 				
@@ -151,14 +153,17 @@ public class BNBServlet extends HttpServlet {
 				if(bookingList.size() > 0)
 					session.setAttribute("bookingList", bookingList); 
 				
+				
 			} catch (JMSException | NotSupportedException | SystemException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
 				// Treat JMS/JPA Exception
-			}
+			}*/
 			ReqDispatcher =req.getRequestDispatcher("mensajes.jsp");				
-		
+			
+				
 			//------------------------END READ MESSAGES------------------------
 			
 		}
+		
 		else if(requestURL.equals(path+"registrado")){
 			int id = (int) session.getAttribute("user");
 			
@@ -452,9 +457,9 @@ public class BNBServlet extends HttpServlet {
 		//-----------------------SEND MESSAGE-------------------------------		
 		
 		
-		else if(requestURL.toString().equals(path+"SendMessage")){
+		/*else if(requestURL.toString().equals(path+"SendMessage")){
 			
-			/* Get content from POST message */
+			//Get content from POST message
 			String email = req.getParameter("receiver");
 			String content = req.getParameter("message");
 			
@@ -462,7 +467,7 @@ public class BNBServlet extends HttpServlet {
 			int id = (int) session.getAttribute("user");
 			
 			
-			/* Query user using email from DB */
+			//Query user using email from DB
 			Query query = em.createQuery("SELECT u "
 				      + " FROM User u "
 				      + " WHERE u.userEmail = :p");
@@ -484,13 +489,13 @@ public class BNBServlet extends HttpServlet {
 
 			res.sendRedirect("mensajes");
 			
-		}
+		}*/
 		
 		//------------------------MESSAGE ADMIN------------------------
 				
-		else if(requestURL.equals(path+"SendMessageAdmin")){
+		/*else if(requestURL.equals(path+"SendMessageAdmin")){
 			
-			/* Get content from POST message */
+			//Get content from POST message 
 			String content = req.getParameter("message");
 			
 			// Get userId from session
@@ -508,13 +513,13 @@ public class BNBServlet extends HttpServlet {
 
 			res.sendRedirect("mensajes");
 			
-		}
+		}*/
 
 		//------------------------BOOKING------------------------
 		
 		else if(requestURL.toString().equals(path+"booking")) {
 			// Obtain sender
-			int id = (int) session.getAttribute("user");
+			/*int id = (int) session.getAttribute("user");
 			// Obtain host
 			Home aux = em.find(Home.class, Integer.parseInt(req.getParameter("home_id")));
 
@@ -547,10 +552,11 @@ public class BNBServlet extends HttpServlet {
 			} catch (NotSupportedException | SystemException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException e1) {
 				// JPA Error
 			}			
+			*/
 			
+			//Get Booking id into message
 			
-			/* Get Booking id into message */
-			String content = ""+obj.getBookingId();
+			/*String content = ""+obj.getBookingId();
 
 			
 			Connection _connection = null;
@@ -575,7 +581,8 @@ public class BNBServlet extends HttpServlet {
 	            }
 	        }
 
-			// TODO: Redirect back to casa
+			// TODO: Redirect back to casa*/
+			
 			res.sendRedirect("mensajes");
 			
 		}
@@ -584,7 +591,8 @@ public class BNBServlet extends HttpServlet {
 		
 		else if(requestURL.toString().equals(path+"booking_confirmation")) {
 			
-			/* Commit the JMS transaction (queue is always same object) */
+			//Commit the JMS transaction (queue is always same object)
+			/*
 			try {
 				transaction.commit();
 			} catch (JMSException e1) {
@@ -619,7 +627,9 @@ public class BNBServlet extends HttpServlet {
 					body += "rejected.";
 				}				
 
-				ut.commit();				
+				ut.commit();	
+				*/
+			/*
 			} catch (NotSupportedException | SystemException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
 				// Error JPA
 			}
@@ -630,7 +640,7 @@ public class BNBServlet extends HttpServlet {
 			} catch (JMSException e) {
 				// Error JMS
 			}
-
+			*/
 			res.sendRedirect("mensajes");
 			
 		}
