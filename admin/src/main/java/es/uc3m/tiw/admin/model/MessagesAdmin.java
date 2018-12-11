@@ -2,6 +2,7 @@ package es.uc3m.tiw.admin.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
 import java.util.Date;
 
 
@@ -10,7 +11,7 @@ import java.util.Date;
  * 
  */
 @Entity
-@Table(name="messages_admin")
+@Table(name="MESSAGES_ADMIN")
 @NamedQuery(name="MessagesAdmin.findAll", query="SELECT m FROM MessagesAdmin m")
 public class MessagesAdmin implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -34,12 +35,26 @@ public class MessagesAdmin implements Serializable {
 	@Column(name="MESSAGE_READ")
 	private byte messageRead;
 
-	@Column(name="MESSAGE_USER_ID")
-	private int messageUserId;
-
-	//bi-directional many-to-one association to Admin
+	// many-to-one association to User
 	@ManyToOne
-	@JoinColumn(name="MESSAGE_ADMIN_ID")
+	@JoinColumn(name="MESSAGE_USER_ID", referencedColumnName="USER_ID")
+	private User user;
+	
+	public Admin getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Admin admin) {
+		this.admin = admin;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	// many-to-one association to Admin
+	@ManyToOne
+	@JoinColumn(name="MESSAGE_ADMIN_ID", referencedColumnName="ADMIN_ID")
 	private Admin admin;
 
 	public MessagesAdmin() {
@@ -85,20 +100,12 @@ public class MessagesAdmin implements Serializable {
 		this.messageRead = messageRead;
 	}
 
-	public int getMessageUserId() {
-		return this.messageUserId;
+	public User getUser() {
+		return this.user;
 	}
 
-	public void setMessageUserId(int messageUserId) {
-		this.messageUserId = messageUserId;
-	}
-
-	public Admin getAdmin() {
-		return this.admin;
-	}
-
-	public void setAdmin(Admin admin) {
-		this.admin = admin;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

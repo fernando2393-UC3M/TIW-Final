@@ -1,4 +1,4 @@
-package es.uc3m.tiw.rent.model;
+package es.uc3m.tiw.admin.model;
 
 import java.io.Serializable;
 import javax.persistence.*;

@@ -1,4 +1,4 @@
-package es.uc3m.tiw.homes.model;
+package es.uc3m.tiw.admin.model;
 
 import java.io.Serializable;
 import javax.persistence.*;

@@ -3,14 +3,6 @@ package main;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-import javax.annotation.Resource;
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.Queue;
-import javax.jms.Session;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -18,12 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -37,19 +23,10 @@ import javax.servlet.ServletContext;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Date;
 
-import messages.ReadMessages;
-
-import messages.SendMessages;
-import model.Admin;
-import model.Booking;
-
 import model.Home;
-import model.MessagesAdmin;
 import model.User;
-import javax.jms.JMSException;
 
 /**
  * Servlet implementation class BDServlet
