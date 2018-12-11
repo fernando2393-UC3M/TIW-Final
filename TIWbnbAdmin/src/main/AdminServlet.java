@@ -323,50 +323,47 @@ public class AdminServlet extends HttpServlet {
 		// ------------------------- MODIFY PLACE CASE -------------------------------
 		
 		else if (requestURL.toString().equals(path+"modify_place")) {
+			
+			
+			// First look for user to re-asign email
+			
+			Client clientUsr = ClientBuilder.newClient();
+			WebTarget webResource = clientUsr.target(USER_API_URL).path(req.getParameter("inputEmail"));
+			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
 					
-			//ModifyPlace modify = new ModifyPlace();
-			dispatcher = req.getRequestDispatcher("resultados.jsp");
-			/*	
-			try {
-				ut.begin();
-			} catch (NotSupportedException | SystemException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			String aux = req.getParameter("inputId");
+			int id = Integer.parseInt(aux);
+			
+			Client client = ClientBuilder.newClient();
+			WebTarget webResource = client.target(HOME_API_URL).path(req.getParameter("inputId"));
+			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+			
+			Home result = new Home();
+			// Password confirmed
+			result.setHomeName(req.getParameter("inputName"));
+			result.setHomeCity(req.getParameter("inputCity"));
+			result.setHomeDescriptionFull(req.getParameter("inputDescriptionFull"));
+			result.setHomeDescriptionShort(req.getParameter("inputDescriptionShort"));
+			result.setHomeType(req.getParameter("inputType"));
+			
+			int guests = Integer.parseInt(req.getParameter("inputGuests"));
+			result.setHomeGuests(guests);
+			
+			BigDecimal price = new BigDecimal (req.getParameter("inputPriceNight"));
+			result.setHomePriceNight(price);
+			
+			Response response = invocationBuilder.put(Entity.entity(result, MediaType.APPLICATION_JSON));
+			
+			if(response.getStatus() == 200) {
+				
+				dispatcher = req.getRequestDispatcher("resultados.jsp");
+				dispatcher.forward(req, res);				
 			}
-					
-			String aux = "";
-			int id = Integer.parseInt(req.getParameter("inputId"));
-			
-			aux = req.getParameter("inputGuests");
-			int inputGuests = Integer.parseInt(aux);
-			
-			aux = req.getParameter("inputPriceNight");
-			
-			BigDecimal inputPriceNight = new BigDecimal(aux.replaceAll(",",""));
-					
-			modify.updatePlaceData(
-					id, 
-					req.getParameter("inputAvDateFin"), 
-					req.getParameter("inputAvDateInit"), 
-					req.getParameter("inputCity"),
-					req.getParameter("inputDescriptionFull"),
-					req.getParameter("inputDescriptionShort"),
-					inputGuests,
-					req.getParameter("inputName"),
-					req.getParameter("inputPhotos"),
-					inputPriceNight,
-					req.getParameter("inputType"),
-					em);
-					
-			try {
-				ut.commit();
-			} catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
-					| HeuristicRollbackException | SystemException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
-					
-			dispatcher.forward(req, res);
+			else { // Error in update
+				dispatcher = req.getRequestDispatcher("resultados.jsp");
+				// Forward to requested URL by user
+				dispatcher.forward(req, res);
+			}		
 					
 		} 
 		else {
