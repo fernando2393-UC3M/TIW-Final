@@ -56,33 +56,58 @@ public class HomesController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value="/homes")
-	public @ResponseBody Home saveHome(@PathVariable @Validated Home phome){
-		return daoHome.save(phome);
+	public ResponseEntity<Home> saveHome(@RequestBody @Validated Home pHome){
+		Home home = daoHome.findById(pHome.getHomeId()).orElse(null);
+		ResponseEntity<Home> response;
+		
+		if(home == null){
+			daoHome.save(pHome);
+			response = new ResponseEntity<>(HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return response;
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value="/homes/{id}")
-	public @ResponseBody void deleteHome(@PathVariable @Validated Integer id){
+	public ResponseEntity<Home> deleteHome(@PathVariable @Validated Integer id){
 		Home hm = daoHome.findById(id).orElse(null);
+		ResponseEntity<Home> response;
+		
 		if (hm != null){
 			daoHome.delete(hm);
+			response = new ResponseEntity<>(HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+		
+		return response;
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value="/homes/{id}")
-	public @ResponseBody Home updateHome(@PathVariable @Validated Integer id, @RequestBody Home pHome){
+	public ResponseEntity<Home> updateHome(@PathVariable @Validated Integer id, @RequestBody Home pHome){
 		Home hm = daoHome.findById(id).orElse(null);
-		hm.setHomeAvDateFin(pHome.getHomeAvDateFin());
-		hm.setHomeAvDateInit(pHome.getHomeAvDateInit());
-		hm.setHomeCity(pHome.getHomeCity());
-		hm.setHomeDescriptionFull(pHome.getHomeDescriptionFull());
-		hm.setHomeDescriptionShort(pHome.getHomeDescriptionShort());
-		hm.setHomeGuests(pHome.getHomeGuests());
-		hm.setHomeName(pHome.getHomeName());
-		hm.setHomePhotos(pHome.getHomePhotos());
-		hm.setHomePriceNight(pHome.getHomePriceNight());
-		hm.setHomeType(pHome.getHomeType());
-		//hm.setBookings(pHome.getBookings());
-		return daoHome.save(hm);
+		ResponseEntity<Home> response;
+		
+		if(hm != null) {
+			hm.setHomeAvDateFin(pHome.getHomeAvDateFin());
+			hm.setHomeAvDateInit(pHome.getHomeAvDateInit());
+			hm.setHomeCity(pHome.getHomeCity());
+			hm.setHomeDescriptionFull(pHome.getHomeDescriptionFull());
+			hm.setHomeDescriptionShort(pHome.getHomeDescriptionShort());
+			hm.setHomeGuests(pHome.getHomeGuests());
+			hm.setHomeName(pHome.getHomeName());
+			hm.setHomePhotos(pHome.getHomePhotos());
+			hm.setHomePriceNight(pHome.getHomePriceNight());
+			hm.setHomeType(pHome.getHomeType());
+			
+			daoHome.save(hm);
+			
+			response = new ResponseEntity<>(HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return response;
 	}
 	
 	/*
