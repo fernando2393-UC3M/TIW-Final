@@ -38,7 +38,7 @@ public class HomesController {
 		return response;
 	}
 	
-	@RequestMapping("/homes/{id}")
+	@RequestMapping(method=RequestMethod.GET, value="/homes/{id}")
 	public ResponseEntity<Home> getHomeByHomeId(@PathVariable int id){
 		Home home = daoHome.findById(id).orElse(null);
 		ResponseEntity<Home> response;
@@ -81,7 +81,7 @@ public class HomesController {
 		hm.setHomePhotos(pHome.getHomePhotos());
 		hm.setHomePriceNight(pHome.getHomePriceNight());
 		hm.setHomeType(pHome.getHomeType());
-		hm.setBookings(pHome.getBookings());
+		//hm.setBookings(pHome.getBookings());
 		return daoHome.save(hm);
 	}
 	

@@ -2,6 +2,9 @@ package es.uc3m.tiw.homes.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.util.Date;
 import java.math.BigInteger;
 
