@@ -123,7 +123,7 @@ public class AdminServlet extends HttpServlet {
 			
 			
 		}
-	
+		
 		//------------------------END READ MESSAGES------------------------
 		
 		else if(requestURL.equals(path+"resultados")){
@@ -259,28 +259,22 @@ public class AdminServlet extends HttpServlet {
 		
 		else if (requestURL.toString().equals(path+"delete_place")) {
 
-			dispatcher = req.getRequestDispatcher("resultados.jsp");
-			/*	
-			try {
-				ut.begin();
-			} catch (NotSupportedException | SystemException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			Client client = ClientBuilder.newClient();
+			WebTarget webResource = client.target(HOME_API_URL).path(req.getParameter("homeId"));
+			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+			Response response = invocationBuilder.delete();
+			
+			if(response.getStatus() == 200) {
+				
+				dispatcher = req.getRequestDispatcher("resultados.jsp");
+				dispatcher.forward(req, res);				
 			}
-					
-			String aux = req.getParameter("homeId");
-			int id = Integer.parseInt(aux);
-					
-			DeletePlace.delete(em, id);
-					
-			try {
-				ut.commit();
-			} catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
-					| HeuristicRollbackException | SystemException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			*/	
+			else { // Error in deletion
+				dispatcher = req.getRequestDispatcher("resultados.jsp");
+				// Forward to requested URL by user
+				dispatcher.forward(req, res);
+			}			
+			
 			dispatcher.forward(req, res);
 					
 		}

@@ -131,6 +131,7 @@
 				<!-- <th>Email</th> -->
 				<th>Name</th>
 				<th>City</th>
+				<th>Email</th>
 			</tr>
 		
 		<%
@@ -140,7 +141,7 @@
 		for (int i = 0; i<homes.size(); i++) {
 			out.println("<tr>");
 			out.println("<td>"+homes.get(i).getHomeId()+"</td><td>"+homes.get(i).getHomeName()+
-					"</td><td>"+homes.get(i).getHomeCity()+"</td>");
+					"</td><td>"+homes.get(i).getHomeCity()+"</td><td>"+homes.get(i).getUser().getUserEmail()+"</td>");
 			out.println("</tr>");
 		}
 
