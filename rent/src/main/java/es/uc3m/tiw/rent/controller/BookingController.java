@@ -1,16 +1,10 @@
 package es.uc3m.tiw.rent.controller;
 
-import java.math.BigInteger;
-import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import es.uc3m.tiw.rent.dao.BookingDao;
 import es.uc3m.tiw.rent.dao.HomesDao;
 import es.uc3m.tiw.rent.dao.UsersDao;
+
 import es.uc3m.tiw.rent.model.Booking;
 import es.uc3m.tiw.rent.model.Home;
 import es.uc3m.tiw.rent.model.User;
@@ -40,24 +35,49 @@ public class BookingController {
 
 
 	@RequestMapping("/rents")
-	public @ResponseBody List<Booking> getUsers(){
-		return daoBk.findAll();
+	public ResponseEntity<List<Booking>> getUsers(){
+				
+		List<Booking> bookList = daoBk.findAll();
+		ResponseEntity<List<Booking>> response;
+		
+		if(bookList.size() == 0) {
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			response = new ResponseEntity<>(bookList, HttpStatus.OK);
+		}
+		return response;
 	}
 	
 	@RequestMapping("/rents/homes/{id}")
-	public @ResponseBody List<Booking> getBookingByHomeId(@PathVariable @Validated Integer homeId){
-		Home home = daoHm.findById(homeId).orElse(null);
-		return daoBk.findByHome(home);
+	public ResponseEntity<List<Booking>> getBookingByHomeId(@PathVariable @Validated Integer id){
+		Home home = daoHm.findById(id).orElse(null);
+		List<Booking> bookList = daoBk.findByHome(home);
+		
+		ResponseEntity<List<Booking>> response;
+		if(bookList.size() == 0) {
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			response = new ResponseEntity<>(bookList, HttpStatus.OK);
+		}
+		return response;
 	}
 	
 	@RequestMapping("/rents/users/{id}")
-	public @ResponseBody List<Booking> getBookingByUserId(@PathVariable @Validated Integer userId){
-		User user = daoUs.findById(userId).orElse(null);
-		return daoBk.findByUser(user);
+	public ResponseEntity<List<Booking>> getBookingByUserId(@PathVariable @Validated Integer id){		
+		User user = daoUs.findById(id).orElse(null);
+		List<Booking> bookList = daoBk.findByUser(user);
+		
+		ResponseEntity<List<Booking>> response;
+		if(bookList.size() == 0) {
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			response = new ResponseEntity<>(bookList, HttpStatus.OK);
+		}
+		return response;
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value="/rents")
-	public @ResponseBody Booking saveBooking(@PathVariable @Validated Booking pbooking){
+	public @ResponseBody Booking saveBooking(@Validated Booking pbooking){
 		return daoBk.save(pbooking);
 	}
 

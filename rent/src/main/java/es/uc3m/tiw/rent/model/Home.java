@@ -4,10 +4,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 /**
@@ -57,17 +53,12 @@ public class Home implements Serializable {
 	@Column(name="HOME_TYPE")
 	private String homeType;
 
-	//bi-directional many-to-one association to Booking
-	@OneToMany(mappedBy="home")
-	@JsonManagedReference
-	private List<Booking> bookings;
-
-	//bi-directional many-to-one association to User
+	//many-to-one association to User
 	@ManyToOne
-	@JsonBackReference
-	@JoinColumn(name="HOME_EMAIL")
+	@JoinColumn(name="HOME_EMAIL", referencedColumnName="USER_EMAIL")
 	private User user;
 
+	
 	public Home() {
 	}
 
@@ -159,28 +150,6 @@ public class Home implements Serializable {
 		this.homeType = homeType;
 	}
 
-	public List<Booking> getBookings() {
-		return this.bookings;
-	}
-
-	public void setBookings(List<Booking> bookings) {
-		this.bookings = bookings;
-	}
-
-	public Booking addBooking(Booking booking) {
-		getBookings().add(booking);
-		booking.setHome(this);
-
-		return booking;
-	}
-
-	public Booking removeBooking(Booking booking) {
-		getBookings().remove(booking);
-		booking.setHome(null);
-
-		return booking;
-	}
-
 	public User getUser() {
 		return this.user;
 	}
@@ -188,5 +157,6 @@ public class Home implements Serializable {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
 
 }

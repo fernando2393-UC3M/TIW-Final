@@ -3,8 +3,6 @@ package es.uc3m.tiw.homes.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import java.util.Date;
 
 
@@ -23,9 +21,6 @@ public class MessagesAdmin implements Serializable {
 	@Column(name="MESSAGE_ID")
 	private int messageId;
 
-	@Column(name="MESSAGE_ADMIN_ID")
-	private int messageAdminId;
-
 	@Lob
 	@Column(name="MESSAGE_CONTENT")
 	private String messageContent;
@@ -40,11 +35,27 @@ public class MessagesAdmin implements Serializable {
 	@Column(name="MESSAGE_READ")
 	private byte messageRead;
 
-	//bi-directional many-to-one association to User
+	// many-to-one association to User
 	@ManyToOne
-	@JoinColumn(name="MESSAGE_USER_ID")
-	@JsonBackReference
+	@JoinColumn(name="MESSAGE_USER_ID", referencedColumnName="USER_ID")
 	private User user;
+	
+	public Admin getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Admin admin) {
+		this.admin = admin;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	// many-to-one association to Admin
+	@ManyToOne
+	@JoinColumn(name="MESSAGE_ADMIN_ID", referencedColumnName="ADMIN_ID")
+	private Admin admin;
 
 	public MessagesAdmin() {
 	}
@@ -55,14 +66,6 @@ public class MessagesAdmin implements Serializable {
 
 	public void setMessageId(int messageId) {
 		this.messageId = messageId;
-	}
-
-	public int getMessageAdminId() {
-		return this.messageAdminId;
-	}
-
-	public void setMessageAdminId(int messageAdminId) {
-		this.messageAdminId = messageAdminId;
 	}
 
 	public String getMessageContent() {

@@ -1,12 +1,9 @@
 package es.uc3m.tiw.rent.model;
 
 import java.io.Serializable;
-
 import javax.persistence.*;
-import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.util.Date;
 
 
 /**
@@ -14,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  * 
  */
 @Entity
-@Table(name="messages_admin")
+@Table(name="MESSAGES_ADMIN")
 @NamedQuery(name="MessagesAdmin.findAll", query="SELECT m FROM MessagesAdmin m")
 public class MessagesAdmin implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -38,17 +35,27 @@ public class MessagesAdmin implements Serializable {
 	@Column(name="MESSAGE_READ")
 	private byte messageRead;
 
-	//bi-directional many-to-one association to Admin
+	// many-to-one association to User
 	@ManyToOne
-	@JsonBackReference
-	@JoinColumn(name="MESSAGE_ADMIN_ID")
-	private Admin admin;
-
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	@JsonBackReference
-	@JoinColumn(name="MESSAGE_USER_ID")
+	@JoinColumn(name="MESSAGE_USER_ID", referencedColumnName="USER_ID")
 	private User user;
+	
+	public Admin getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Admin admin) {
+		this.admin = admin;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	// many-to-one association to Admin
+	@ManyToOne
+	@JoinColumn(name="MESSAGE_ADMIN_ID", referencedColumnName="ADMIN_ID")
+	private Admin admin;
 
 	public MessagesAdmin() {
 	}
@@ -91,14 +98,6 @@ public class MessagesAdmin implements Serializable {
 
 	public void setMessageRead(byte messageRead) {
 		this.messageRead = messageRead;
-	}
-
-	public Admin getAdmin() {
-		return this.admin;
-	}
-
-	public void setAdmin(Admin admin) {
-		this.admin = admin;
 	}
 
 	public User getUser() {

@@ -10,12 +10,19 @@
 	<%@ page contentType="text/html; charset=UTF-8" %>
 	<%@ page import="java.util.List" %>
 	<%@ page import="java.util.Date" %>
-	<%@ page import="model.User" %>
+	<%@ page import="java.util.Iterator" %>
 	<%@ page import="java.sql.DriverManager" %>
 	<%@ page import="java.sql.Connection" %>
 	<%@ page import="java.sql.Statement" %>
 	<%@ page import="java.sql.ResultSet" %>
-	<%@ page import="java.sql.SQLException" %>	<meta charset="utf-8">
+	<%@ page import="java.sql.SQLException" %>
+	<%@ page import="javax.ws.rs.client.*" %>
+	<%@ page import="javax.ws.rs.core.MediaType" %>
+	<%@ page import="javax.ws.rs.core.Response" %>
+	<%@ page import="javax.ws.rs.core.GenericType" %>
+	<%@ page import="model.User" %>
+	<%@ page import="model.Booking" %>
+	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>TIWbnb</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -121,50 +128,30 @@
 				<div class="row row-bottom-padded-md">
 				<%
 		
-		Connection con = null;
-		Statement st = null;
-		
-		// Open connection
-		
-		try {
-			// Load Driver
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			// Connect to the database
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/tiwbnb", "root", "admin");
-			System.out.println("Sucessful connection");
-		} catch (Exception e) {
-			System.out.println("Error when connecting to the database ");
-		}
-		
-		ResultSet rs = null;
-		
-		try {
-			// Create statement
-			st =con.createStatement();
+		final String HOMES_API_URL = "http://localhost:10003/rents/users/";
+		int id = (Integer) session.getAttribute("user");
 
-			//Once the statement is created, we need to get the user input for both user email and password
-
-			// Execute statement
-			int userID = (Integer)session.getAttribute("user");
-			String query = "SELECT * FROM BOOKING INNER JOIN HOME ON BOOKING.BOOKING_HOME_ID=HOME.HOME_ID WHERE BOOKING_USER_ID =" + userID;
-			rs = st.executeQuery(query);
-			
-		} catch (SQLException e) {
-			System.out.println("Error when opening table ");
-		}
+		Client client = ClientBuilder.newClient();
+		WebTarget webResource = client.target(HOMES_API_URL).path("" + id);
+		Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
 		
-		// List <User> userList = (List <User>) request.getAttribute("Users");
+		Response resp = invocationBuilder.get();
 		
-		while(rs.next()){
+		List<Booking> homeList = resp.readEntity(new GenericType<List<Booking>>(){});
+		
+		Iterator i = homeList.iterator();
+		
+		while(i.hasNext()){
+			Booking curr = (Booking)i.next();
 			
 			out.println("<div class=\"col-md-4 col-sm-6 fh5co-tours animate-box\" data-animate-effect=\"fadeIn\">");
-			out.println("<div href=\"#\"><img src=\"" + rs.getString("HOME_PHOTOS") + "\" alt=\"Free HTML5 Website Template by FreeHTML5.co\" class=\"img-responsive\">");
+			out.println("<div href=\"#\"><img src=\"" + curr.getHome().getHomePhotos() + "\" alt=\"Free HTML5 Website Template by FreeHTML5.co\" class=\"img-responsive\">");
 			out.println("<div class=\"desc\">");
 			
 			out.println("<span></span>");
-			out.println("<h3>" + rs.getString("HOME_NAME") + "</h3>");
-			out.println("<span>" + rs.getString("HOME_DESCRIPTION_SHORT") + "</span>");
-			out.println("<span>Booking id: " + rs.getInt("BOOKING_ID") +"</span>");
+			out.println("<h3>" + curr.getHome().getHomeName() + "</h3>");
+			out.println("<span>" + curr.getHome().getHomeDescriptionShort() + "</span>");
+			out.println("<span>Booking id: " + curr.getBookingId() +"</span>");
 			out.println("<a class=\"btn btn-primary btn-outline\" href=\"#\">Más Info <i class=\"icon-arrow-right22\"></i></a>");
 
 			out.println("</div>");

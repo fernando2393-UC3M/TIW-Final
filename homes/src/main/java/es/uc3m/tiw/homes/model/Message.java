@@ -3,8 +3,6 @@ package es.uc3m.tiw.homes.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import java.util.Date;
 
 
@@ -34,16 +32,14 @@ public class Message implements Serializable {
 	@Column(name="MESSAGE_READ")
 	private byte messageRead;
 
-	//bi-directional many-to-one association to User
+	// many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="MESSAGE_SENDER_ID")
-	@JsonBackReference(value="messages1")
 	private User user1;
 
-	//bi-directional many-to-one association to User
+	// many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="MESSAGE_RECEIVER_ID")
-	@JsonBackReference(value="messages2")
 	private User user2;
 
 	public Message() {
