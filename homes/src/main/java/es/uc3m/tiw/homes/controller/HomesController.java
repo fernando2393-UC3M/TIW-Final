@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.uc3m.tiw.homes.dao.HomesDao;
 import es.uc3m.tiw.homes.dao.UsersDao;
@@ -70,12 +69,15 @@ public class HomesController {
 		return response;
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value="/homes")
-	public ResponseEntity<Home> saveHome(@RequestBody @Validated Home pHome){
-		Home home = daoHome.findById(pHome.getHomeId()).orElse(null);
-		ResponseEntity<Home> response;
+	@RequestMapping(method = RequestMethod.POST, value="/homes/users/{userId}")
+	public ResponseEntity<Home> saveHome(@RequestBody @Validated Home pHome, @PathVariable @Validated int userId){
+		// Home home = daoHome.findById(pHome.getHomeId()).orElse(null);
+		User us = daoUs.findById(userId).orElse(null);
 		
-		if(home == null){
+		ResponseEntity<Home> response;
+
+		if(pHome != null && us != null){
+			pHome.setUser(us);
 			daoHome.save(pHome);
 			response = new ResponseEntity<>(HttpStatus.OK);
 		} else {

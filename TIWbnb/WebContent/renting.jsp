@@ -134,6 +134,7 @@
 						
 						Iterator i = homeList.iterator();
 						
+						
 						while(i.hasNext()){
 							Home curr = (Home)i.next();
 							
@@ -176,6 +177,7 @@
 							out.println("</div>");
 							out.println("</div>");
 							out.println("</div>");
+							
 						   	
 						}	
 						
