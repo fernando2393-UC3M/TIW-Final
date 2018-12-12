@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.uc3m.tiw.homes.dao.HomesDao;
+import es.uc3m.tiw.homes.dao.UsersDao;
 import es.uc3m.tiw.homes.model.Home;
 import es.uc3m.tiw.homes.model.User;
 
@@ -24,6 +25,9 @@ public class HomesController {
 	
 	@Autowired
 	HomesDao daoHome;
+	
+	@Autowired
+	UsersDao daoUs;
 
 	@RequestMapping(method=RequestMethod.GET, value="/homes")
 	public ResponseEntity <List<Home>> getHomes(){
@@ -50,9 +54,20 @@ public class HomesController {
 		return response;
 	}
 	
-	@RequestMapping("/homes/{user}")
-	public @ResponseBody List<Home> getHomesByUser(@RequestBody User user){
-		return daoHome.findByUser(user);
+	@RequestMapping("/homes/users/{id}")
+	public ResponseEntity<List<Home>> getHomesByUserId(@PathVariable @Validated int id){
+		User user = daoUs.findById(id).orElse(null);
+		List<Home> homeList = daoHome.findByUser(user);
+		
+		ResponseEntity<List<Home>> response;
+		
+		if(homeList.size() == 0) {
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			response = new ResponseEntity<>(homeList, HttpStatus.OK);
+		}
+		
+		return response;
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value="/homes")

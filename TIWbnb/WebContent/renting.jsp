@@ -6,6 +6,20 @@
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 	<head>
 	<%@ page contentType="text/html; charset=UTF-8" %>
+	<%@ page import="java.util.List" %>
+	<%@ page import="java.util.Date" %>
+	<%@ page import="java.util.Iterator" %>
+	<%@ page import="java.sql.DriverManager" %>
+	<%@ page import="java.sql.Connection" %>
+	<%@ page import="java.sql.Statement" %>
+	<%@ page import="java.sql.ResultSet" %>
+	<%@ page import="java.sql.SQLException" %>
+	<%@ page import="javax.ws.rs.client.*" %>
+	<%@ page import="javax.ws.rs.core.MediaType" %>
+	<%@ page import="javax.ws.rs.core.Response" %>
+	<%@ page import="javax.ws.rs.core.GenericType" %>
+	<%@ page import="model.User" %>
+	<%@ page import="model.Home" %>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>TIWbnb</title>
@@ -105,92 +119,67 @@
 				<div class="desc">
 					<div class="container">
 						<div class="row">
-							<div class="col-sm-6 col-md-6">
-								<!-- <a href="index" id="main-logo">Travel</a> -->
-								<div class="tabulation animate-box">
+						
+						<% 
+						final String HOMES_API_URL = "http://localhost:10002/homes/users/";
+						int id = (Integer) session.getAttribute("user");
 
-								  <!-- Nav tabs -->
-								   <ul class="nav nav-tabs" role="tablist">
-								      <li role="presentation" class="active">
-								    	   <a href="#alojamientos" aria-controls="alojamientos" role="tab" data-toggle="tab">Alojamiento</a>
-								      </li>
-								   </ul>
-
-								   <!-- Tab panes -->
-									<div class="tab-content">
-									 <div role="tabpanel" class="tab-pane active" id="hotels">
-									 	<div class="row">
-													<div class="col-xxs-12 col-xs-12 mt">
-														<div class="input-field">
-															<label>Casa en C/ Preciados, 12</label>
-															<a class="info" href="casa">Modificar Información</a>
-															<br>
-															<img alt="Casa-Preciados" src="images/Airbnb.jpg" max>
-														</div>
-														<br>
-														<div class="col-xxs-12 col-xs-12 mt">
-															<label>Alquilada:</label><font class="rented" color="green">Alquilada</font>
-														</div>
-														<div class="col-xxs-12 col-xs-12 mt">
-															<label>Descripción:</label>
-															<p><font color="black">Impresionante ático en Calle Preciados, en el mismo centro de Madrid. A 5 minutos andando de Sol y 
-															rodeado de comercios y zonas turísticas. Un alojamiento encantador para cualquier persona.</font>
-															</p>															
-														</div>
-													</div>                                     
-
-											<div class="col-xs-12">
-												<input type="button" class="btn btn-primary btn-block" value="Eliminar Alojamiento" onclick="errorDel()">
-											</div>
-                                        </div>
-				                    </div>
-								 </div>
-								</div>
-							</div>
+						Client client = ClientBuilder.newClient();
+						WebTarget webResource = client.target(HOMES_API_URL).path("" + id);
+						Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+						
+						Response resp = invocationBuilder.get();
+						
+						List<Home> homeList = resp.readEntity(new GenericType<List<Home>>(){});
+						
+						Iterator i = homeList.iterator();
+						
+						while(i.hasNext()){
+							Home curr = (Home)i.next();
 							
+							out.println("<div class=\"col-sm-6 col-md-6\">");
+							out.println("<div class=\"tabulation animate-box\">");
 							
-							<div class="col-sm-6 col-md-6">
-								<!-- <a href="index" id="main-logo">Travel</a> -->
-								<div class="tabulation animate-box">
+							out.println("<ul class=\"nav nav-tabs\" role=\"tablist\">");
+						    out.println("<li role=\"presentation\" class=\"active\">");
+						    out.println("<a href=\"#alojamientos\" aria-controls=\"alojamientos\" role=\"tab\" data-toggle=\"tab\">Alojamiento</a>");
+						    out.println("</li>");
+						   	out.println("</ul>");
+						   	
+						   	out.println("<div class=\"tab-content\">");
+						   	out.println("<div role=\"tabpanel\" class=\"tab-pane active\" id=\"hotels\">");
+						   	out.println("<div class=\"row\">");
+						   	out.println("<div class=\"col-xxs-12 col-xs-12 mt\">");
+						   	out.println("<div class=\"input-field\">");
+						   	out.println("<label>" + curr.getHomeName() + "</label>");
+						   	out.println("<a class=\"info\" href=\"casa\">Modificar Información</a>");
+						   	out.println("<br>");
+						   	out.println("<img alt=\"" + curr.getHomeName() + "\" src=\"" + curr.getHomePhotos() + "\" max>");
+						   	out.println("</div>");
+						   	out.println("<br>");
+						   	out.println("<div class=\"col-xxs-12 col-xs-12 mt\">");
+						   	out.println("<label>Alquilada:</label><font class=\"rented\" color=\"green\">Alquilada</font>");
+						   	out.println("</div>");
+						   	out.println("<div class=\"col-xxs-12 col-xs-12 mt\">");
+							out.println("<label>Descripción:</label>");
+							out.println("<p><font color=\"black\">" + curr.getHomeDescriptionFull() + "</font>");
+							out.println("</p>");											
+							out.println("</div>");
+							out.println("</div>");                                 
 
-								  <!-- Nav tabs -->
-								   <ul class="nav nav-tabs" role="tablist">
-								      <li role="presentation" class="active">
-								    	   <a href="#alojamientos" aria-controls="alojamientos" role="tab" data-toggle="tab">Alojamiento</a>
-								      </li>
-								   </ul>
-
-								   <!-- Tab panes -->
-									<div class="tab-content">
-									 <div role="tabpanel" class="tab-pane active" id="hotels">
-									 	<div class="row">
-													<div class="col-xxs-12 col-xs-12 mt">
-														<div class="input-field">
-															<label>Casa en C/ Preciados, 12</label>
-															<a class="info" href="casa">Modificar Información</a>
-															<br>
-															<img alt="Casa-Preciados" src="images/Airbnb.jpg" max>
-														</div>
-														<br>
-														<div class="col-xxs-12 col-xs-12 mt">
-															<label>Alquilada:</label><font class="rented" color="red">No Alquilada</font>
-														</div>
-														<div class="col-xxs-12 col-xs-12 mt">
-															<label>Descripción:</label>
-															<p><font color="black">Impresionante ático en Calle Preciados, en el mismo centro de Madrid. A 5 minutos andando de Sol y 
-															rodeado de comercios y zonas turísticas. Un alojamiento encantador para cualquier persona.</font>
-															</p>															
-														</div>
-													</div>                                     
-
-											<div class="col-xs-12">
-												<input type="button" class="btn btn-primary btn-block" value="Eliminar Alojamiento" onclick="deleted()">
-											</div>
-                                        </div>
-				                    </div>
-								 </div>
-								</div>
-							</div>		
+							out.println("<div class=\"col-xs-12\">");
+							out.println("<input type=\"button\" class=\"btn btn-primary btn-block\" value=\"Eliminar Alojamiento\" onclick=\"errorDel()\">");
+							
+							out.println("</div>");
+							out.println("</div>");
+   							out.println("</div>");
+							out.println("</div>");
+							out.println("</div>");
+							out.println("</div>");
+						   	
+						}	
+						
+						%>		
 							
 						</div>
 					</div>
