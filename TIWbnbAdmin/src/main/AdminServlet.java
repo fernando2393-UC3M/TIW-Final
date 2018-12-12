@@ -283,8 +283,6 @@ public class AdminServlet extends HttpServlet {
 		
 		else if (requestURL.toString().equals(path+"modify")) {
 			
-			String aux = req.getParameter("inputId");
-			int id = Integer.parseInt(aux);
 			
 			Client client = ClientBuilder.newClient();
 			WebTarget webResource = client.target(USER_API_URL).path(req.getParameter("inputId"));
