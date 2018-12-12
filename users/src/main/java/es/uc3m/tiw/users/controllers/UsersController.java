@@ -52,7 +52,7 @@ public class UsersController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<User> getUserByUserEmail(@RequestParam(name="email") String email){
+	public ResponseEntity<User> getUserByUserEmail(@RequestParam(name="email", required=true) String email){
 		User user = daoUs.findByUserEmail(email).orElse(null);
 		ResponseEntity<User> response;
 		

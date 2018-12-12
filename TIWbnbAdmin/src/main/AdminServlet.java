@@ -325,14 +325,25 @@ public class AdminServlet extends HttpServlet {
 		else if (requestURL.toString().equals(path+"modify_place")) {
 			
 			
-			// First look for user to re-asign email
-			
+			// First look for user to re-assign email
+						
 			Client clientUsr = ClientBuilder.newClient();
-			WebTarget webResource = clientUsr.target(USER_API_URL).path(req.getParameter("inputEmail"));
-			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
-					
-			String aux = req.getParameter("inputId");
-			int id = Integer.parseInt(aux);
+			WebTarget webResourceUsr = clientUsr.target(USER_API_URL).queryParam("email", req.getParameter("inputEmail"));
+			Invocation.Builder invocationBuilderUsr = webResourceUsr.request(MediaType.APPLICATION_JSON);
+			
+			Response responseUsr = invocationBuilderUsr.get();
+			
+			User resultUsr = responseUsr.readEntity(User.class); //New user to whom this house will be assigned
+			
+			if(responseUsr.getStatus() != 200) { // Error getting the user
+				
+				dispatcher = req.getRequestDispatcher("resultados.jsp");
+				dispatcher.forward(req, res);				
+			}
+			
+			
+			
+			// Look for home now
 			
 			Client client = ClientBuilder.newClient();
 			WebTarget webResource = client.target(HOME_API_URL).path(req.getParameter("inputId"));
@@ -341,6 +352,7 @@ public class AdminServlet extends HttpServlet {
 			Home result = new Home();
 			// Password confirmed
 			result.setHomeName(req.getParameter("inputName"));
+			result.setUser(resultUsr);
 			result.setHomeCity(req.getParameter("inputCity"));
 			result.setHomeDescriptionFull(req.getParameter("inputDescriptionFull"));
 			result.setHomeDescriptionShort(req.getParameter("inputDescriptionShort"));
