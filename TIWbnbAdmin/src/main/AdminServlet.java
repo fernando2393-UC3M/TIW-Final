@@ -339,23 +339,6 @@ public class AdminServlet extends HttpServlet {
 		else if (requestURL.toString().equals(path+"modify_place")) {
 			
 			
-			// First look for user to re-assign email
-						
-			Client clientUsr = ClientBuilder.newClient();
-			WebTarget webResourceUsr = clientUsr.target("http://localhost:10001").queryParam("email", req.getParameter("inputEmail"));
-			Invocation.Builder invocationBuilderUsr = webResourceUsr.request(MediaType.APPLICATION_JSON);
-			
-			Response responseUsr = invocationBuilderUsr.get();
-			
-			User resultUsr = responseUsr.readEntity(User.class); //New user to whom this house will be assigned
-			
-			if(responseUsr.getStatus() != 200) { // Error getting the user
-				
-				res.sendRedirect("resultados");					
-			}
-			
-			
-			
 			// Look for home now
 			
 			Client client = ClientBuilder.newClient();
@@ -373,7 +356,24 @@ public class AdminServlet extends HttpServlet {
 			}
 			else {
 				result.setHomeName(resultHome.getHomeName());
-			}			
+			}
+			
+			// First look for user to re-assign email
+			
+			Client clientUsr = ClientBuilder.newClient();
+			WebTarget webResourceUsr = clientUsr.target("http://localhost:10001").queryParam("email", req.getParameter("inputEmail"));
+			Invocation.Builder invocationBuilderUsr = webResourceUsr.request(MediaType.APPLICATION_JSON);
+			
+			Response responseUsr = invocationBuilderUsr.get();
+			
+			User resultUsr = responseUsr.readEntity(User.class); //New user to whom this house will be assigned
+			
+			if(resultUsr == null) { // Error getting the user
+				
+				res.sendRedirect("resultados");					
+			}
+			
+			else {
 			
 			result.setUser(resultUsr);
 			
@@ -426,7 +426,9 @@ public class AdminServlet extends HttpServlet {
 			}
 			else { // Error in update
 				res.sendRedirect("resultados");	
-			}		
+			}
+			
+			}
 					
 		} 
 		else {

@@ -107,11 +107,14 @@
 			<form ACTION="modify_place" METHOD="POST" class="form-signin">
 				<input type="number" id="inputId" name="inputId" class="form-control" placeholder="Id del alojamiento">
 				<input type="text" id="inputName" name="inputName" class="form-control" placeholder="Nombre" required>
-				<input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Dirección de correo electrónico">
+				<input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Dirección de correo electrónico (Campo Obligatorio)">
 				<input type="text" id="inputCity" name="inputCity" class="form-control" placeholder="Ciudad" required>
 				<input type="text" id="inputDescriptionFull" name="inputDescriptionFull" class="form-control" placeholder="Descripción" required>
 				<input type="text" id="inputDescriptionShort" name="inputDescriptionShort" class="form-control" placeholder="Descripción corta" required>
-				<input type="text" id="inputType" name="inputType" class="form-control" placeholder="Tipo" required>
+				<select type="text" id="inputType" name="inputType" class="form-control" placeholder="Tipo" required>
+				<option value="apartamento">Apartamento</option>
+				<option value="habitacion privada">Habitación Privada</option>
+				</select>
 				<input type="number" id="inputGuests" name="inputGuests" class="form-control" placeholder="Huéspedes" required>
 				<input type="text" id="inputPhotos" name="inputPhotos" class="form-control" placeholder="Fotos" required>
 				<input type="number" id="inputPriceNight" name="inputPriceNight" class="form-control" placeholder="Precio por noche" required>
