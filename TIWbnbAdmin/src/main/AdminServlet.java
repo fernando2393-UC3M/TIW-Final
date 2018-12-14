@@ -245,13 +245,11 @@ public class AdminServlet extends HttpServlet {
 			
 			if(response.getStatus() == 200) {
 				
-				dispatcher = req.getRequestDispatcher("manage_users.jsp");
-				dispatcher.forward(req, res);				
+				res.sendRedirect("manage_users");				
 			}
 			else { // Error in deletion
-				dispatcher = req.getRequestDispatcher("manage_users.jsp");
-				// Forward to requested URL by user
-				dispatcher.forward(req, res);
+				
+				res.sendRedirect("manage_users");
 			}			
 		}
 		
@@ -336,7 +334,7 @@ public class AdminServlet extends HttpServlet {
 			} catch (ParseException e) {
 			}		
 			
-			Response response = invocationBuilder.put(Entity.entity(result, MediaType.APPLICATION_JSON));
+			invocationBuilder.put(Entity.entity(result, MediaType.APPLICATION_JSON));
 				
 			res.sendRedirect("manage_users");
 			
