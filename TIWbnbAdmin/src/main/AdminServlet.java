@@ -337,17 +337,8 @@ public class AdminServlet extends HttpServlet {
 			}		
 			
 			Response response = invocationBuilder.put(Entity.entity(result, MediaType.APPLICATION_JSON));
-			
-			if(response.getStatus() == 200) {
 				
-				dispatcher = req.getRequestDispatcher("manage_users.jsp");
-				dispatcher.forward(req, res);				
-			}
-			else { // Error in update
-				dispatcher = req.getRequestDispatcher("manage_users.jsp");
-				// Forward to requested URL by user
-				dispatcher.forward(req, res);
-			}			
+			res.sendRedirect("manage_users");
 			
 		} 
 		
