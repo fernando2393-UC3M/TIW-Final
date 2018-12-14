@@ -288,20 +288,53 @@ public class AdminServlet extends HttpServlet {
 			WebTarget webResource = client.target(USER_API_URL).path(req.getParameter("inputId"));
 			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
 			
+			Response responseUsr = invocationBuilder.get();
+			
+			User resultUsr = responseUsr.readEntity(User.class);	
+			
 			User result = new User();
 			// Password confirmed
-			result.setUserName(req.getParameter("inputName"));
-			result.setUserSurname(req.getParameter("inputSurname"));
-			result.setUserPassword(req.getParameter("inputPassword"));
+			if(!req.getParameter("inputName").isEmpty()){
+				result.setUserName(req.getParameter("inputName"));
+			}
+			else {
+				result.setUserName(resultUsr.getUserName());
+			}
+			
+			if(!req.getParameter("inputEmail").isEmpty()){
+				result.setUserEmail(req.getParameter("inputEmail"));
+			}
+			else {
+				result.setUserEmail(resultUsr.getUserEmail());
+			}
+			
+			if(!req.getParameter("inputSurname").isEmpty()){
+				result.setUserSurname(req.getParameter("inputSurname"));
+			}
+			else {
+				result.setUserSurname(resultUsr.getUserSurname());
+			}
+			
+			if(!req.getParameter("inputPassword").isEmpty()){
+				result.setUserPassword(req.getParameter("inputPassword"));
+			}
+			else {
+				result.setUserPassword(resultUsr.getUserPassword());
+			}
 			
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			Date parsed = new Date(1970, 01, 01);
 			try {
-				parsed = format.parse(req.getParameter("inputBirthdate"));
+				
+				if(!req.getParameter("inputBirthdate").isEmpty()){
+					parsed = format.parse(req.getParameter("inputBirthdate"));
+					result.setUserBirthdate(parsed);
+				}
+				else {
+					result.setUserBirthdate(resultUsr.getUserBirthdate());
+				}
 			} catch (ParseException e) {
-			}
-
-			result.setUserBirthdate(parsed);
+			}		
 			
 			Response response = invocationBuilder.put(Entity.entity(result, MediaType.APPLICATION_JSON));
 			
