@@ -35,7 +35,7 @@ import model.User;
 				"/resultados", "/renting", "/delete",
 				"/registrado", "/mensajes", "/login", "/register",
 				"/alojamiento", "/casa", "/viajes", "/logout",
-				"/SendMessage", "/SendMessageAdmin", "/booking", "/booking_confirmation"})
+				"/SendMessage", "/SendMessageAdmin", "/booking", "/booking_confirmation", "/deleteHome"})
 public class BNBServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
@@ -86,6 +86,23 @@ public class BNBServlet extends HttpServlet {
 		}
 		else if(requestURL.equals(path+"casa")){
 			ReqDispatcher =req.getRequestDispatcher("casa.jsp");
+		}
+		else if(requestURL.toString().equals(path+"deleteHome")) {
+			
+			Client client = ClientBuilder.newClient();
+			WebTarget webResource = client.target(HOMES_API_URL).path(req.getParameter("id"));
+			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+			
+			Response response = invocationBuilder.delete();			
+			
+			if(response.getStatus() == 200){
+				req.setAttribute("deleted", 1);
+			} else {
+				req.setAttribute("deleted", 2);
+			}			
+			
+			ReqDispatcher =req.getRequestDispatcher("renting.jsp");
+
 		}
 		else if(requestURL.equals(path+"mensajes")){
 			
@@ -624,7 +641,6 @@ public class BNBServlet extends HttpServlet {
 			*/
 			res.sendRedirect("mensajes");
 			
-		}
-		
+		} 
 	}
 }

@@ -167,9 +167,9 @@
 							out.println("</p>");											
 							out.println("</div>");
 							out.println("</div>");                                 
-
+							
 							out.println("<div class=\"col-xs-12\">");
-							out.println("<input type=\"button\" class=\"btn btn-primary btn-block\" value=\"Eliminar Alojamiento\" onclick=\"errorDel()\">");
+							out.println("<a href=\"deleteHome?id=" + curr.getHomeId() + "\"> <input type=\"button\" class=\"btn btn-primary btn-block\" value=\"Eliminar Alojamiento\"></a>");
 							
 							out.println("</div>");
 							out.println("</div>");
