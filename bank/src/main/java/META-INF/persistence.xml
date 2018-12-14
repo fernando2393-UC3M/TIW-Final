@@ -3,12 +3,12 @@
 	<persistence-unit name="TIWbnb" transaction-type="JTA">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<jta-data-source>tiwbnb_ds</jta-data-source>
-		<class>model.Admin</class>
-		<class>model.Booking</class>
-		<class>model.Home</class>
-		<class>model.Message</class>
-		<class>model.MessagesAdmin</class>
-		<class>model.User</class>
+		<class>es.uc3m.tiw.bank.model.Admin</class>
+		<class>es.uc3m.tiw.bank.model.Booking</class>
+		<class>es.uc3m.tiw.bank.model.Home</class>
+		<class>es.uc3m.tiw.bank.model.Message</class>
+		<class>es.uc3m.tiw.bank.model.MessagesAdmin</class>
+		<class>es.uc3m.tiw.bank.model.User</class>
 		<properties>
 			<property name="javax.persistence.schema-generation.database.action" value="create"/>
 			<property name="eclipselink.logging.level" value="FINE"/>
