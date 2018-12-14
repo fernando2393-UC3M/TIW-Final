@@ -245,13 +245,11 @@ public class AdminServlet extends HttpServlet {
 			
 			if(response.getStatus() == 200) {
 				
-				dispatcher = req.getRequestDispatcher("manage_users.jsp");
-				dispatcher.forward(req, res);				
+				res.sendRedirect("manage_users");				
 			}
 			else { // Error in deletion
-				dispatcher = req.getRequestDispatcher("manage_users.jsp");
-				// Forward to requested URL by user
-				dispatcher.forward(req, res);
+				
+				res.sendRedirect("manage_users");
 			}			
 		}
 		
@@ -336,18 +334,9 @@ public class AdminServlet extends HttpServlet {
 			} catch (ParseException e) {
 			}		
 			
-			Response response = invocationBuilder.put(Entity.entity(result, MediaType.APPLICATION_JSON));
-			
-			if(response.getStatus() == 200) {
+			invocationBuilder.put(Entity.entity(result, MediaType.APPLICATION_JSON));
 				
-				dispatcher = req.getRequestDispatcher("manage_users.jsp");
-				dispatcher.forward(req, res);				
-			}
-			else { // Error in update
-				dispatcher = req.getRequestDispatcher("manage_users.jsp");
-				// Forward to requested URL by user
-				dispatcher.forward(req, res);
-			}			
+			res.sendRedirect("manage_users");
 			
 		} 
 		
@@ -380,32 +369,70 @@ public class AdminServlet extends HttpServlet {
 			WebTarget webResource = client.target(HOME_API_URL).path(req.getParameter("inputId"));
 			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
 			
+			Response responseHome = invocationBuilder.get();
+			
+			Home resultHome = responseHome.readEntity(Home.class);
+			
 			Home result = new Home();
-			// Password confirmed
-			result.setHomeName(req.getParameter("inputName"));
+			
+			if(!req.getParameter("inputName").isEmpty()) {
+				result.setHomeName(req.getParameter("inputName"));
+			}
+			else {
+				result.setHomeName(resultHome.getHomeName());
+			}			
+			
 			result.setUser(resultUsr);
-			result.setHomeCity(req.getParameter("inputCity"));
-			result.setHomeDescriptionFull(req.getParameter("inputDescriptionFull"));
-			result.setHomeDescriptionShort(req.getParameter("inputDescriptionShort"));
-			result.setHomeType(req.getParameter("inputType"));
 			
-			int guests = Integer.parseInt(req.getParameter("inputGuests"));
-			result.setHomeGuests(guests);
+			if(!req.getParameter("inputCity").isEmpty()) {
+				result.setHomeCity(req.getParameter("inputCity"));
+			}
+			else {
+				result.setHomeCity(resultHome.getHomeCity());
+			}
 			
-			BigDecimal price = new BigDecimal (req.getParameter("inputPriceNight"));
-			result.setHomePriceNight(price);
+			if(!req.getParameter("inputDescriptionFull").isEmpty()) {
+				result.setHomeDescriptionFull(req.getParameter("inputDescriptionFull"));
+			}
+			else {
+				result.setHomeDescriptionFull(resultHome.getHomeDescriptionFull());
+			}
+			
+			if(!req.getParameter("inputDescriptionShort").isEmpty()) {
+				result.setHomeDescriptionShort(req.getParameter("inputDescriptionShort"));
+			}
+			else {
+				result.setHomeDescriptionShort(resultHome.getHomeDescriptionShort());
+			}
+			
+			if(!req.getParameter("inputType").isEmpty()) {
+				result.setHomeType(req.getParameter("inputType"));
+			}
+			else {
+				result.setHomeType(resultHome.getHomeType());
+			}
+			
+			if(!req.getParameter("inputGuests").isEmpty()) {
+				result.setHomeGuests(Integer.parseInt(req.getParameter("inputGuests")));
+			}
+			else {
+				result.setHomeGuests(resultHome.getHomeGuests());
+			}
+			
+			if(!req.getParameter("inputPriceNight").isEmpty()) {
+				result.setHomePriceNight(new BigDecimal (req.getParameter("inputPriceNight")));
+			}
+			else {
+				result.setHomePriceNight(resultHome.getHomePriceNight());
+			}
 			
 			Response response = invocationBuilder.put(Entity.entity(result, MediaType.APPLICATION_JSON));
 			
 			if(response.getStatus() == 200) {
-				
-				dispatcher = req.getRequestDispatcher("resultados.jsp");
-				dispatcher.forward(req, res);				
+				res.sendRedirect("resultados");				
 			}
 			else { // Error in update
-				dispatcher = req.getRequestDispatcher("resultados.jsp");
-				// Forward to requested URL by user
-				dispatcher.forward(req, res);
+				res.sendRedirect("resultados");	
 			}		
 					
 		} 
