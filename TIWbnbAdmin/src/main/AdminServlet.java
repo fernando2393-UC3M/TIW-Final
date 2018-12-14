@@ -264,17 +264,11 @@ public class AdminServlet extends HttpServlet {
 			
 			if(response.getStatus() == 200) {
 				
-				dispatcher = req.getRequestDispatcher("resultados.jsp");
-				dispatcher.forward(req, res);				
+				res.sendRedirect("resultados");		
 			}
 			else { // Error in deletion
-				dispatcher = req.getRequestDispatcher("resultados.jsp");
-				// Forward to requested URL by user
-				dispatcher.forward(req, res);
-			}			
-			
-			dispatcher.forward(req, res);
-					
+				res.sendRedirect("resultados");	
+			}								
 		}
 		
 		// ------------------------- MODIFY USER CASE -------------------------------
@@ -348,7 +342,7 @@ public class AdminServlet extends HttpServlet {
 			// First look for user to re-assign email
 						
 			Client clientUsr = ClientBuilder.newClient();
-			WebTarget webResourceUsr = clientUsr.target(USER_API_URL).queryParam("email", req.getParameter("inputEmail"));
+			WebTarget webResourceUsr = clientUsr.target("http://localhost:10001").queryParam("email", req.getParameter("inputEmail"));
 			Invocation.Builder invocationBuilderUsr = webResourceUsr.request(MediaType.APPLICATION_JSON);
 			
 			Response responseUsr = invocationBuilderUsr.get();
@@ -357,8 +351,7 @@ public class AdminServlet extends HttpServlet {
 			
 			if(responseUsr.getStatus() != 200) { // Error getting the user
 				
-				dispatcher = req.getRequestDispatcher("resultados.jsp");
-				dispatcher.forward(req, res);				
+				res.sendRedirect("resultados");					
 			}
 			
 			
