@@ -58,7 +58,7 @@ public class UsersController {
 		if(user == null) {
 			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
-			response = new ResponseEntity<>(user, HttpStatus.OK);
+			response = new ResponseEntity<>(user, HttpStatus.ACCEPTED);
 		}
 		
 		return response;
