@@ -156,7 +156,7 @@
 							   	out.println("<label>" + curr.getHomeName() + "</label>");
 							   	out.println("<a class=\"info\" href=\"detail?id=" + curr.getHomeId() +"\">Modificar Información</a>");
 							   	out.println("<br>");
-							   	out.println("<img alt=\"" + curr.getHomeName() + "\" src=\"" + curr.getHomePhotos() + "\" max>");
+							   	out.println("<a href=\"alojamiento?id=" + curr.getHomeId() + "\"><img alt=\"" + curr.getHomeName() + "\" src=\"" + curr.getHomePhotos() + "\" max></a>");
 							   	out.println("</div>");
 							   	out.println("<br>");
 							   	out.println("<div class=\"col-xxs-12 col-xs-12 mt\">");

@@ -152,7 +152,7 @@
 			out.println("<h3>" + curr.getHome().getHomeName() + "</h3>");
 			out.println("<span>" + curr.getHome().getHomeDescriptionShort() + "</span>");
 			out.println("<span>Booking id: " + curr.getBookingId() +"</span>");
-			out.println("<a class=\"btn btn-primary btn-outline\" href=\"#\">Más Info <i class=\"icon-arrow-right22\"></i></a>");
+			out.println("<a class=\"btn btn-primary btn-outline\" href=\"alojamiento?id=" + curr.getHome().getHomeId() + "\">Más Info <i class=\"icon-arrow-right22\"></i></a>");
 
 			out.println("</div>");
 			out.println("</div>");

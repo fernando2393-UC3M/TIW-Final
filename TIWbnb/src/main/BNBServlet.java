@@ -378,7 +378,7 @@ public class BNBServlet extends HttpServlet {
 		//////////////////// MODIFY HOUSE
 		else if(requestURL.toString().equals(path+"modifyHome")){
 			
-			dispatcher = req.getRequestDispatcher("casa.jsp");
+			dispatcher = req.getRequestDispatcher("renting.jsp");
 			
 				Client client = ClientBuilder.newClient();
 				WebTarget webResource = client.target(HOMES_API_URL).path("" + req.getParameter("id"));

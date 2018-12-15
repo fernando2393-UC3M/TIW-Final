@@ -9,12 +9,18 @@
 			<%@ page contentType="text/html; charset=UTF-8" %>
 	<%@ page import="java.util.List" %>
 	<%@ page import="java.util.Date" %>
-	<%@ page import="model.Home" %>
+	<%@ page import="java.util.Iterator" %>
 	<%@ page import="java.sql.DriverManager" %>
 	<%@ page import="java.sql.Connection" %>
 	<%@ page import="java.sql.Statement" %>
 	<%@ page import="java.sql.ResultSet" %>
 	<%@ page import="java.sql.SQLException" %>
+	<%@ page import="javax.ws.rs.client.*" %>
+	<%@ page import="javax.ws.rs.core.MediaType" %>
+	<%@ page import="javax.ws.rs.core.Response" %>
+	<%@ page import="javax.ws.rs.core.GenericType" %>
+	<%@ page import="model.User" %>
+	<%@ page import="model.Home" %>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>TIWbnb</title>
@@ -126,56 +132,27 @@
 			<div class="container">
 		
 				<div class="row">
+				<%! Home home; %>
 				
 				<%
-								String idInt = request.getParameter("homeId");
-								int id = Integer.parseInt(idInt);
 								
-								Connection con = null;
-								Statement st = null;
+							final String HOMES_API_URL = "http://localhost:10002/homes/";
+							int id = Integer.parseInt(request.getParameter("id"));
+			
+							Client client = ClientBuilder.newClient();
+							WebTarget webResource = client.target(HOMES_API_URL).path("" + id);
+							Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+							
+							Response resp = invocationBuilder.get();
+							
+							home = resp.readEntity(new GenericType<Home>(){});
+				
 								
-								// Open connection
-								
-								try {
-									// Load Driver
-									Class.forName("com.mysql.jdbc.Driver").newInstance();
-									// Connect to the database
-									con = DriverManager.getConnection("jdbc:mysql://localhost:3306/tiwbnb", "root", "admin");
-									System.out.println("Sucessful connection");
-								} catch (Exception e) {
-									System.out.println("Error when connecting to the database ");
-								}
-								
-								ResultSet rs = null;
-								
-								try {
-									// Create statement
-									st =con.createStatement();
-
-									//Once the statement is created, we need to get the user input for both user email and password
-
-									// Execute statement
-									// Here we obtain the full User table
-									String query = "SELECT * FROM HOME WHERE HOME_ID = '"+id+"'";
-									rs = st.executeQuery(query);
-									
-								} catch (SQLException e) {
-									System.out.println("Error when opening table ");
-								}
-								
-								String name ="";
-								String desc ="";
-								BigDecimal price = null;
-								int guests = 0;
-								String type = "";
-								
-								while(rs.next()) {
-									name = rs.getString("HOME_NAME");
-									desc = rs.getString("HOME_DESCRIPTION_FULL");
-									price = rs.getBigDecimal("HOME_PRICE_NIGHT");
-									guests = rs.getInt("HOME_GUESTS");
-									type = rs.getString("HOME_TYPE");
-								}
+								String name = home.getHomeName();
+								String desc = home.getHomeDescriptionFull();
+								BigDecimal price = home.getHomePriceNight();
+								int guests = home.getHomeGuests();
+								String type = home.getHomeType();
 								
 								
 								out.println("<div class=\"col-md-12 animate-box\">");
