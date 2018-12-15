@@ -118,7 +118,7 @@
 				<option value="Privado">Privado</option>
 				</select>
 				<input type="number" id="inputGuests" name="inputGuests" class="form-control" placeholder="Huéspedes" required>
-				<input type="text" id="inputPhotos" name="inputPhotos" class="form-control" placeholder="Fotos" required>
+				<input type="file" id="inputPhotos" name="inputPhotos" class="form-control" placeholder="images/place-1.jpgssss" required>
 				<input type="number" id="inputPriceNight" name="inputPriceNight" class="form-control" placeholder="Precio por noche" required>
 				<button class="btn btn-lg btn-primary btn-block" type="submit" id="IniciaSesion">Actualizar información</button>
 			</form>

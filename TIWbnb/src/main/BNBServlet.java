@@ -417,6 +417,11 @@ public class BNBServlet extends HttpServlet {
 						home.setHomePriceNight(new BigDecimal (req.getParameter("inputPriceNight")));
 					}
 					
+					if(!req.getParameter("photo").isEmpty()) {
+						String pic = "images/"+req.getParameter("photo");
+						home.setHomePhotos(pic);
+					}
+					
 					if(!req.getParameter("iDate").isEmpty()) {
 
 						SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");

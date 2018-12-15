@@ -419,6 +419,14 @@ public class AdminServlet extends HttpServlet {
 				result.setHomePriceNight(resultHome.getHomePriceNight());
 			}
 			
+			if(!req.getParameter("inputPhotos").isEmpty()) {
+				String pic = "images/"+req.getParameter("inputPhotos");
+				result.setHomePhotos(pic);
+			}
+			else {
+				result.setHomePhotos("images/place-1.jpg");
+			}
+			
 			if(!req.getParameter("inputDateInit").isEmpty()) {
 
 				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
