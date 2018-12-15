@@ -419,6 +419,36 @@ public class AdminServlet extends HttpServlet {
 				result.setHomePriceNight(resultHome.getHomePriceNight());
 			}
 			
+			if(!req.getParameter("inputDateInit").isEmpty()) {
+
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				Date parsed = new Date(1970, 01, 01);
+				try {
+					parsed = format.parse(req.getParameter("inputDateInit"));
+					result.setHomeAvDateInit(parsed);
+
+				} catch (ParseException e) {
+				}				
+			}
+			else {
+				result.setHomeAvDateInit(resultHome.getHomeAvDateInit());
+			}
+			
+			if(!req.getParameter("inputDateFin").isEmpty()) {
+
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				Date parsed = new Date(1970, 01, 01);
+				try {
+					parsed = format.parse(req.getParameter("inputDateFin"));
+					result.setHomeAvDateFin(parsed);
+
+				} catch (ParseException e) {
+				}				
+			}
+			else {
+				result.setHomeAvDateFin(resultHome.getHomeAvDateFin());
+			}
+			
 			Response response = invocationBuilder.put(Entity.entity(result, MediaType.APPLICATION_JSON));
 			
 			if(response.getStatus() == 200) {

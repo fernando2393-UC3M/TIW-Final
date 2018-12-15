@@ -111,6 +111,8 @@
 				<input type="text" id="inputCity" name="inputCity" class="form-control" placeholder="Ciudad" required>
 				<input type="text" id="inputDescriptionFull" name="inputDescriptionFull" class="form-control" placeholder="Descripción" required>
 				<input type="text" id="inputDescriptionShort" name="inputDescriptionShort" class="form-control" placeholder="Descripción corta" required>
+				<input type="date" id="inputDateInit" name="inputDateInit" class="form-control" placeholder="1997-07-01" required>
+				<input type="date" id="inputDateFin" name="inputDateFin" class="form-control" placeholder="1997-07-02" required>
 				<select id="inputType" name="inputType" class="form-control" required>
 				<option value="apartamento">Apartamento</option>
 				<option value="habitacion privada">Privado</option>
