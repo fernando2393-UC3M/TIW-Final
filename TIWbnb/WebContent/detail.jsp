@@ -72,6 +72,36 @@
 	<![endif]-->
 	</head>
 <body>
+		<%@ page import="java.util.List" %>
+		<%@ page import="java.util.Date" %>
+		<%@ page import="java.util.Iterator" %>
+		<%@ page import="java.sql.DriverManager" %>
+		<%@ page import="java.sql.Connection" %>
+		<%@ page import="java.sql.Statement" %>
+		<%@ page import="java.sql.ResultSet" %>
+		<%@ page import="java.sql.SQLException" %>
+		<%@ page import="javax.ws.rs.client.*" %>
+		<%@ page import="javax.ws.rs.core.MediaType" %>
+		<%@ page import="javax.ws.rs.core.Response" %>
+		<%@ page import="javax.ws.rs.core.GenericType" %>
+		<%@ page import="model.User" %>
+		<%@ page import="model.Home" %>
+		
+		<%! final String HOMES_API_URL = "http://localhost:10002/homes/"; 
+			Home home;
+		%>
+
+		<% 
+		int id = Integer.parseInt(request.getParameter("id"));
+
+		Client client = ClientBuilder.newClient();
+		WebTarget webResource = client.target(HOMES_API_URL).path("" + id);
+		Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+		
+		Response resp = invocationBuilder.get();
+		
+		home = resp.readEntity(new GenericType<Home>(){}); %>
+		
 		<div id="fh5co-wrapper">
 		<div id="fh5co-page">
 
@@ -111,14 +141,14 @@
 								  <!-- Nav tabs -->
 								   <ul class="nav nav-tabs" role="tablist">
 								      <li role="presentation" class="active">
-								    	   <a href="#alojamientos" aria-controls="alojamientos" role="tab" data-toggle="tab">Registra un Alojamiento</a>
+								    	   <a href="#alojamientos" aria-controls="alojamientos" role="tab" data-toggle="tab">Modifica tu Alojamiento</a>
 								      </li>
 								   </ul>
 
 								   <!-- Tab panes -->
 									<div class="tab-content">
 									 <div role="tabpanel" class="tab-pane active" id="hotels">
-									 <form class="form-signin" METHOD="POST" ACTION="casa">
+									 <form class="form-signin" METHOD="POST" ACTION="modifyHome?id=<%= home.getHomeId() %>">
 									 	<div class="row">
 													<div class="col-xxs-12 col-xs-12 mt">
 
@@ -126,27 +156,27 @@
 
 														<div class="input-field">
 															<label for="name">Nombre:</label> <input type="text"
-																class="form-control" id="name" name="houseName" value="Casa en Sol" />
+																class="form-control" id="name" name="houseName" value="<%= home.getHomeName() %>" />
 														</div>
 													</div>
 													<div class="col-xxs-12 col-xs-12 mt alternate">
 														<div class="input-field">
 															<label for="desc">Ciudad:</label> <input
 																type="text" class="form-control" id="desc" name="houseCity"
-																value="Madrid" />
+																value="<%= home.getHomeCity() %>" />
 														</div>
 													</div>
 													<div class="col-xxs-12 col-xs-12 mt alternate">
 														<div class="input-field">
 															<label for="desc">Descripción:</label> <input
 																type="text" class="form-control" id="desc" name="houseDesc"
-																value="Casa muy luminosa..." />
+																value="<%= home.getHomeDescriptionFull() %>" />
 														</div>
 													</div>
 													<div class="col-xxs-12 col-xs-12 mt alternate">
 														<div class="input-field">
 															<label for="subdesc">Resumen:</label> <input
-																type="text" class="form-control" id="subdesc" name="houseSubDesc" value="Casa para todos"/>
+																type="text" class="form-control" id="subdesc" name="houseSubDesc" value="<%= home.getHomeDescriptionShort() %>"/>
 														</div>
 													</div>
 													<div class="col-xxs-12 col-xs-6 mt alternate">
@@ -154,8 +184,13 @@
 														<label for="type">Tipo de Alojamiento:</label>
 														<font color="black">
 															<select id="type" name="houseType">
-																<option value="Apartamento">Apartamento</option>
-																<option value="Privado">Habitación Privada</option>
+																<% if(home.getHomeType().equals("Apartamento")) { %>
+																	<option value="Apartamento" selected="selected">Apartamento</option>
+																	<option value ="Privado">Habitación Privada</option>
+																<% } else { %>
+																	<option value="Apartamento">Apartamento</option>
+																	<option value="Privado" selected="selected">Habitación Privada</option>
+																<% } %>
 															</select>
 															</font>
 														</div>
@@ -163,37 +198,37 @@
 													<div class="col-xxs-12 col-xs-6 mt alternate">
 														<div class="input-field">
 															<label for="guests">Número de Huéspedes:</label> <input
-																type="number" class="form-control" id="guests" name="guests"/>
+																type="number" class="form-control" id="guests" name="guests" value="<%=home.getHomeGuests()%>"/>
 														</div>
 													</div>
 													<div class="col-xxs-12 col-xs-6 mt alternate">
 														<div class="input-field">
 															<label for="picture">Foto:</label> <input
-																type="file" name="photo" class="form-control" id="picture" accept="image/*"/>
+																type="file" name="photo" class="form-control" id="picture" value="<%=home.getHomePhotos() %>" accept="image/*"/>
 														</div>
 													</div>
 													<div class="col-xxs-12 col-xs-6 mt alternate">
 														<div class="input-field">
 															<label for="price">Precio por Noche:</label> <input
-																type="number" class="form-control" id="price" name="inputPriceNight" placeholder="40€"/>
+																type="number" class="form-control" id="price" name="inputPriceNight" value="<%= home.getHomePriceNight() %>"/>
 														</div>
 													</div>
 													<div class="col-xxs-12 col-xs-6 mt alternate">
 														<div class="input-field">
 															<label for="date0">Fecha Inicial:</label> <input
-																type="date" name="iDate" class="form-control" id="date0"/>
+																type="date" name="iDate" class="form-control" id="date0" value="<%= home.getHomeAvDateInit() %>"/>
 														</div>
 													</div>
 													<!-- <form class="form-signin" METHOD="POST" ACTION="casa"> -->
 													<div class="col-xxs-12 col-xs-6 mt alternate">
 														<div class="input-field">
 															<label for="date1">Fecha Final:</label> <input
-																type="date" name="fDate" class="form-control" id="date1"/>
+																type="date" name="fDate" class="form-control" id="date1" value="<%= home.getHomeAvDateFin()%>"/>
 														</div>
 													</div>
 
 											<div class="col-xs-12">
-												<input type="submit" name="submitHouse" class="btn btn-primary btn-block" value="Registrar Alojamiento">
+												<input type="submit" name="submitHouse" class="btn btn-primary btn-block" value="Guardar Alojamiento">
 											</div>
 										<!-- </form> -->
 										</form>

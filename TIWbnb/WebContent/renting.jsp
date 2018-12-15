@@ -154,7 +154,7 @@
 							   	out.println("<div class=\"col-xxs-12 col-xs-12 mt\">");
 							   	out.println("<div class=\"input-field\">");
 							   	out.println("<label>" + curr.getHomeName() + "</label>");
-							   	out.println("<a class=\"info\" href=\"casa\">Modificar Información</a>");
+							   	out.println("<a class=\"info\" href=\"detail?id=" + curr.getHomeId() +"\">Modificar Información</a>");
 							   	out.println("<br>");
 							   	out.println("<img alt=\"" + curr.getHomeName() + "\" src=\"" + curr.getHomePhotos() + "\" max>");
 							   	out.println("</div>");

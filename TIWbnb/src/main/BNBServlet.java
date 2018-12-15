@@ -31,11 +31,12 @@ import model.User;
 /**
  * Servlet implementation class BDServlet
  */
-@WebServlet(urlPatterns = {"/index", "/admin", 
-				"/resultados", "/renting", "/delete",
-				"/registrado", "/mensajes", "/login", "/register",
-				"/alojamiento", "/casa", "/viajes", "/logout",
-				"/SendMessage", "/SendMessageAdmin", "/booking", "/booking_confirmation", "/deleteHome"})
+@WebServlet(urlPatterns = {"/index", "/admin", "/resultados",
+				"/renting", "/delete", "/registrado",
+				"/mensajes", "/login", "/register",
+				"/alojamiento", "/casa", "/viajes",
+				"/logout", "/SendMessage", "/SendMessageAdmin",
+				"/booking", "/booking_confirmation", "/deleteHome", "/detail", "/modifyHome"})
 public class BNBServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
@@ -87,6 +88,9 @@ public class BNBServlet extends HttpServlet {
 		else if(requestURL.equals(path+"casa")){
 			ReqDispatcher =req.getRequestDispatcher("casa.jsp");
 		}
+		else if(requestURL.equals(path+"detail")){
+			ReqDispatcher =req.getRequestDispatcher("detail.jsp");
+		}
 		else if(requestURL.toString().equals(path+"deleteHome")) {
 			
 			Client client = ClientBuilder.newClient();
@@ -104,6 +108,7 @@ public class BNBServlet extends HttpServlet {
 			ReqDispatcher =req.getRequestDispatcher("renting.jsp");
 
 		}
+		
 		else if(requestURL.equals(path+"mensajes")){
 			
 			//------------------------READ MESSAGES------------------------
@@ -369,6 +374,86 @@ public class BNBServlet extends HttpServlet {
 
 			dispatcher.forward(req, res);			
 
+		}
+		//////////////////// MODIFY HOUSE
+		else if(requestURL.toString().equals(path+"modifyHome")){
+			
+			dispatcher = req.getRequestDispatcher("casa.jsp");
+			
+				Client client = ClientBuilder.newClient();
+				WebTarget webResource = client.target(HOMES_API_URL).path("" + req.getParameter("id"));
+				Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+				Response response = invocationBuilder.get();
+				
+				Home home = response.readEntity(Home.class);
+				
+				if(response.getStatus() == 200) {
+					
+					if(!req.getParameter("houseName").isEmpty()) {
+						home.setHomeName(req.getParameter("houseName"));
+					}
+				
+					if(!req.getParameter("houseCity").isEmpty()) {
+						home.setHomeCity(req.getParameter("houseCity"));
+					}
+					
+					if(!req.getParameter("houseDesc").isEmpty()) {
+						home.setHomeDescriptionFull(req.getParameter("houseDesc"));
+					}
+					
+					if(!req.getParameter("houseSubDesc").isEmpty()) {
+						home.setHomeDescriptionShort(req.getParameter("houseSubDesc"));
+					}
+					
+					if(!req.getParameter("houseType").isEmpty()) {
+						home.setHomeType(req.getParameter("houseType"));
+					}
+					
+					if(!req.getParameter("guests").isEmpty()) {
+						home.setHomeGuests(Integer.parseInt(req.getParameter("guests")));
+					}
+					
+					if(!req.getParameter("inputPriceNight").isEmpty()) {
+						home.setHomePriceNight(new BigDecimal (req.getParameter("inputPriceNight")));
+					}
+					
+					if(!req.getParameter("iDate").isEmpty()) {
+
+						SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+						Date parsed = new Date(1970, 01, 01);
+						try {
+							parsed = format.parse(req.getParameter("iDate"));
+							home.setHomeAvDateInit(parsed);
+
+						} catch (ParseException e) {
+						}				
+					}
+					
+					if(!req.getParameter("fDate").isEmpty()) {
+
+						SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+						Date parsed = new Date(1970, 01, 01);
+						try {
+							parsed = format.parse(req.getParameter("fDate"));
+							home.setHomeAvDateFin(parsed);
+
+						} catch (ParseException e) {
+						}				
+					}
+										
+					response = invocationBuilder.put(Entity.entity(home, MediaType.APPLICATION_JSON));			
+					
+					if(response.getStatus() == 200) {
+						req.setAttribute("Registered", 1);
+					} else {
+						req.setAttribute("Registered", 2);
+					}
+					dispatcher = req.getRequestDispatcher("renting.jsp");
+
+				}
+
+			dispatcher.forward(req, res);		
+			
 		}
 		
 		//------------------------HOUSE CREATION------------------------
