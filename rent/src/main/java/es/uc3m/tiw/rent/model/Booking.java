@@ -43,12 +43,12 @@ public class Booking implements Serializable {
 
 	// many-to-one association to User
 	@ManyToOne
-	@JoinColumn(name="BOOKING_USER_ID", referencedColumnName="USER_ID")
+	@JoinColumn(name="BOOKING_USER_ID")
 	private User user;
 
 	// many-to-one association to Home
 	@ManyToOne
-	@JoinColumn(name="BOOKING_HOME_ID", referencedColumnName="HOME_ID")
+	@JoinColumn(name="BOOKING_HOME_ID")
 	private Home home;
 
 	public Booking() {

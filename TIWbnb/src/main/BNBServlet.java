@@ -30,6 +30,7 @@ import java.util.Date;
 import java.util.List;
 
 import model.Admin;
+import model.Booking;
 import model.Home;
 import model.Message;
 import model.MessagesAdmin;
@@ -43,14 +44,16 @@ import model.User;
 				"/mensajes", "/login", "/register",
 				"/alojamiento", "/casa", "/queryhome", "/viajes",
 				"/logout", "/SendMessage", "/SendMessageAdmin",
-				"/booking", "/booking_confirmation", "/deleteHome", "/detail", "/modifyHome"})
+				"/booking", "/booking_accept", "/booking_reject", "/deleteHome", "/detail", "/modifyHome"})
 public class BNBServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 	
 	private static final String USERS_API_URL = "http://localhost:10001/users";
 	private static final String HOMES_API_URL = "http://localhost:10002/homes";
+	private static final String RENT_API_URL = "http://localhost:10003";
 	private static final String MESSAGES_API_URL = "http://localhost:10006";
+	private static final String BANK_API_URL = "http://localhost:10004/bank";
 	
 	String path = "http://localhost:8080/TIWbnb/";
 	
@@ -112,6 +115,7 @@ public class BNBServlet extends HttpServlet {
 
 			List<Message> msgList = null;
 			List<MessagesAdmin> adminList = null;
+			List<Booking> bkList = null;
 
 			// Get user messages
 			Client client = ClientBuilder.newClient();
@@ -152,10 +156,19 @@ public class BNBServlet extends HttpServlet {
 			Invocation.Builder invocationBuilder3 = webResource3.request(MediaType.APPLICATION_JSON);
 			invocationBuilder3.get();
 			
-			/*
-			if(bookingList.size() > 0)
-				session.setAttribute("bookingList", bookingList); 
-			*/
+			// Get admin messages
+			WebTarget webResource4 = client.target(RENT_API_URL).path("/rents/users").path(userId.toString());
+			Invocation.Builder invocationBuilder4 = webResource4.request(MediaType.APPLICATION_JSON);
+			Response response4 = invocationBuilder4.get();
+			
+			if(response4.getStatus() == 200){
+				Booking[] temp = response4.readEntity(Booking[].class);
+				bkList = Arrays.asList(temp);
+				
+				if(adminList.size() > 0){
+					session.setAttribute("bookingList", bkList);					
+				}				
+			}
 			
 			ReqDispatcher =req.getRequestDispatcher("mensajes.jsp");				
 			
@@ -642,7 +655,7 @@ public class BNBServlet extends HttpServlet {
 
 			WebTarget webResource3 = client.target("http://localhost:10006/sendMessage");
 			Invocation.Builder invocationBuilder3 = webResource3.request(MediaType.APPLICATION_JSON);
-			Response resp3 = invocationBuilder3.post(Entity.entity(aux, MediaType.APPLICATION_JSON));
+			invocationBuilder3.post(Entity.entity(aux, MediaType.APPLICATION_JSON));
 			
 			// Redirect back to messages
 			res.sendRedirect("mensajes");
@@ -677,10 +690,9 @@ public class BNBServlet extends HttpServlet {
 			aux.setUser(usr);
 			aux.setAdmin(adm);
 			
-
 			WebTarget webResource3 = client.target("http://localhost:10006/sendAdminMessage");
 			Invocation.Builder invocationBuilder3 = webResource3.request(MediaType.APPLICATION_JSON);
-			Response resp3 = invocationBuilder3.post(Entity.entity(aux, MediaType.APPLICATION_JSON));
+			invocationBuilder3.post(Entity.entity(aux, MediaType.APPLICATION_JSON));
 			
 			// Redirect back to messages
 			res.sendRedirect("mensajes");
@@ -775,60 +787,60 @@ public class BNBServlet extends HttpServlet {
 			
 		}
 		
-		//------------------------BOOKING CONFIRMATION------------------------
+		//------------------ACCEPT BOOKING CONFIRMATION------------------------
 		
-		else if(requestURL.toString().equals(path+"booking_confirmation")) {
-			
-			//Commit the JMS transaction (queue is always same object)
-			/*
-			try {
-				transaction.commit();
-			} catch (JMSException e1) {
-				// Error JMS commit transaction
-			}
+		else if(requestURL.toString().equals(path+"booking_accept")) {
 
-			// Get Booking Request
-			int bookingId = (int) session.getAttribute("bookingId");
-			Booking object = em.find(Booking.class, bookingId);
-
-
-			// Get response from home owner
-			boolean accept = (boolean) session.getAttribute("bookingId");
+			Client client = ClientBuilder.newClient();
 			
-			// Get users involved in booking
-			User sender = object.getHome().getUser();
-			User receiver = object.getUser();
-			String body = "Your booking request with id "+object.getBookingId()+" has been ";
+			String bookingId = req.getParameter("bookid");
 			
-			try {
-				ut.begin();
+			// Obtain booking from rent microservice
+			WebTarget webResource = client.target(RENT_API_URL).path("rents").path(bookingId);
+			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);	
+			Response response = invocationBuilder.get();
+			
+			model.Booking bk = response.readEntity(model.Booking.class);
+			
+			if(bk != null){
+				// TODO: creating object to send to bank
 				
-				// Accept Booking Request
-				if(accept){
-					object.setBookingConfirmed(true);
-					em.persist(object);
-					body += "accepted.";
+				// Call bank microservice to process confirmation
+				WebTarget webResourceBank = client.target(BANK_API_URL);
+				Invocation.Builder invocationBuilderBank = webResourceBank.request(MediaType.APPLICATION_JSON);
+				// TODO: send object to bank
+				Response responseBank = invocationBuilderBank.post(null);
+				
+				int status_code = responseBank.getStatus();
+				
+				// Confirm Booking with final result
+				if(status_code == 200){
+					WebTarget webResource1 = client.target(RENT_API_URL).path("accept").path(bookingId);
+					Invocation.Builder invocationBuilder1 = webResource1.request(MediaType.APPLICATION_JSON);
+					invocationBuilder1.get();				
 				}
-				// Reject (delete) Booking Request
-				else{
-					em.remove(object);
-					body += "rejected.";
-				}				
-
-				ut.commit();	
-				*/
-			/*
-			} catch (NotSupportedException | SystemException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
-				// Error JPA
-			}
+				else if(status_code == 402){
+					WebTarget webResource2 = client.target(RENT_API_URL).path("bank").path(bookingId);
+					Invocation.Builder invocationBuilder2 = webResource2.request(MediaType.APPLICATION_JSON);
+					invocationBuilder2.get();				
+				}
+			}								
 			
-			// Send a response message
-			try {
-				SendMessages.sendMessage(sender.getUserId(), receiver.getUserId(), body, cf, queue);
-			} catch (JMSException e) {
-				// Error JMS
-			}
-			*/
+			res.sendRedirect("mensajes");
+			
+		} 
+		
+		//------------------REJECT BOOKING CONFIRMATION------------------------
+		
+		else if(requestURL.toString().equals(path+"booking_accept")) {
+			
+			String bookingId = req.getParameter("bookid");
+
+			Client client = ClientBuilder.newClient();
+			WebTarget webResource = client.target(RENT_API_URL).path("reject").path(bookingId);
+			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+			invocationBuilder.get();			
+			
 			res.sendRedirect("mensajes");
 			
 		} 

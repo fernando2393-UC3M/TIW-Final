@@ -2,7 +2,11 @@ package es.uc3m.tiw.users.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.sql.Date;
+import java.util.List;
 
 
 /**
@@ -35,6 +39,31 @@ public class User implements Serializable {
 
 	@Column(name="USER_SURNAME")
 	private String userSurname;
+
+	//bi-directional many-to-one association to Booking
+	@OneToMany(mappedBy="user")
+	@JsonIgnore
+	private List<Booking> bookings;
+
+	//bi-directional many-to-one association to Home
+	@OneToMany(mappedBy="user")
+	@JsonIgnore
+	private List<Home> homes;
+
+	//bi-directional many-to-one association to Message
+	@OneToMany(mappedBy="user1")
+	@JsonIgnore
+	private List<Message> messages1;
+
+	//bi-directional many-to-one association to Message
+	@OneToMany(mappedBy="user2")
+	@JsonIgnore
+	private List<Message> messages2;
+
+	//bi-directional many-to-one association to MessagesAdmin
+	@OneToMany(mappedBy="user")
+	@JsonIgnore
+	private List<MessagesAdmin> messagesAdmins;
 
 	public User() {
 	}

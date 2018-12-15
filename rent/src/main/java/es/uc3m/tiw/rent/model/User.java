@@ -2,7 +2,9 @@ package es.uc3m.tiw.rent.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.sql.Date;
+
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -20,7 +22,7 @@ public class User implements Serializable {
 	@Column(name="USER_ID")
 	private int userId;
 
-	//@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.DATE)
 	@Column(name="USER_BIRTHDATE")
 	private Date userBirthdate;
 
@@ -35,6 +37,14 @@ public class User implements Serializable {
 
 	@Column(name="USER_SURNAME")
 	private String userSurname;
+
+	//bi-directional many-to-one association to Booking
+	@OneToMany(mappedBy="user")
+	private List<Booking> bookings;
+
+	//bi-directional many-to-one association to Home
+	@OneToMany(mappedBy="user")
+	private List<Home> homes;
 
 	public User() {
 	}
@@ -87,4 +97,47 @@ public class User implements Serializable {
 		this.userSurname = userSurname;
 	}
 
+	public List<Booking> getBookings() {
+		return this.bookings;
+	}
+
+	public void setBookings(List<Booking> bookings) {
+		this.bookings = bookings;
+	}
+
+	public Booking addBooking(Booking booking) {
+		getBookings().add(booking);
+		booking.setUser(this);
+
+		return booking;
+	}
+
+	public Booking removeBooking(Booking booking) {
+		getBookings().remove(booking);
+		booking.setUser(null);
+
+		return booking;
+	}
+
+	public List<Home> getHomes() {
+		return this.homes;
+	}
+
+	public void setHomes(List<Home> homes) {
+		this.homes = homes;
+	}
+
+	public Home addHome(Home home) {
+		getHomes().add(home);
+		home.setUser(this);
+
+		return home;
+	}
+
+	public Home removeHome(Home home) {
+		getHomes().remove(home);
+		home.setUser(null);
+
+		return home;
+	}
 }
