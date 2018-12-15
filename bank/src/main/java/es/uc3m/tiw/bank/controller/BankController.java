@@ -7,6 +7,7 @@ import java.time.ZoneId;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +17,8 @@ public class BankController {
 	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping("/")
-	public ResponseEntity validateCard(String card_num, String cv2, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) java.sql.Date date){
+	public ResponseEntity validateCard(@RequestBody String card_num, @RequestBody String cv2,
+			@RequestBody @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) java.sql.Date date){
 		
 		boolean cnum_validate = false;
 		
