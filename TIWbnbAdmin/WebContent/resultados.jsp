@@ -111,7 +111,7 @@
 				<input type="text" id="inputCity" name="inputCity" class="form-control" placeholder="Ciudad" required>
 				<input type="text" id="inputDescriptionFull" name="inputDescriptionFull" class="form-control" placeholder="Descripción" required>
 				<input type="text" id="inputDescriptionShort" name="inputDescriptionShort" class="form-control" placeholder="Descripción corta" required>
-				<select type="text" id="inputType" name="inputType" class="form-control" placeholder="Tipo" required>
+				<select id="inputType" name="inputType" class="form-control" required>
 				<option value="apartamento">Apartamento</option>
 				<option value="habitacion privada">Privado</option>
 				</select>
@@ -131,9 +131,9 @@
 		<table style="width:100%">
 			<tr>
 				<th>Home ID</th>
-				<!-- <th>Email</th> -->
 				<th>Name</th>
 				<th>City</th>
+				<th>Type</th>
 				<th>Email</th>
 			</tr>
 		
@@ -144,7 +144,7 @@
 		for (int i = 0; i<homes.size(); i++) {
 			out.println("<tr>");
 			out.println("<td>"+homes.get(i).getHomeId()+"</td><td>"+homes.get(i).getHomeName()+
-					"</td><td>"+homes.get(i).getHomeCity()+"</td><td>"+homes.get(i).getUser().getUserEmail()+"</td>");
+					"</td><td>"+homes.get(i).getHomeCity()+"</td><td>"+homes.get(i).getHomeType()+"</td><td>"+homes.get(i).getUser().getUserEmail()+"</td>");
 			out.println("</tr>");
 		}
 
