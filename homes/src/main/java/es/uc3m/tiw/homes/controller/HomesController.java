@@ -31,7 +31,7 @@ public class HomesController {
 	
 	@Autowired
 	UsersDao daoUs;
-/*
+
 	@RequestMapping(method=RequestMethod.GET, value="/homes")
 	public ResponseEntity <List<Home>> getHomes(){
 		List<Home> homeList = daoHome.findAll();
@@ -44,7 +44,7 @@ public class HomesController {
 		}
 		return response;
 	}
-	*/
+	
 	@RequestMapping(method=RequestMethod.GET, value="/homes/{id}")
 	public ResponseEntity<Home> getHomeByHomeId(@PathVariable int id){
 		Home home = daoHome.findById(id).orElse(null);
