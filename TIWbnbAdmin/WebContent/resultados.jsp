@@ -114,8 +114,8 @@
 				<input type="date" id="inputDateInit" name="inputDateInit" class="form-control" placeholder="1997-07-01" required>
 				<input type="date" id="inputDateFin" name="inputDateFin" class="form-control" placeholder="1997-07-02" required>
 				<select id="inputType" name="inputType" class="form-control" required>
-				<option value="apartamento">Apartamento</option>
-				<option value="habitacion privada">Privado</option>
+				<option value="Apartamento">Apartamento</option>
+				<option value="Privado">Privado</option>
 				</select>
 				<input type="number" id="inputGuests" name="inputGuests" class="form-control" placeholder="Huéspedes" required>
 				<input type="text" id="inputPhotos" name="inputPhotos" class="form-control" placeholder="Fotos" required>
