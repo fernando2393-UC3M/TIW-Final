@@ -3,8 +3,9 @@ package es.uc3m.tiw.homes.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
+
 /**
- * The persistent class for the ADMIN database table.
+ * The persistent class for the admin database table.
  * 
  */
 @Entity
