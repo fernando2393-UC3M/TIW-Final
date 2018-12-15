@@ -113,7 +113,7 @@
 				<input type="text" id="inputDescriptionShort" name="inputDescriptionShort" class="form-control" placeholder="Descripción corta" required>
 				<select type="text" id="inputType" name="inputType" class="form-control" placeholder="Tipo" required>
 				<option value="apartamento">Apartamento</option>
-				<option value="habitacion privada">Habitación Privada</option>
+				<option value="habitacion privada">Privado</option>
 				</select>
 				<input type="number" id="inputGuests" name="inputGuests" class="form-control" placeholder="Huéspedes" required>
 				<input type="text" id="inputPhotos" name="inputPhotos" class="form-control" placeholder="Fotos" required>
