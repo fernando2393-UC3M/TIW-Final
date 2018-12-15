@@ -414,7 +414,7 @@ public class AdminServlet extends HttpServlet {
 				result.setHomePriceNight(resultHome.getHomePriceNight());
 			}
 			
-			if(!req.getParameter("inputPhotos").isEmpty()) {
+			if(req.getParameter("inputPhotos") != null) {
 				String pic = "images/"+req.getParameter("inputPhotos");
 				result.setHomePhotos(pic);
 			}
