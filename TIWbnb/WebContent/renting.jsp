@@ -163,9 +163,9 @@
 							   	out.println("</div>");
 							   	
 							   	out.println("<br>");
-							   	out.println("<div class=\"col-xxs-12 col-xs-12 mt\">");
-							   	out.println("<label>Alquilada:</label><font class=\"rented\" color=\"green\">Alquilada</font>");
-							   	out.println("</div>");
+							   	//out.println("<div class=\"col-xxs-12 col-xs-12 mt\">");
+							   	//out.println("<label>Alquilada:</label><font class=\"rented\" color=\"green\">Alquilada</font>");
+							   	//out.println("</div>");
 							   	
 							   	out.println("<div class=\"col-xxs-12 col-xs-12 mt\">");
 								out.println("<label>Descripción:</label>");
