@@ -178,13 +178,28 @@
                             </tbody>
                         </table>
                         <div class="col-xxs-12 col-xs-6 mt">
-                            <input type="button" class="btn btn-primary btn-block" value="Reservar">
+				         	<form class="form-sendmsg" METHOD="POST" ACTION="booking">
+				         	<input type="hidden" id="userid" name="userid"  value=<%= home.getUser().getUserId() %> />
+				         	<input type="hidden" id="homeid" name="homeid"  value=<%= home.getHomeId() %> />
+							<label for="date-start">Date Start:</label>
+							<input type="text" name="homeIda" class="form-control" id="date-start" placeholder="mm/dd/yyyy"/>
+							<label for="date-end">Date End:</label>
+							<input type="text" name="homeVuelta"  class="form-control" id="date-end" placeholder="mm/dd/yyyy"/>
+							<label for="message">Card Number:</label>
+							<textarea id="cardnum" class="text" rows="1" cols="25" name="cardnum" >1234567890123456</textarea>
+							<label for="message">Exp. Code:</label>
+							<textarea id="expcode" class="text" rows="1" cols="25" name="expcode" >MMyyyy</textarea>
+							<label for="message">CV2:</label>
+							<textarea id="cv2" class="text" rows="1" cols="25" name="cv2" >123</textarea>
+							<button type="submit" formmethod="post">Book</button>
+							</form>
                         </div>
                         <div class="col-xxs-12 col-xs-6 mt">
 				         	<form class="form-sendmsg" METHOD="POST" ACTION="SendMessage">
 				         	<input type="hidden" id="receiver" name="receiver"  value=<%= home.getUser().getUserEmail() %> />
+							<label for="message">Contact Owner:</label>
 							<textarea id="message" class="text" rows="4" cols="25" name="message" >Enter text here...</textarea>
-							<button type="submit" formmethod="post">Contactar</button>
+							<button type="submit" formmethod="post">Contact</button>
 							</form>
                         </div>
                                                                         

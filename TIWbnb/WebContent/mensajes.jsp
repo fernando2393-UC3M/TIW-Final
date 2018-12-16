@@ -235,27 +235,19 @@
 				         	<form class="form-sendmsg" METHOD="POST" ACTION="SendMessage">
 					     	<input type="email" id="receiver" name="receiver" placeholder="Email">
 							<button type="submit" formmethod="post">Send Message</button>
-							<textarea id="message" class="text" rows="4" cols="50" name="message" >Enter text here...</textarea>
+							<textarea id="message" class="text" rows="4" cols="75" name="message" >Enter text here...</textarea>
 							</form>
 					      	</div>
 					      	<br>
 							<div class="modal-body">
 							<p><b>Send a message to an admin.</b></p>
 				         	<form class="form-sendmsg" METHOD="POST" ACTION="SendMessageAdmin">
-							<textarea id="message" class="text" rows="4" cols="50" name="message" >Enter text here...</textarea>
+							<textarea id="message" class="text" rows="4" cols="75" name="message" >Enter text here...</textarea>
 							<button type="submit" formmethod="post">Send Message</button>
 							</form>
 					      	</div>
 					
 							<!-- end:Send Message -->
-							
-					     	<div class="col-xxs-12 col-xs-6 mt">
-					         	<form class="form-sendmsg" METHOD="POST" ACTION="SendMessage">
-						     	<input type="email" id="receiver" name="receiver" placeholder=test>
-								<textarea id="message" class="text" rows="4" cols="50" name="message" >Enter text here...</textarea>
-								<button type="submit" formmethod="post">Contactar</button>
-								</form>
-                        	</div>
 						</div>
 					</div>
 				</div>

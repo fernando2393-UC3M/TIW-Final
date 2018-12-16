@@ -147,6 +147,11 @@ public class BNBServlet extends HttpServlet {
 				}				
 			}
 			
+			// Set admin messages as Read
+			WebTarget webResource3 = client.target(MESSAGES_API_URL).path("admin/user/setRead/").path(userId.toString());
+			Invocation.Builder invocationBuilder3 = webResource3.request(MediaType.APPLICATION_JSON);
+			invocationBuilder3.get();
+			
 			/*
 			if(bookingList.size() > 0)
 				session.setAttribute("bookingList", bookingList); 
@@ -677,6 +682,23 @@ public class BNBServlet extends HttpServlet {
 		//------------------------BOOKING------------------------
 		
 		else if(requestURL.toString().equals(path+"booking")) {
+			/*
+			<form class="form-sendmsg" METHOD="POST" ACTION="booking">
+         	<input type="hidden" id="userid" name="userid"  value=<%= home.getUser().getUserId() %> />
+         	<input type="hidden" id="homeid" name="homeid"  value=<%= home.getHomeId() %> />
+			<label for="date-start">Date Start:</label>
+			<input type="text" name="homeIda" class="form-control" id="date-start" placeholder="mm/dd/yyyy"/>
+			<label for="date-end">Date End:</label>
+			<input type="text" name="homeVuelta"  class="form-control" id="date-end" placeholder="mm/dd/yyyy"/>
+			<label for="message">Card Number:</label>
+			<textarea id="cardnum" class="text" rows="1" cols="25" name="cardnum" >1234567890123456</textarea>
+			<label for="message">Exp. Code:</label>
+			<textarea id="expcode" class="text" rows="1" cols="25" name="expcode" >MMyyyy</textarea>
+			<label for="message">CV2:</label>
+			<textarea id="cv2" class="text" rows="1" cols="25" name="cv2" >123</textarea>
+			<button type="submit" formmethod="post">Book</button>
+			 */
+			
 			// Obtain sender
 			/*int id = (int) session.getAttribute("user");
 			// Obtain host

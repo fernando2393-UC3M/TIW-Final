@@ -9,9 +9,11 @@ import es.uc3m.tiw.messages.model.MessagesAdmin;
 import es.uc3m.tiw.messages.model.User;
 
 public interface MessagesAdminDao extends CrudRepository<MessagesAdmin, Integer>{
-	
+
 	public List<MessagesAdmin> findByUserAndMessageFromAdmin(User user, byte fromAdmin);
 	public List<MessagesAdmin> findByAdminAndMessageFromAdmin(Admin admin, byte fromAdmin);
+	public List<MessagesAdmin> findByUserAndMessageFromAdminAndMessageRead(User user, byte fromAdmin, byte read);
+	public List<MessagesAdmin> findByAdminAndMessageFromAdminAndMessageRead(Admin admin, byte fromAdmin, byte read);
 	public List<MessagesAdmin> findAll();
 
 }
