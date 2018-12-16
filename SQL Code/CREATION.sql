@@ -41,12 +41,12 @@ CREATE TABLE home (
   HOME_CITY VARCHAR(25) NOT NULL,
   HOME_DESCRIPTION_FULL VARCHAR(200) NOT NULL,
   HOME_DESCRIPTION_SHORT VARCHAR(50) NOT NULL,
-  HOME_TYPE VARCHAR(20) NOT NULL,
+  HOME_TYPE VARCHAR(40) NOT NULL,
   HOME_GUESTS INT(3) NOT NULL,
   HOME_PHOTOS VARCHAR(45),
   HOME_PRICE_NIGHT DECIMAL(6,2) NOT NULL,
-  HOME_AV_DATE_INIT DATE,
-  HOME_AV_DATE_FIN DATE,
+  HOME_AV_DATE_INIT DATE NOT NULL,
+  HOME_AV_DATE_FIN DATE NOT NULL,
   CONSTRAINT PK_HOME PRIMARY KEY (HOME_ID),
   CONSTRAINT FK_HOME FOREIGN KEY (HOME_EMAIL) REFERENCES users (USER_EMAIL) ON DELETE CASCADE
 );
@@ -103,11 +103,13 @@ INSERT INTO `admin` VALUE (2, 'ibm', 'admin');
 INSERT INTO `admin` VALUE (3, 'tzarraon@inf.uc3m.es', 'admin');
 
 INSERT INTO `home` VALUE (1, 'Loft Espacioso', 'mail@ibm.com', 'Madrid', 'Loft grande espacioso en el centro de Madrid', 'Loft en Madrid', 
-'Apartamento', 5, 'images/place-1.jpg', 420, '20180101', '20181231');
-INSERT INTO `home` VALUE (2, 'Chalet Bonito', 'mail@ibm.com', 'NY', 'Chalet bonito en pleno Manhattan', 'Chalet en NY', 
-'Privado', 1, 'images/place-2.jpg', 70, '20180101', '20181231');
-INSERT INTO `home` VALUE (3, 'Suite', 'mail@redsys.es', 'Madrid', 'Suite en el centro de la capital', 'Suite en Madrid', 
-'Apartamento', 3, 'images/place-3.jpg', 1337.70, '20180101', '20181231');
+'Alojamiento entero', 5, 'images/place-1.jpg', 30, '20181201', '20181220');
+INSERT INTO `home` VALUE (2, 'Chalet Bonito', 'mail@ibm.com', 'Nueva York', 'Chalet bonito en pleno Manhattan', 'Chalet en NY', 
+'Habitacion privada', 1, 'images/place-2.jpg', 70, '20170101', '20170131');
+INSERT INTO `home` VALUE (3, 'Suite', 'mail@redsys.es', 'Madrid', 'Suite en el centro de la capital', 'En pleno centro', 
+'Alojamiento entero', 3, 'images/place-3.jpg', 150, '20181210', '20181230');
+INSERT INTO `home` VALUE (4, 'Chalet Bonito', 'mail@ibm.com', 'Nueva York', 'Azotea en la 5a Avenida', 'Azotea', 
+'Alojamiento entero', 1, 'images/place-2.jpg', 70, '20170101', '20170131');
 
 INSERT INTO `messages` VALUE (1, 2, 1, "Sample message", 20181231, true);
 INSERT INTO `messages` VALUE (2, 1, 2, "Random Reply", 20181231, true);
