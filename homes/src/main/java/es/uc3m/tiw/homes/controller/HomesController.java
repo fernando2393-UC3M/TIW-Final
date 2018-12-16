@@ -32,18 +32,18 @@ public class HomesController {
 	@Autowired
 	UsersDao daoUs;
 
-	@RequestMapping(method=RequestMethod.GET, value="/homes")
+	/*@RequestMapping(method=RequestMethod.POST, value="/homes")
 	public ResponseEntity <List<Home>> getHomes(){
 		List<Home> homeList = daoHome.findAll();
 		ResponseEntity<List<Home>> response;
-		
+		System.out.println("AQUI");
 		if(homeList.size() == 0) {
 			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
 			response = new ResponseEntity<>(homeList, HttpStatus.OK);
 		}
 		return response;
-	}
+	}*/
 	
 	@RequestMapping(method=RequestMethod.GET, value="/homes/{id}")
 	public ResponseEntity<Home> getHomeByHomeId(@PathVariable int id){
@@ -57,7 +57,7 @@ public class HomesController {
 		return response;
 	}
 	
-		@RequestMapping(method=RequestMethod.GET)
+	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<List<Home>> getHomeByCity(@RequestParam(name="homeCity", required=true) String city,
 													@RequestParam(name="homeInit", required=false) java.util.Date dateInit,
 													@RequestParam(name="homeEnd", required=false) java.util.Date dateEnd,
@@ -69,43 +69,57 @@ public class HomesController {
 		//Main query get matching: city, type of home, guests
 		System.out.println("Home city is: " + city);
 		
-		int lowPriceBound;
-		int highPriceBound;
-		//Check price range
-		if(price.equals("Hasta 35€")){
-			lowPriceBound = 0;
-			highPriceBound = 35;
-		}
-		else if(price.equals("36€ - 69€")){
-			lowPriceBound = 36;
-			highPriceBound = 69;
-		}
-		else if(price.equals("70€ - 130€")){
-			lowPriceBound = 70;
-			highPriceBound = 130;
+		
+		if(city.equals("all")){
+			List<Home> homeList = daoHome.findAll();
+			ResponseEntity<List<Home>> response;
+			System.out.println("AQUI");
+			if(homeList.size() == 0) {
+				response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			} else {
+				response = new ResponseEntity<>(homeList, HttpStatus.OK);
+			}
+			return response;
 		}
 		else{
-			//130+
-			lowPriceBound = 131;
-			highPriceBound = 3000;
+			int lowPriceBound;
+			int highPriceBound;
+			//Check price range
+			if(price.equals("Hasta 35€")){
+				lowPriceBound = 0;
+				highPriceBound = 35;
+			}
+			else if(price.equals("36€ - 69€")){
+				lowPriceBound = 36;
+				highPriceBound = 69;
+			}
+			else if(price.equals("70€ - 130€")){
+				lowPriceBound = 70;
+				highPriceBound = 130;
+			}
+			else{
+				//130+
+				lowPriceBound = 131;
+				highPriceBound = 3000;
+			}
+			
+			//Adapt types to sql
+			java.sql.Date sqlDateInit = new java.sql.Date(dateInit.getTime());
+			java.sql.Date sqlDateEnd = new java.sql.Date(dateEnd.getTime());
+			
+			BigDecimal bdLowPrice = new BigDecimal(lowPriceBound);
+			BigDecimal bdHighPrice = new BigDecimal(highPriceBound);
+			
+			
+			List<Home> home = daoHome.findByHomeCityAndHomeTypeAndHomeGuestsGreaterThanAndHomePriceNightBetweenAndHomeAvDateInitBeforeAndHomeAvDateFinAfter
+					(city, type, adults+kids, bdLowPrice, bdHighPrice, sqlDateInit, sqlDateEnd);
+	
+			ResponseEntity<List<Home>> response;
+			
+			response = new ResponseEntity<>(home, HttpStatus.OK);
+			
+			return response;
 		}
-		
-		//Adapt types to sql
-		java.sql.Date sqlDateInit = new java.sql.Date(dateInit.getTime());
-		java.sql.Date sqlDateEnd = new java.sql.Date(dateEnd.getTime());
-		
-		BigDecimal bdLowPrice = new BigDecimal(lowPriceBound);
-		BigDecimal bdHighPrice = new BigDecimal(highPriceBound);
-		
-		
-		List<Home> home = daoHome.findByHomeCityAndHomeTypeAndHomeGuestsGreaterThanAndHomePriceNightBetweenAndHomeAvDateInitBeforeAndHomeAvDateFinAfter
-				(city, type, adults+kids, bdLowPrice, bdHighPrice, sqlDateInit, sqlDateEnd);
-
-		ResponseEntity<List<Home>> response;
-		
-		response = new ResponseEntity<>(home, HttpStatus.OK);
-		
-		return response;
 	}
 	
 	
