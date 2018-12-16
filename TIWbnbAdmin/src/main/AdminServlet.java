@@ -94,10 +94,16 @@ public class AdminServlet extends HttpServlet {
 			
 			List<MessagesAdmin> messageList = null;
 
+			// Obtain messages to admin
 			Client client = ClientBuilder.newClient();
 			WebTarget webResource = client.target(MESSAGES_API_URL).path("admin/admin").path(adminId.toString());
 			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
 			Response response = invocationBuilder.get();
+			
+			// Set admin messages as Read
+			WebTarget webResource3 = client.target(MESSAGES_API_URL).path("admin/admin/setRead/").path(adminId.toString());
+			Invocation.Builder invocationBuilder3 = webResource3.request(MediaType.APPLICATION_JSON);
+			invocationBuilder3.get();
 			
 			if(response.getStatus() == 200){
 				MessagesAdmin[] temp = response.readEntity(MessagesAdmin[].class);

@@ -166,7 +166,7 @@
 				         	<form class="form-sendmsg" METHOD="POST" ACTION="SendMessage">
 					     	<input type="email" id="receiver" name="receiver" placeholder="Email">
 							<button type="submit" formmethod="post">Send Message</button>
-							<textarea id="message" class="text" rows="4" cols="50" name="message" >Enter text here...</textarea>
+							<textarea id="message" class="text" rows="4" cols="75" name="message" >Enter text here...</textarea>
 							</form>
 					      	</div>
 					

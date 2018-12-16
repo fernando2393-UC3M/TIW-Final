@@ -80,7 +80,7 @@ public class MessagesController {
 	@RequestMapping(method=RequestMethod.GET, value="/admin/user/{id}")
 	public ResponseEntity<List<MessagesAdmin>> getMessagesAdminByUser(@PathVariable @Validated int id) {	
 		User user = daoUs.findById(id).orElse(null);
-		List<MessagesAdmin> list = daoAd.findByUserAndMessageFromAdmin(user, (byte) 0);
+		List<MessagesAdmin> list = daoAd.findByUserAndMessageFromAdmin(user, (byte) 1);
 		
 		ResponseEntity<List<MessagesAdmin>> response;
 		
@@ -97,7 +97,7 @@ public class MessagesController {
 	@RequestMapping(method=RequestMethod.GET, value="/admin/admin/{id}")
 	public ResponseEntity<List<MessagesAdmin>> getMessagesAdminByAdmin(@PathVariable @Validated int id) {	
 		Admin admin = daoAdmin.findById(id).orElse(null);
-		List<MessagesAdmin> list = daoAd.findByAdminAndMessageFromAdmin(admin, (byte) 1);
+		List<MessagesAdmin> list = daoAd.findByAdminAndMessageFromAdmin(admin, (byte) 0);
 		ResponseEntity<List<MessagesAdmin>> response;
 		
 		if(list.size() == 0) {
@@ -137,6 +137,48 @@ public class MessagesController {
 			for(Message msg: aux){
 				msg.setMessageRead((byte) 1);
 				daoMs.save(msg);
+			}			
+			response = new ResponseEntity<>(HttpStatus.OK);
+		}
+		
+		return response;
+	}
+	
+	/* Set User received messages to read */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(method=RequestMethod.GET, value="/admin/user/setRead/{id}")
+	public ResponseEntity setReadAdminMessage(@PathVariable @Validated int id){
+		User user = daoUs.findById(id).orElse(null);		
+		List<MessagesAdmin> aux = daoAd.findByUserAndMessageFromAdminAndMessageRead(user, (byte) 1, (byte) 0);
+		ResponseEntity response;
+		
+		if(aux.size() == 0) {
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {			
+			for(MessagesAdmin msg: aux){
+				msg.setMessageRead((byte) 1);
+				daoAd.save(msg);
+			}			
+			response = new ResponseEntity<>(HttpStatus.OK);
+		}
+		
+		return response;
+	}
+	
+	/* Set User received messages to read */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(method=RequestMethod.GET, value="/admin/admin/setRead/{id}")
+	public ResponseEntity setAdminReadMessage(@PathVariable @Validated int id){
+		Admin admin = daoAdmin.findById(id).orElse(null);		
+		List<MessagesAdmin> aux = daoAd.findByAdminAndMessageFromAdminAndMessageRead(admin, (byte) 0, (byte) 0);
+		ResponseEntity response;
+		
+		if(aux.size() == 0) {
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {			
+			for(MessagesAdmin msg: aux){
+				msg.setMessageRead((byte) 1);
+				daoAd.save(msg);
 			}			
 			response = new ResponseEntity<>(HttpStatus.OK);
 		}
