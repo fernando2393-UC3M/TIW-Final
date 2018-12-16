@@ -140,39 +140,45 @@
 								Home curr = (Home)i.next();
 								
 								out.println("<div class=\"col-sm-6 col-md-6\">");
-								out.println("<div class=\"tabulation animate-box\">");
+								out.println("<div style=\"margin-top:0px;margin-bottom:7em;\" class=\"tabulation animate-box\">");
+								//out.println("<div class=\"tabulation animate-box\">");
 								
-								out.println("<ul class=\"nav nav-tabs\" role=\"tablist\">");
-							    out.println("<li role=\"presentation\" class=\"active\">");
-							    out.println("<a href=\"#alojamientos\" aria-controls=\"alojamientos\" role=\"tab\" data-toggle=\"tab\">Alojamiento</a>");
-							    out.println("</li>");
-							   	out.println("</ul>");
+								
+								//out.println("<ul class=\"nav nav-tabs\" role=\"tablist\">");
+							    //out.println("<li role=\"presentation\" class=\"active\">");
+							    //out.println("<a href=\"#alojamientos\" aria-controls=\"alojamientos\" role=\"tab\" data-toggle=\"tab\">Alojamiento</a>");
+							    //out.println("</li>");
+							   	//out.println("</ul>");
 							   	
 							   	out.println("<div class=\"tab-content\">");
 							   	out.println("<div role=\"tabpanel\" class=\"tab-pane active\" id=\"hotels\">");
 							   	out.println("<div class=\"row\">");
 							   	out.println("<div class=\"col-xxs-12 col-xs-12 mt\">");
+							   	
 							   	out.println("<div class=\"input-field\">");
 							   	out.println("<label>" + curr.getHomeName() + "</label>");
 							   	out.println("<a class=\"info\" href=\"detail?id=" + curr.getHomeId() +"\">Modificar Información</a>");
 							   	out.println("<br>");
-							   	out.println("<a href=\"alojamiento?id=" + curr.getHomeId() + "\"><img alt=\"" + curr.getHomeName() + "\" src=\"" + curr.getHomePhotos() + "\" max></a>");
+							   	out.println("<a href=\"alojamiento?id=" + curr.getHomeId() + "\"><img alt=\"" + curr.getHomeName() + "\" src=\"" + curr.getHomePhotos() + "\" onerror=\"this.src='images/Airbnb.jpg'\" max></a>");
 							   	out.println("</div>");
+							   	
 							   	out.println("<br>");
 							   	out.println("<div class=\"col-xxs-12 col-xs-12 mt\">");
 							   	out.println("<label>Alquilada:</label><font class=\"rented\" color=\"green\">Alquilada</font>");
 							   	out.println("</div>");
+							   	
 							   	out.println("<div class=\"col-xxs-12 col-xs-12 mt\">");
 								out.println("<label>Descripción:</label>");
 								out.println("<p><font color=\"black\">" + curr.getHomeDescriptionFull() + "</font>");
 								out.println("</p>");											
 								out.println("</div>");
-								out.println("</div>");                                 
-								
 								out.println("<div class=\"col-xs-12\">");
 								out.println("<a href=\"deleteHome?id=" + curr.getHomeId() + "\"> <input type=\"button\" class=\"btn btn-primary btn-block\" value=\"Eliminar Alojamiento\"></a>");
 								
 								out.println("</div>");
+								out.println("</div>");                                 
+								
+								
 								out.println("</div>");
 	   							out.println("</div>");
 								out.println("</div>");
