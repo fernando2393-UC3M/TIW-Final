@@ -131,11 +131,14 @@ public class UsersController {
 			us.setUserPassword(pUser.getUserPassword());
 			us.setUserName(pUser.getUserName());
 			us.setUserSurname(pUser.getUserSurname());
-			if(pUser.getUserBirthdate() == null)
-				us.setUserBirthdate(new Date(1970, 01, 01));
-			else
+			if(pUser.getUserBirthdate() == null){
+				java.util.Date date = new Date(1970, 01, 01);
+				java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+				us.setUserBirthdate(sqlDate);
+			}
+			else {
 				us.setUserBirthdate(pUser.getUserBirthdate());
-			
+			}			
 			daoUs.save(us);
 			
 			response = new ResponseEntity<>(HttpStatus.OK);

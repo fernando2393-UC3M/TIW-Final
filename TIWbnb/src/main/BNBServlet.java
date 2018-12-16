@@ -175,7 +175,7 @@ public class BNBServlet extends HttpServlet {
 			if(status == 200){
 				req.setAttribute("Name", user.getUserName());
 				req.setAttribute("Surname", user.getUserSurname());		
-				//req.setAttribute("Birthdate", (new SimpleDateFormat("yyyy-MM-dd")).format(user.getUserBirthdate()));
+				req.setAttribute("Birthdate", user.getUserBirthdate());
 				req.setAttribute("Password", user.getUserPassword());
 				
 				ReqDispatcher = req.getRequestDispatcher("registrado.jsp");
@@ -268,7 +268,9 @@ public class BNBServlet extends HttpServlet {
 			newUser.setUserName(req.getParameter("registerName"));
 			newUser.setUserSurname(req.getParameter("registerSurname"));
 			newUser.setUserPassword(req.getParameter("registerPassword"));
-			newUser.setUserBirthdate(aux);
+			
+			java.sql.Date sqlDate = new java.sql.Date(aux.getTime());
+			newUser.setUserBirthdate(sqlDate);
 									
 			Response response = invocationBuilder.post(Entity.entity(newUser, MediaType.APPLICATION_JSON));			
 			
@@ -309,8 +311,8 @@ public class BNBServlet extends HttpServlet {
 					parsed = format.parse(req.getParameter("birthdate"));
 				} catch (ParseException e) {
 				}
-				
-				result.setUserBirthdate(parsed);
+				java.sql.Date sqlDate = new java.sql.Date(parsed.getTime());
+				result.setUserBirthdate(sqlDate);
 				
 				Response response = invocationBuilder.put(Entity.entity(result, MediaType.APPLICATION_JSON));
 				

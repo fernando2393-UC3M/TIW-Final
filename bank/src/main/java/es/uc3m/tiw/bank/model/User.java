@@ -2,16 +2,16 @@ package es.uc3m.tiw.bank.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 
 /**
- * The persistent class for the USER database table.
+ * The persistent class for the users database table.
  * 
  */
 @Entity
-@Table(name="USER")
+@Table(name="users")
 @NamedQuery(name="User.findAll", query="SELECT u FROM User u")
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -21,7 +21,7 @@ public class User implements Serializable {
 	@Column(name="USER_ID")
 	private int userId;
 
-	@Temporal(TemporalType.DATE)
+	//@Temporal(TemporalType.DATE)
 	@Column(name="USER_BIRTHDATE")
 	private Date userBirthdate;
 

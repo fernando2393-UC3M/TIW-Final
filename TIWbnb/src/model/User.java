@@ -2,7 +2,7 @@ package model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 
@@ -21,7 +21,7 @@ public class User implements Serializable {
 	@Column(name="USER_ID")
 	private int userId;
 
-	@Temporal(TemporalType.DATE)
+	//@Temporal(TemporalType.DATE)
 	@Column(name="USER_BIRTHDATE")
 	private Date userBirthdate;
 

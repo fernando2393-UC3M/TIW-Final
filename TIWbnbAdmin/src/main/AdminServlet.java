@@ -308,7 +308,8 @@ public class AdminServlet extends HttpServlet {
 				
 				if(!req.getParameter("inputBirthdate").isEmpty()){
 					parsed = format.parse(req.getParameter("inputBirthdate"));
-					result.setUserBirthdate(parsed);
+					java.sql.Date sqlDate = new java.sql.Date(parsed.getTime());
+					result.setUserBirthdate(sqlDate);
 				}
 				else {
 					result.setUserBirthdate(resultUsr.getUserBirthdate());

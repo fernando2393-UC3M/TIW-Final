@@ -5,7 +5,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 
@@ -24,7 +24,6 @@ public class User implements Serializable {
 	@Column(name="USER_ID")
 	private int userId;
 
-	@Temporal(TemporalType.DATE)
 	@Column(name="USER_BIRTHDATE")
 	private Date userBirthdate;
 
