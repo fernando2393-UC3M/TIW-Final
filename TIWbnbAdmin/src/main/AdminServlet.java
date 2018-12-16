@@ -123,7 +123,16 @@ public class AdminServlet extends HttpServlet {
 		else if(requestURL.equals(path+"resultados")){
 			
 			Client client = ClientBuilder.newClient();
-			WebTarget webResource = client.target(HOME_API_URL);
+			
+			WebTarget webResource = client.target(HOME_API_URL).queryParam("homeCity", "all")
+					   .queryParam("homeInit", null)
+					   .queryParam("homeEnd", null)
+					   .queryParam("homePrice", 0)
+					   .queryParam("homeType", "nada")
+					   .queryParam("homeAdults", 0)
+					   .queryParam("homeKids", 0);
+			
+			
 			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
 			Response response = invocationBuilder.get();
 			
