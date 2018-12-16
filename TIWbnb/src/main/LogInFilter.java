@@ -54,6 +54,7 @@ public class LogInFilter implements Filter {
         String registerURI = req.getContextPath() + "/register";
         String resultadosURI = req.getContextPath() + "/resultados";
         String alojamientoURI = req.getContextPath() + "/alojamiento";
+	String buscarCasa = req.getContextPath() + "/queryhome";
         String mainURI = req.getContextPath() + "/";
         
         boolean loggedIn = session != null && session.getAttribute("user") != null;
@@ -62,6 +63,7 @@ public class LogInFilter implements Filter {
         boolean isRegisterRequest = req.getRequestURI().equals(registerURI);
         boolean isResultadosRequest = req.getRequestURI().equals(resultadosURI);
         boolean isAlojamientoRequest = req.getRequestURI().equals(alojamientoURI);
+	boolean isQueryHomeRequest = req.getRequestURI().equals(buscarCasa);
         boolean isIndexRequest = req.getRequestURI().equals(indexURI) || 
         						 req.getRequestURI().equals(mainURI);
         boolean isStaticResource = req.getRequestURI().startsWith(req.getContextPath() + "/css/")   ||
@@ -69,7 +71,7 @@ public class LogInFilter implements Filter {
         						   req.getRequestURI().startsWith(req.getContextPath() + "/images/")|| 
         						   req.getRequestURI().startsWith(req.getContextPath() + "/js/");
 
-        if (loggedIn || isLoginRequest || isLogoutRequest || isIndexRequest || isAlojamientoRequest || isResultadosRequest || isRegisterRequest || isStaticResource) {
+        if (loggedIn || isQueryHomeRequest || isLoginRequest || isLogoutRequest || isIndexRequest || isAlojamientoRequest || isResultadosRequest || isRegisterRequest || isStaticResource) {
         	// pass the request along the filter chain
             chain.doFilter(request, response);
         } else {

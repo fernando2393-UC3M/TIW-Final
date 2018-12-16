@@ -15,6 +15,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -40,7 +41,7 @@ import model.User;
 @WebServlet(urlPatterns = {"/index", "/admin", "/resultados",
 				"/renting", "/delete", "/registrado",
 				"/mensajes", "/login", "/register",
-				"/alojamiento", "/casa", "/viajes",
+				"/alojamiento", "/casa", "/queryhome", "/viajes",
 				"/logout", "/SendMessage", "/SendMessageAdmin",
 				"/booking", "/booking_confirmation", "/deleteHome", "/detail", "/modifyHome"})
 public class BNBServlet extends HttpServlet {
@@ -514,7 +515,67 @@ public class BNBServlet extends HttpServlet {
 			dispatcher.forward(req, res);		
 			
 		}
-		
+			//-----------------------QUERY HOME-------------------------------
+		else if(requestURL.toString().equals(path+"queryhome")) {
+			String city = req.getParameter("homeCiudad");
+			String strInit = req.getParameter("homeIda");
+			String strEnd = req.getParameter("homeVuelta");
+			String price = req.getParameter("homePrecio");
+			String type = req.getParameter("homeTipo");
+			int numAdults = Integer.parseInt(req.getParameter("homeAdultos"));
+			int numKids = Integer.parseInt(req.getParameter("homeNinios"));
+			
+			
+			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+			Date dateInit = null;;
+			Date dateEnd = null;
+			try {
+				dateInit = formatter.parse(strInit);
+				dateEnd = formatter.parse(strEnd);
+				
+			} catch (ParseException e) {
+
+				e.printStackTrace();
+			}
+			
+			Client client = ClientBuilder.newClient();
+			WebTarget webResource = client.target(HOMES_API_URL).queryParam("homeCity", city)
+															   .queryParam("homeInit", dateInit)
+															   .queryParam("homeEnd", dateEnd)
+															   .queryParam("homePrice", price)
+															   .queryParam("homeType", type)
+															   .queryParam("homeAdults", numAdults)
+															   .queryParam("homeKids", numKids);
+			
+			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+			Response response = invocationBuilder.get();
+			
+			List <Home> result = (List<Home>) response.readEntity(new GenericType<List<Home>>(){});
+			
+			for(int i = 0; i < result.size(); i++){
+				System.out.println(result.get(i).getHomeCity());
+				System.out.println(result.get(i).getHomeDescriptionFull());
+				System.out.println(result.get(i).getHomeDescriptionShort());
+				System.out.println(result.get(i).getHomeGuests());
+				System.out.println(result.get(i).getHomeId());
+				System.out.println(result.get(i).getHomeName());
+				System.out.println(result.get(i).getHomePhotos());
+				System.out.println(result.get(i).getHomeType());
+			}
+			
+			req.setAttribute("resultHomes", result);
+			if(response.getStatus() == 200) {
+				dispatcher = req.getRequestDispatcher("resultados.jsp");
+				dispatcher.forward(req, res);				
+			}
+			else { // Error in deletion
+				dispatcher = req.getRequestDispatcher("resultados.jsp");
+				// Forward to requested URL by user
+				dispatcher.forward(req, res);
+			}			
+			
+			
+		}
 		//-----------------------LOGOUT-------------------------------
 		
 		else if(requestURL.toString().equals(path+"logout")) {
