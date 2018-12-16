@@ -215,16 +215,23 @@
 												%> <tr>
 												<td>User <%= obj.getUser().getUserEmail() %> wants to book your home <%= obj.getHome().getHomeName() %>.</td>
 												<td>From dates <%= obj.getBookingDateIn() %> to <%= obj.getBookingDateIn() %>.</td>
-												<td><button type="submit" formmethod="post">Accept</button></td>
-												<td><button type="submit" formmethod="post">Reject</button></td>
+												
+									         	<td><form class="form-accept-booking" METHOD="POST" ACTION="booking">
+									         	<input type="hidden" id="bookid" name="bookid"  value=<%= obj.getBookingId() %> />
+												<button type="submit" formmethod="post">Book</button>
+												</form></td>
+												
+									         	<td><form class="form-reject-booking" METHOD="POST" ACTION="booking">
+									         	<input type="hidden" id="bookid" name="bookid"  value=<%= obj.getBookingId() %> />
+												<button type="submit" formmethod="post">Book</button>
+												</form></td>
+												
 												</tr> 
 												<%
 											}	
 										}
 										%>                                       
-									</tbody>
-									
-									
+									</tbody>									
 								</table>
 							</div>	
 														

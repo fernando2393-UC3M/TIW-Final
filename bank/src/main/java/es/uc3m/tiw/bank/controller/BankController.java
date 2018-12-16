@@ -9,14 +9,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
 public class BankController {
-	
+	//TODO Request body into a single object
 	@SuppressWarnings("rawtypes")
-	@RequestMapping("/")
+	@RequestMapping(method = RequestMethod.POST, value="/bank")
 	public ResponseEntity validateCard(@RequestBody String card_num, @RequestBody String cv2,
 			@RequestBody @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) java.sql.Date date){
 		

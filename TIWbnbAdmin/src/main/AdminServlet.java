@@ -151,11 +151,12 @@ public class AdminServlet extends HttpServlet {
 			WebTarget webResource = client.target(USER_API_URL);
 			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
 			Response response = invocationBuilder.get();
-			
-			List <User> result = (List<User>) response.readEntity(new GenericType<List<User>>(){});
+
+			List <User> result;
 			
 			if(response.getStatus() == 200) {
-				
+				User[] temp = response.readEntity(User[].class);
+				result = Arrays.asList(temp);
 				req.setAttribute("users", result);
 								
 			}

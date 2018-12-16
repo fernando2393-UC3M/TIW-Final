@@ -48,6 +48,19 @@ public class BookingController {
 		return response;
 	}
 	
+	@RequestMapping("/rents/{id}")
+	public ResponseEntity<Booking> getBookingByBookingId(@PathVariable @Validated Integer id){
+		Booking bk = daoBk.findById(id).orElse(null);
+
+		ResponseEntity<Booking> response;
+		if(bk == null) {
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			response = new ResponseEntity<>(bk, HttpStatus.OK);
+		}
+		return response;
+	}
+	
 	@RequestMapping("/rents/homes/{id}")
 	public ResponseEntity<List<Booking>> getBookingByHomeId(@PathVariable @Validated Integer id){
 		Home home = daoHm.findById(id).orElse(null);
@@ -97,6 +110,54 @@ public class BookingController {
 			bk.setBookingConfirmed(bk.getBookingConfirmed());
 		}		
 		return daoBk.save(bk);
+	}
+	
+	// Accept a Booking
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(method = RequestMethod.GET, value="/accept/{id}")
+	public ResponseEntity acceptBooking(@PathVariable @Validated Integer id){
+		Booking bk = daoBk.findById(id).orElse(null);
+		
+		ResponseEntity response;
+		if(bk != null){
+			bk.setBookingConfirmed("Accepted");
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			response = new ResponseEntity<>(HttpStatus.OK);
+		}
+		return response;
+	}
+	
+	// Reject a Booking
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(method = RequestMethod.GET, value="/reject/{id}")
+	public ResponseEntity rejectBooking(@PathVariable @Validated Integer id){
+		Booking bk = daoBk.findById(id).orElse(null);
+		
+		ResponseEntity response;
+		if(bk != null){
+			bk.setBookingConfirmed("Cancelled by the host");
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			response = new ResponseEntity<>(HttpStatus.OK);
+		}
+		return response;
+	}
+
+	// Reject a Booking
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(method = RequestMethod.GET, value="/bank/{id}")
+	public ResponseEntity bankBooking(@PathVariable @Validated Integer id){
+		Booking bk = daoBk.findById(id).orElse(null);
+		
+		ResponseEntity response;
+		if(bk != null){
+			bk.setBookingConfirmed("Cancelled by the bank");
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			response = new ResponseEntity<>(HttpStatus.OK);
+		}
+		return response;
 	}
 	
 }
