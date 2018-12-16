@@ -97,23 +97,14 @@ public class HomesController {
 		BigDecimal bdLowPrice = new BigDecimal(lowPriceBound);
 		BigDecimal bdHighPrice = new BigDecimal(highPriceBound);
 		
-		System.out.println("City: " + city);
-		System.out.println("Type: " + type);
-		System.out.println("Date initial: " + sqlDateInit);
-		System.out.println("Date end: " + sqlDateEnd);
-		System.out.println("low bound " + lowPriceBound);
-		System.out.println("high bound " + highPriceBound);
 		
 		List<Home> home = daoHome.findByHomeCityAndHomeTypeAndHomeGuestsGreaterThanAndHomePriceNightBetweenAndHomeAvDateInitBeforeAndHomeAvDateFinAfter
 				(city, type, adults+kids, bdLowPrice, bdHighPrice, sqlDateInit, sqlDateEnd);
 
 		ResponseEntity<List<Home>> response;
 		
-		if(home.size() == 0) {
-			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		} else {
-			response = new ResponseEntity<>(home, HttpStatus.OK);
-		}
+		response = new ResponseEntity<>(home, HttpStatus.OK);
+		
 		return response;
 	}
 	
