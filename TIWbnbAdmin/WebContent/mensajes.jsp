@@ -142,7 +142,7 @@
 												%>
 												<td>
 												<div class="media">
-													<h4 class="title"> admin </h4>
+													<h4 class="title"><%= obj.getUser().getUserEmail() %></h4>
 												</div>
 												</td>
 												<td>      

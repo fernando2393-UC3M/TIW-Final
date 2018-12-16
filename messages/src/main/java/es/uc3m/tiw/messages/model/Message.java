@@ -33,12 +33,12 @@ public class Message implements Serializable {
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
-	@JoinColumn(name="MESSAGE_SENDER_ID")
+	@JoinColumn(name="MESSAGE_SENDER_ID", referencedColumnName="USER_ID")
 	private User user1;
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
-	@JoinColumn(name="MESSAGE_RECEIVER_ID")
+	@JoinColumn(name="MESSAGE_RECEIVER_ID", referencedColumnName="USER_ID")
 	private User user2;
 
 	public Message() {

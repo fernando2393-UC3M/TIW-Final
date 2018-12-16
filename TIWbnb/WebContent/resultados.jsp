@@ -8,6 +8,7 @@
 		<%@ page contentType="text/html; charset=UTF-8" %>
 	<%@ page import="java.util.List" %>
 	<%@ page import="java.util.Date" %>
+	<%@ page import="java.util.Iterator" %>
 	<%@ page import="model.Home" %>
 	<%@ page import="java.sql.DriverManager" %>
 	<%@ page import="java.sql.Connection" %>
@@ -130,23 +131,72 @@
 		<%
 		
 		List <Home> resultHomes = (List <Home>) request.getAttribute("resultHomes");
+
 		
-		for (int i = 0; i<resultHomes.size(); i++) {
-			Home home = resultHomes.get(i);
-			String city = resultHomes.get(i).getHomeCity();
-			String type = resultHomes.get(i).getHomeType();
-			String descFull = resultHomes.get(i).getHomeDescriptionFull();
-			String descShort = resultHomes.get(i).getHomeDescriptionShort();
-			int guests = resultHomes.get(i).getHomeGuests();
-			int id = resultHomes.get(i).getHomeId();
-			String name = resultHomes.get(i).getHomeName();
-			String photos = resultHomes.get(i).getHomePhotos();
-		
-			out.println("<tr>");
-			out.println("<td>"+resultHomes.get(i).getHomeId()+"</td><td>"+resultHomes.get(i).getHomeName()+
-					"</td><td>"+resultHomes.get(i).getHomeCity()+"</td><td>"+resultHomes.get(i).getUser().getUserEmail()+"</td>");
-			out.println("</tr>");
-		}
+		if(resultHomes != null && resultHomes.size()>0) {
+							Iterator i = resultHomes.iterator();
+							
+							
+							while(i.hasNext()){
+								Home curr = (Home)i.next();
+								
+								out.println("<div class=\"col-sm-6 col-md-6\">");
+								out.println("<div class=\"tabulation animate-box\">");
+								
+								out.println("<ul class=\"nav nav-tabs\" role=\"tablist\">");
+							    out.println("<li role=\"presentation\" class=\"active\">");
+							    out.println("<a href=\"#alojamientos\" aria-controls=\"alojamientos\" role=\"tab\" data-toggle=\"tab\">Alojamiento</a>");
+							    out.println("</li>");
+							   	out.println("</ul>");
+							   	
+							   	out.println("<div class=\"tab-content\">");
+							   	out.println("<div role=\"tabpanel\" class=\"tab-pane active\" id=\"hotels\">");
+							   	out.println("<div class=\"row\">");
+							   	out.println("<div class=\"col-xxs-12 col-xs-12 mt\">");
+							   	out.println("<div class=\"input-field\">");
+							   	out.println("<label>" + curr.getHomeName() + "</label>");
+							   	out.println("<a class=\"info\" href=\"detail?id=" + curr.getHomeId() +"\"></a>");
+							   	out.println("<br>");
+							   	out.println("<a href=\"alojamiento?id=" + curr.getHomeId() + "\"><img alt=\"" + curr.getHomeName() + "\" src=\"" + curr.getHomePhotos() + "\" max></a>");
+							   	out.println("</div>");
+							   	out.println("<br>");
+							   	out.println("<div class=\"col-xxs-12 col-xs-12 mt\">");
+							   	out.println("<label>Alquilada:</label><font class=\"rented\" color=\"green\">Alquilada</font>");
+							   	out.println("</div>");
+							   	out.println("<div class=\"col-xxs-12 col-xs-12 mt\">");
+								out.println("<label>Descripción:</label>");
+								out.println("<p><font color=\"black\">" + curr.getHomeDescriptionFull() + "</font>");
+								out.println("</p>");
+								out.println("<label>Disponible desde:</label>");
+								out.println("<p><font color=\"black\">" + curr.getHomeAvDateInit() + "</font>");
+								out.println("</p>");
+								out.println("<label>Disponible hasta:</label>");
+								out.println("<p><font color=\"black\">" + curr.getHomeAvDateFin() + "</font>");
+								out.println("</p>");
+								out.println("</div>");
+								out.println("</div>");                                 
+								
+								out.println("<div class=\"col-xs-12\">");
+								//out.println("<a href=\"deleteHome?id=" + curr.getHomeId() + "\"> <input type=\"button\" class=\"btn btn-primary btn-block\" value=\"Eliminar Alojamiento\"></a>");
+								
+								out.println("</div>");
+								out.println("</div>");
+	   							out.println("</div>");
+								out.println("</div>");
+								out.println("</div>");
+								out.println("</div>");
+								
+							   	
+							}
+			}
+			else{
+				out.println("<div class=\"col-sm-6 col-md-6\">");
+				out.println("<div class=\"tabulation animate-box\">");
+				out.println("<label>" + "No se encuentran resultados según los criterios de búsqueda" + "</label>");
+				out.println("</div>");
+				out.println("</div>");
+
+			}
 
 		%>
 					

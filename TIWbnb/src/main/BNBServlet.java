@@ -156,7 +156,7 @@ public class BNBServlet extends HttpServlet {
 			Invocation.Builder invocationBuilder3 = webResource3.request(MediaType.APPLICATION_JSON);
 			invocationBuilder3.get();
 			
-			// Get admin messages
+			// Get bookings
 			WebTarget webResource4 = client.target(RENT_API_URL).path("/rents/users").path(userId.toString());
 			Invocation.Builder invocationBuilder4 = webResource4.request(MediaType.APPLICATION_JSON);
 			Response response4 = invocationBuilder4.get();
@@ -563,6 +563,26 @@ public class BNBServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 			
+			//If no dates were specified show all houses taking into account the rest of criteria
+			if(dateInit == null){
+				try {
+	
+					dateInit = formatter.parse("04/12/2100");
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if(dateEnd == null){
+				try {
+					dateEnd = formatter.parse("04/12/2010");
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
 			Client client = ClientBuilder.newClient();
 			WebTarget webResource = client.target(HOMES_API_URL).queryParam("homeCity", city)
 															   .queryParam("homeInit", dateInit)
@@ -832,7 +852,7 @@ public class BNBServlet extends HttpServlet {
 		
 		//------------------REJECT BOOKING CONFIRMATION------------------------
 		
-		else if(requestURL.toString().equals(path+"booking_accept")) {
+		else if(requestURL.toString().equals(path+"booking_reject")) {
 			
 			String bookingId = req.getParameter("bookid");
 
