@@ -188,7 +188,7 @@
 							<label for="message">Card Number:</label>
 							<textarea id="cardnum" class="text" rows="1" cols="25" name="cardnum" >1234567890123456</textarea>
 							<label for="message">Exp. Code:</label>
-							<textarea id="expcode" class="text" rows="1" cols="25" name="expcode" >MMyyyy</textarea>
+							<textarea id="expcode" class="text" rows="1" cols="25" name="expcode" >MM/yy</textarea>
 							<label for="message">CV2:</label>
 							<textarea id="cv2" class="text" rows="1" cols="25" name="cv2" >123</textarea>
 							<button type="submit" formmethod="post">Book</button>

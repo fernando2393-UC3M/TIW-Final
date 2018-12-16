@@ -209,21 +209,20 @@
 									<tbody>
 										<%
 										List<model.Booking> bookingList = (List<model.Booking>) session.getAttribute("bookingList");
-//TODO:
 										if(bookingList != null){
 											for(model.Booking obj: bookingList){										
 												%> <tr>
-												<td>User <%= obj.getUser().getUserEmail() %> wants to book your home <%= obj.getHome().getHomeName() %>.</td>
-												<td>From dates <%= obj.getBookingDateIn() %> to <%= obj.getBookingDateIn() %>.</td>
+												<td>User <%= obj.getUser().getUserEmail() %> </td>
+												<td>Wants to book your home <%= obj.getHome().getHomeName() %> </td>
 												
-									         	<td><form class="form-accept-booking" METHOD="POST" ACTION="booking">
+									         	<td><form class="form-accept-booking" METHOD="POST" ACTION="booking_accept">
 									         	<input type="hidden" id="bookid" name="bookid"  value=<%= obj.getBookingId() %> />
-												<button type="submit" formmethod="post">Book</button>
+												<button type="submit" formmethod="post">Accept</button>
 												</form></td>
 												
-									         	<td><form class="form-reject-booking" METHOD="POST" ACTION="booking">
+									         	<td><form class="form-reject-booking" METHOD="POST" ACTION="booking_reject">
 									         	<input type="hidden" id="bookid" name="bookid"  value=<%= obj.getBookingId() %> />
-												<button type="submit" formmethod="post">Book</button>
+												<button type="submit" formmethod="post">Reject</button>
 												</form></td>
 												
 												</tr> 

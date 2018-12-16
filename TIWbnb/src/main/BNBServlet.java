@@ -852,7 +852,7 @@ public class BNBServlet extends HttpServlet {
 		
 		//------------------REJECT BOOKING CONFIRMATION------------------------
 		
-		else if(requestURL.toString().equals(path+"booking_accept")) {
+		else if(requestURL.toString().equals(path+"booking_reject")) {
 			
 			String bookingId = req.getParameter("bookid");
 
