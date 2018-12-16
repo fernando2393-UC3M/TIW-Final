@@ -133,7 +133,7 @@
 									 	<div class="row">
 											<div class="col-xxs-12 col-xs-12 mt">
 												<div class="input-field">
-													<label for="from">Ciudad:</label>
+													<label for="from">Ciudad: (Obligatorio)</label>
 													<input type="text" name="homeCiudad" class="form-control" id="from-place" placeholder="Madrid, SPAIN"/>
 												</div>
 											</div>
@@ -169,7 +169,7 @@
 												
 														<option value="Alojamiento entero">Alojamiento entero</option>
 														<option value="Habitacion privada">Habitacion privada</option>
-														<option value="Habitacion compartida">Habitación compartida</option>
+														
 													</select>
 												</section>
 											</div>
