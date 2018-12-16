@@ -166,7 +166,13 @@
 							   	out.println("<div class=\"col-xxs-12 col-xs-12 mt\">");
 								out.println("<label>Descripción:</label>");
 								out.println("<p><font color=\"black\">" + curr.getHomeDescriptionFull() + "</font>");
-								out.println("</p>");											
+								out.println("</p>");
+								out.println("<label>Disponible desde:</label>");
+								out.println("<p><font color=\"black\">" + curr.getHomeAvDateInit() + "</font>");
+								out.println("</p>");
+								out.println("<label>Disponible hasta:</label>");
+								out.println("<p><font color=\"black\">" + curr.getHomeAvDateFin() + "</font>");
+								out.println("</p>");
 								out.println("</div>");
 								out.println("</div>");                                 
 								
