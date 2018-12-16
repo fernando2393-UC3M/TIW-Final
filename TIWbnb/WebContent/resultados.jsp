@@ -127,56 +127,28 @@
 					</div>
 				</div>
 				<div class="row row-bottom-padded-md">
-				<%
-				
-				Connection con = null;
-				Statement st = null;
-				
-				// Open connection
-				
-				try {
-					// Load Driver
-					Class.forName("com.mysql.jdbc.Driver").newInstance();
-					// Connect to the database
-					con = DriverManager.getConnection("jdbc:mysql://localhost:3306/tiwbnb", "root", "admin");
-					System.out.println("Sucessful connection");
-				} catch (Exception e) {
-					System.out.println("Error when connecting to the database ");
-				}
-				
-				ResultSet rs = null;
-				
-				try {
-					// Create statement
-					st =con.createStatement();
+		<%
+		
+		List <Home> resultHomes = (List <Home>) request.getAttribute("resultHomes");
+		
+		for (int i = 0; i<resultHomes.size(); i++) {
+			Home home = resultHomes.get(i);
+			String city = resultHomes.get(i).getHomeCity();
+			String type = resultHomes.get(i).getHomeType();
+			String descFull = resultHomes.get(i).getHomeDescriptionFull();
+			String descShort = resultHomes.get(i).getHomeDescriptionShort();
+			int guests = resultHomes.get(i).getHomeGuests();
+			int id = resultHomes.get(i).getHomeId();
+			String name = resultHomes.get(i).getHomeName();
+			String photos = resultHomes.get(i).getHomePhotos();
+		
+			out.println("<tr>");
+			out.println("<td>"+resultHomes.get(i).getHomeId()+"</td><td>"+resultHomes.get(i).getHomeName()+
+					"</td><td>"+resultHomes.get(i).getHomeCity()+"</td><td>"+resultHomes.get(i).getUser().getUserEmail()+"</td>");
+			out.println("</tr>");
+		}
 
-					//Once the statement is created, we need to get the user input for both user email and password
-
-					// Execute statement
-					// Here we obtain the full User table
-					String query = "SELECT * FROM HOME";
-					rs = st.executeQuery(query);
-					
-				} catch (SQLException e) {
-					System.out.println("Error when opening table ");
-				}
-				
-				while(rs.next()){
-				
-					out.println("<div class=\"col-md-4 col-sm-6 fh5co-tours animate-box\" data-animate-effect=\"fadeIn\">");
-					out.println("<div href=\"#\"><img src=\"images/place-1.jpg\" alt=\"Free HTML5 Website Template by FreeHTML5.co\" class=\"img-responsive\">");
-					out.println("<div class=\"desc\">");
-					out.println("<span></span>");
-					out.println("<h3>"+rs.getString("HOME_NAME")+"</h3>");
-					out.println("<span>"+rs.getString("HOME_DESCRIPTION_SHORT")+"</span>");
-					out.println("<span class=\"price\">"+rs.getBigDecimal("HOME_PRICE_NIGHT")+"€"+"</span>");
-					out.println("<a class=\"btn btn-primary btn-outline\" href=\"alojamiento?homeId="+rs.getInt("HOME_ID")+"\">Seleccionar <i class=\"icon-arrow-right22\"></i></a>");
-					out.println("</div>");
-					out.println("</div>");
-					out.println("</div>");					
-				}
-				
-				%>
+		%>
 					
 				</div>
 
