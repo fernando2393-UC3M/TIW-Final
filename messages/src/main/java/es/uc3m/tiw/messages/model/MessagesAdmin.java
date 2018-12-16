@@ -2,15 +2,18 @@ package es.uc3m.tiw.messages.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.util.Date;
 
 
 /**
- * The persistent class for the MESSAGES_ADMIN database table.
+ * The persistent class for the messages_admin database table.
  * 
  */
 @Entity
-@Table(name="MESSAGES_ADMIN")
+@Table(name="messages_admin")
 @NamedQuery(name="MessagesAdmin.findAll", query="SELECT m FROM MessagesAdmin m")
 public class MessagesAdmin implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -37,11 +40,13 @@ public class MessagesAdmin implements Serializable {
 	//bi-directional many-to-one association to Admin
 	@ManyToOne
 	@JoinColumn(name="MESSAGE_ADMIN_ID")
+	@JsonBackReference
 	private Admin admin;
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="MESSAGE_USER_ID")
+	@JsonBackReference
 	private User user;
 
 	public MessagesAdmin() {

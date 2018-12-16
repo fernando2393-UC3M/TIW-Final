@@ -12,5 +12,6 @@ public interface MessagesAdminDao extends CrudRepository<MessagesAdmin, Integer>
 	
 	public List<MessagesAdmin> findByUserAndMessageFromAdmin(User user, byte fromAdmin);
 	public List<MessagesAdmin> findByAdminAndMessageFromAdmin(Admin admin, byte fromAdmin);
+	public List<MessagesAdmin> findAll();
 
 }

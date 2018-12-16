@@ -25,8 +25,34 @@ public class MessagesController {
 
 	@Autowired
 	private MessagesDao daoMs;
+	@Autowired
 	private MessagesAdminDao daoAd;
 
+	@RequestMapping(method=RequestMethod.GET, value="/test")
+	public ResponseEntity<List<Message>> getMessages(){
+		List<Message> list = daoMs.findAll();
+		ResponseEntity<List<Message>> response;
+		
+		if(list.size() == 0) {
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			response = new ResponseEntity<>(list, HttpStatus.OK);
+		}
+		return response;
+	}
+	@RequestMapping(method=RequestMethod.GET, value="/testadmin")
+	public ResponseEntity<List<MessagesAdmin>> getMessagesAdmin(){
+		List<MessagesAdmin> list = daoAd.findAll();
+		ResponseEntity<List<MessagesAdmin>> response;
+		
+		if(list.size() == 0) {
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			response = new ResponseEntity<>(list, HttpStatus.OK);
+		}
+		return response;
+	}
+	
 	/* Get Message between users from a user*/
 	@RequestMapping(method=RequestMethod.GET, value="/user")
 	public ResponseEntity<List<Message>> getMessagesByUser2(@RequestBody @Validated User pUser) {	
@@ -73,19 +99,23 @@ public class MessagesController {
 	}
 
 	/* Store new Message */
-	public void saveMessage(Message message){
+	@RequestMapping(method = RequestMethod.POST, value="/sendMessage")
+	public ResponseEntity<Message> saveMessage(@RequestBody @Validated Message message){
 		daoMs.save(message);		
+		return (new ResponseEntity<>(HttpStatus.OK));
 	}
-
+	
 	/* Store new AdminMessage */
-	public void saveAdminMessage(MessagesAdmin message){
+	@RequestMapping(method = RequestMethod.POST, value="/sendAdminMessage")
+	public ResponseEntity<MessagesAdmin> saveAdminMessage(@RequestBody @Validated MessagesAdmin message){
 		daoAd.save(message);		
+		return (new ResponseEntity<>(HttpStatus.OK));
 	}
 
-	/* Set User messages to read */
+	/* Set User received messages to read */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(method=RequestMethod.GET, value="/user/setread")
-	public ResponseEntity setReadMessage(@RequestBody @Validated User pUser, byte read){
+	@RequestMapping(method=RequestMethod.GET, value="/user/setRead")
+	public ResponseEntity setReadMessage(@RequestBody @Validated User pUser){
 		List<Message> aux = daoMs.findByUser2AndMessageRead(pUser, (byte) 0);
 		ResponseEntity response;
 		

@@ -15,6 +15,7 @@ import org.springframework.jms.support.converter.MappingJackson2MessageConverter
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 
+
 @SpringBootApplication
 @EnableJms
 public class MessagesApplication {
@@ -44,10 +45,12 @@ public class MessagesApplication {
         JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
 
         // Send a message with a POJO - the template reuse the message converter
-        System.out.println("Sending an email message.");
+        //System.out.println("Sending an email message.");
         //jmsTemplate.convertAndSend("mailbox", new Email("info@example.com", "Hello"));
         jmsTemplate.convertAndSend("mailbox", "info@example.com");
     }
+    
+    
 
 }
 

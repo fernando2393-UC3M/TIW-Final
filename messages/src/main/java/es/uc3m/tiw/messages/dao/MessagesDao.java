@@ -11,5 +11,6 @@ public interface MessagesDao extends CrudRepository<Message, Integer>{
 	
 	public List<Message> findByUser2(User user2);
 	public List<Message> findByUser2AndMessageRead(User user2, byte read);
+	public List<Message> findAll();
 	
 }
