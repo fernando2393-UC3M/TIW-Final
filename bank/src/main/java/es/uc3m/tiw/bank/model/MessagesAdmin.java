@@ -6,11 +6,11 @@ import java.util.Date;
 
 
 /**
- * The persistent class for the MESSAGES_ADMIN database table.
+ * The persistent class for the messages_admin database table.
  * 
  */
 @Entity
-@Table(name="MESSAGES_ADMIN")
+@Table(name="messages_admin")
 @NamedQuery(name="MessagesAdmin.findAll", query="SELECT m FROM MessagesAdmin m")
 public class MessagesAdmin implements Serializable {
 	private static final long serialVersionUID = 1L;

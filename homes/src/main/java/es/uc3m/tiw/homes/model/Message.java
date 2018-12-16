@@ -2,16 +2,15 @@ package es.uc3m.tiw.homes.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-
 import java.util.Date;
 
 
 /**
- * The persistent class for the MESSAGES database table.
+ * The persistent class for the messages database table.
  * 
  */
 @Entity
-@Table(name="MESSAGES")
+@Table(name="messages")
 @NamedQuery(name="Message.findAll", query="SELECT m FROM Message m")
 public class Message implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -32,12 +31,12 @@ public class Message implements Serializable {
 	@Column(name="MESSAGE_READ")
 	private byte messageRead;
 
-	// many-to-one association to User
+	//bi-directional many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="MESSAGE_SENDER_ID")
 	private User user1;
 
-	// many-to-one association to User
+	//bi-directional many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="MESSAGE_RECEIVER_ID")
 	private User user2;

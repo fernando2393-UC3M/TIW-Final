@@ -7,11 +7,11 @@ import java.math.BigInteger;
 
 
 /**
- * The persistent class for the BOOKING database table.
+ * The persistent class for the booking database table.
  * 
  */
 @Entity
-@Table(name="BOOKING")
+@Table(name="booking")
 @NamedQuery(name="Booking.findAll", query="SELECT b FROM Booking b")
 public class Booking implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -25,7 +25,7 @@ public class Booking implements Serializable {
 	private BigInteger bookingCardNum;
 
 	@Column(name="BOOKING_CONFIRMED")
-	private byte bookingConfirmed;
+	private String bookingConfirmed;
 
 	@Column(name="BOOKING_CV2")
 	private int bookingCv2;
@@ -41,15 +41,15 @@ public class Booking implements Serializable {
 	@Column(name="BOOKING_EXP_CODE")
 	private String bookingExpCode;
 
-	//bi-directional many-to-one association to Home
+	// many-to-one association to User
 	@ManyToOne
-	@JoinColumn(name="BOOKING_HOME_ID")
-	private Home home;
-
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	@JoinColumn(name="BOOKING_USER_ID")
+	@JoinColumn(name="BOOKING_USER_ID", referencedColumnName="USER_ID")
 	private User user;
+
+	// many-to-one association to Home
+	@ManyToOne
+	@JoinColumn(name="BOOKING_HOME_ID", referencedColumnName="HOME_ID")
+	private Home home;
 
 	public Booking() {
 	}
@@ -70,11 +70,11 @@ public class Booking implements Serializable {
 		this.bookingCardNum = bookingCardNum;
 	}
 
-	public byte getBookingConfirmed() {
+	public String getBookingConfirmed() {
 		return this.bookingConfirmed;
 	}
 
-	public void setBookingConfirmed(byte bookingConfirmed) {
+	public void setBookingConfirmed(String bookingConfirmed) {
 		this.bookingConfirmed = bookingConfirmed;
 	}
 
@@ -110,20 +110,20 @@ public class Booking implements Serializable {
 		this.bookingExpCode = bookingExpCode;
 	}
 
-	public Home getHome() {
-		return this.home;
-	}
-
-	public void setHome(Home home) {
-		this.home = home;
-	}
-
 	public User getUser() {
 		return this.user;
 	}
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public Home getHome() {
+		return this.home;
+	}
+
+	public void setHome(Home home) {
+		this.home = home;
 	}
 
 }

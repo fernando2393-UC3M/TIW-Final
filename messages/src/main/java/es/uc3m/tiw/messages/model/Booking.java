@@ -1,4 +1,4 @@
-package es.uc3m.tiw.admin.model;
+package es.uc3m.tiw.messages.model;
 
 import java.io.Serializable;
 import javax.persistence.*;

@@ -2,7 +2,6 @@ package model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
 
 /**
@@ -25,10 +24,6 @@ public class Admin implements Serializable {
 
 	@Column(name="ADMIN_PASSWORD")
 	private String adminPassword;
-
-	//bi-directional many-to-one association to MessagesAdmin
-	@OneToMany(mappedBy="admin")
-	private List<MessagesAdmin> messagesAdmins;
 
 	public Admin() {
 	}
@@ -55,28 +50,6 @@ public class Admin implements Serializable {
 
 	public void setAdminPassword(String adminPassword) {
 		this.adminPassword = adminPassword;
-	}
-
-	public List<MessagesAdmin> getMessagesAdmins() {
-		return this.messagesAdmins;
-	}
-
-	public void setMessagesAdmins(List<MessagesAdmin> messagesAdmins) {
-		this.messagesAdmins = messagesAdmins;
-	}
-
-	public MessagesAdmin addMessagesAdmin(MessagesAdmin messagesAdmin) {
-		getMessagesAdmins().add(messagesAdmin);
-		messagesAdmin.setAdmin(this);
-
-		return messagesAdmin;
-	}
-
-	public MessagesAdmin removeMessagesAdmin(MessagesAdmin messagesAdmin) {
-		getMessagesAdmins().remove(messagesAdmin);
-		messagesAdmin.setAdmin(null);
-
-		return messagesAdmin;
 	}
 
 }

@@ -41,12 +41,12 @@ public class Booking implements Serializable {
 	@Column(name="BOOKING_EXP_CODE")
 	private String bookingExpCode;
 
-	//bi-directional many-to-one association to User
+	// many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="BOOKING_USER_ID")
 	private User user;
 
-	//bi-directional many-to-one association to Home
+	// many-to-one association to Home
 	@ManyToOne
 	@JoinColumn(name="BOOKING_HOME_ID")
 	private Home home;

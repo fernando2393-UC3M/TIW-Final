@@ -2,11 +2,7 @@ package es.uc3m.tiw.messages.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import java.sql.Date;
-import java.util.List;
 
 
 /**
@@ -24,6 +20,7 @@ public class User implements Serializable {
 	@Column(name="USER_ID")
 	private int userId;
 
+	//@Temporal(TemporalType.DATE)
 	@Column(name="USER_BIRTHDATE")
 	private Date userBirthdate;
 
@@ -38,21 +35,6 @@ public class User implements Serializable {
 
 	@Column(name="USER_SURNAME")
 	private String userSurname;
-
-	//bi-directional many-to-one association to Message
-	@OneToMany(mappedBy="user1")
-    @JsonManagedReference(value="sender")
-	private List<Message> messages1;
-
-	//bi-directional many-to-one association to Message
-	@OneToMany(mappedBy="user2")
-    @JsonManagedReference(value="receiver")
-	private List<Message> messages2;
-
-	//bi-directional many-to-one association to MessagesAdmin
-	@OneToMany(mappedBy="user")
-    @JsonManagedReference(value="user")
-	private List<MessagesAdmin> messagesAdmins;
 
 	public User() {
 	}
@@ -103,72 +85,6 @@ public class User implements Serializable {
 
 	public void setUserSurname(String userSurname) {
 		this.userSurname = userSurname;
-	}
-
-	public List<Message> getMessages1() {
-		return this.messages1;
-	}
-
-	public void setMessages1(List<Message> messages1) {
-		this.messages1 = messages1;
-	}
-
-	public Message addMessages1(Message messages1) {
-		getMessages1().add(messages1);
-		messages1.setUser1(this);
-
-		return messages1;
-	}
-
-	public Message removeMessages1(Message messages1) {
-		getMessages1().remove(messages1);
-		messages1.setUser1(null);
-
-		return messages1;
-	}
-
-	public List<Message> getMessages2() {
-		return this.messages2;
-	}
-
-	public void setMessages2(List<Message> messages2) {
-		this.messages2 = messages2;
-	}
-
-	public Message addMessages2(Message messages2) {
-		getMessages2().add(messages2);
-		messages2.setUser2(this);
-
-		return messages2;
-	}
-
-	public Message removeMessages2(Message messages2) {
-		getMessages2().remove(messages2);
-		messages2.setUser2(null);
-
-		return messages2;
-	}
-
-	public List<MessagesAdmin> getMessagesAdmins() {
-		return this.messagesAdmins;
-	}
-
-	public void setMessagesAdmins(List<MessagesAdmin> messagesAdmins) {
-		this.messagesAdmins = messagesAdmins;
-	}
-
-	public MessagesAdmin addMessagesAdmin(MessagesAdmin messagesAdmin) {
-		getMessagesAdmins().add(messagesAdmin);
-		messagesAdmin.setUser(this);
-
-		return messagesAdmin;
-	}
-
-	public MessagesAdmin removeMessagesAdmin(MessagesAdmin messagesAdmin) {
-		getMessagesAdmins().remove(messagesAdmin);
-		messagesAdmin.setUser(null);
-
-		return messagesAdmin;
 	}
 
 }
