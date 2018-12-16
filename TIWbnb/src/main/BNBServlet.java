@@ -432,7 +432,7 @@ public class BNBServlet extends HttpServlet {
 						home.setHomePriceNight(new BigDecimal (req.getParameter("inputPriceNight")));
 					}
 					
-					if(!req.getParameter("photo").isEmpty()) {
+					if(req.getParameter("photo") != null) {
 						String pic = "images/"+req.getParameter("photo");
 						home.setHomePhotos(pic);
 					}
