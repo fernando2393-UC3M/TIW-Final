@@ -24,6 +24,7 @@ import javax.servlet.ServletContext;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import model.Home;
 import model.User;
@@ -544,7 +545,7 @@ public class BNBServlet extends HttpServlet {
 			}
 			
 			Client client = ClientBuilder.newClient();
-			WebTarget webResource = client.target(HOME_API_URL).queryParam("homeCity", city)
+			WebTarget webResource = client.target(HOMES_API_URL).queryParam("homeCity", city)
 															   .queryParam("homeInit", dateInit)
 															   .queryParam("homeEnd", dateEnd)
 															   .queryParam("homePrice", price)
