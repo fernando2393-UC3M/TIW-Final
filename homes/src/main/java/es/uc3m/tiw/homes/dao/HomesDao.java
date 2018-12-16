@@ -11,5 +11,7 @@ public interface HomesDao extends CrudRepository<Home, Integer>{
 
 	public List<Home> findByUser(User user);
 	public List<Home> findAll();
+	public List<Home> findByHomeCityAndHomeTypeAndHomeGuestsGreaterThanAndHomePriceNightBetweenAndHomeAvDateInitBeforeAndHomeAvDateFinAfter
+				(String homeCity, String homeType, int homeGuests, BigDecimal lowPriceBound, BigDecimal highPriceBound, java.sql.Date homeAvDateInit, java.sql.Date homeAvDateFin);
 	
 }
