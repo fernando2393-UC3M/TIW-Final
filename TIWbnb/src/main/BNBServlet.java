@@ -563,6 +563,26 @@ public class BNBServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 			
+			//If no dates were specified show all houses taking into account the rest of criteria
+			if(dateInit == null){
+				try {
+	
+					dateInit = formatter.parse("04/12/2100");
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if(dateEnd == null){
+				try {
+					dateEnd = formatter.parse("04/12/2010");
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
 			Client client = ClientBuilder.newClient();
 			WebTarget webResource = client.target(HOMES_API_URL).queryParam("homeCity", city)
 															   .queryParam("homeInit", dateInit)
