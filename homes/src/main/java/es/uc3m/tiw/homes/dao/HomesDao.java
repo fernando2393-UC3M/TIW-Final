@@ -1,6 +1,8 @@
 package es.uc3m.tiw.homes.dao;
 
 import java.util.List;
+import java.math.BigDecimal;
+import java.sql.Date;
 
 import org.springframework.data.repository.CrudRepository;
 
