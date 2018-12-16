@@ -36,12 +36,12 @@ public class MessagesAdmin implements Serializable {
 
 	//bi-directional many-to-one association to Admin
 	@ManyToOne
-	@JoinColumn(name="MESSAGE_ADMIN_ID")
+	@JoinColumn(name="MESSAGE_ADMIN_ID", referencedColumnName="ADMIN_ID")
 	private Admin admin;
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
-	@JoinColumn(name="MESSAGE_USER_ID")
+	@JoinColumn(name="MESSAGE_USER_ID", referencedColumnName="USER_ID")
 	private User user;
 
 	public MessagesAdmin() {

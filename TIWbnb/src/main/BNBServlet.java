@@ -156,7 +156,7 @@ public class BNBServlet extends HttpServlet {
 			Invocation.Builder invocationBuilder3 = webResource3.request(MediaType.APPLICATION_JSON);
 			invocationBuilder3.get();
 			
-			// Get admin messages
+			// Get bookings
 			WebTarget webResource4 = client.target(RENT_API_URL).path("/rents/users").path(userId.toString());
 			Invocation.Builder invocationBuilder4 = webResource4.request(MediaType.APPLICATION_JSON);
 			Response response4 = invocationBuilder4.get();

@@ -2,6 +2,10 @@ package es.uc3m.tiw.rent.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -54,13 +58,9 @@ public class Home implements Serializable {
 	@Column(name="HOME_TYPE")
 	private String homeType;
 
-	//bi-directional many-to-one association to Booking
-	@OneToMany(mappedBy="home")
-	private List<Booking> bookings;
-
 	//bi-directional many-to-one association to User
 	@ManyToOne
-	@JoinColumn(name="HOME_EMAIL")
+	@JoinColumn(name="HOME_EMAIL", referencedColumnName="USER_EMAIL")
 	private User user;
 
 	public Home() {
@@ -152,28 +152,6 @@ public class Home implements Serializable {
 
 	public void setHomeType(String homeType) {
 		this.homeType = homeType;
-	}
-
-	public List<Booking> getBookings() {
-		return this.bookings;
-	}
-
-	public void setBookings(List<Booking> bookings) {
-		this.bookings = bookings;
-	}
-
-	public Booking addBooking(Booking booking) {
-		getBookings().add(booking);
-		booking.setHome(this);
-
-		return booking;
-	}
-
-	public Booking removeBooking(Booking booking) {
-		getBookings().remove(booking);
-		booking.setHome(null);
-
-		return booking;
 	}
 
 	public User getUser() {

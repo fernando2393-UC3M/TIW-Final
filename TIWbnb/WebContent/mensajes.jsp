@@ -146,7 +146,7 @@
 												%>
 												<td>
 												<div class="media">
-													<h4 class="title"> user mail
+													<h4 class="title"> <%= obj.getUser1().getUserEmail() %>
 													</h4>
 												</div>
 												</td>
@@ -184,7 +184,7 @@
 												%>
 												<td>
 												<div class="media">
-													<h4 class="title"> admin mail
+													<h4 class="title"> <%= obj.getAdmin().getAdminEmail() %>
 													</h4>
 												</div>
 												</td>
