@@ -428,7 +428,8 @@ public class AdminServlet extends HttpServlet {
 				Date parsed = new Date(1970, 01, 01);
 				try {
 					parsed = format.parse(req.getParameter("inputDateInit"));
-					result.setHomeAvDateInit(parsed);
+					java.sql.Date sqlDate = new java.sql.Date(parsed.getTime());
+					result.setHomeAvDateInit(sqlDate);
 
 				} catch (ParseException e) {
 				}				
@@ -443,7 +444,8 @@ public class AdminServlet extends HttpServlet {
 				Date parsed = new Date(1970, 01, 01);
 				try {
 					parsed = format.parse(req.getParameter("inputDateFin"));
-					result.setHomeAvDateFin(parsed);
+					java.sql.Date sqlDate = new java.sql.Date(parsed.getTime());
+					result.setHomeAvDateFin(sqlDate);
 
 				} catch (ParseException e) {
 				}				

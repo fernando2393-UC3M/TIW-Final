@@ -430,7 +430,8 @@ public class BNBServlet extends HttpServlet {
 						Date parsed = new Date(1970, 01, 01);
 						try {
 							parsed = format.parse(req.getParameter("iDate"));
-							home.setHomeAvDateInit(parsed);
+							java.sql.Date sqlDate = new java.sql.Date(parsed.getTime());
+							home.setHomeAvDateInit(sqlDate);
 
 						} catch (ParseException e) {
 						}				
@@ -442,7 +443,8 @@ public class BNBServlet extends HttpServlet {
 						Date parsed = new Date(1970, 01, 01);
 						try {
 							parsed = format.parse(req.getParameter("fDate"));
-							home.setHomeAvDateFin(parsed);
+							java.sql.Date sqlDate = new java.sql.Date(parsed.getTime());
+							home.setHomeAvDateFin(sqlDate);
 
 						} catch (ParseException e) {
 						}				
@@ -495,6 +497,10 @@ public class BNBServlet extends HttpServlet {
 				try {
 					parsedIDate = format.parse(iDate);
 					parsedFDate = format.parse(fDate);
+					java.sql.Date sqlDateI = new java.sql.Date(parsedIDate.getTime());
+					java.sql.Date sqlDateF = new java.sql.Date(parsedFDate.getTime());
+					home.setHomeAvDateInit(sqlDateI);
+					home.setHomeAvDateFin(sqlDateF);
 				} catch (ParseException e) {
 				}
 								
@@ -507,8 +513,7 @@ public class BNBServlet extends HttpServlet {
 				home.setHomeGuests(guests);
 				home.setHomePhotos(req.getParameter("photo"));
 				home.setHomePriceNight(inputPriceNight);
-				home.setHomeAvDateInit(parsedIDate);
-				home.setHomeAvDateFin(parsedFDate);
+				
 										
 				Response response = invocationBuilder.post(Entity.entity(home, MediaType.APPLICATION_JSON));			
 				

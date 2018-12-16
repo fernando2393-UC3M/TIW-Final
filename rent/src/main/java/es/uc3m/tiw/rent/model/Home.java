@@ -3,7 +3,7 @@ package es.uc3m.tiw.rent.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.sql.Date;
 
 
 /**
@@ -21,11 +21,9 @@ public class Home implements Serializable {
 	@Column(name="HOME_ID")
 	private int homeId;
 
-	@Temporal(TemporalType.DATE)
 	@Column(name="HOME_AV_DATE_FIN")
 	private Date homeAvDateFin;
 
-	@Temporal(TemporalType.DATE)
 	@Column(name="HOME_AV_DATE_INIT")
 	private Date homeAvDateInit;
 

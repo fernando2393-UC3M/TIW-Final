@@ -3,8 +3,7 @@ package es.uc3m.tiw.bank.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import java.sql.Date;
 
 
 /**
@@ -12,7 +11,7 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="HOME")
+@Table(name="home")
 @NamedQuery(name="Home.findAll", query="SELECT h FROM Home h")
 public class Home implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -22,11 +21,9 @@ public class Home implements Serializable {
 	@Column(name="HOME_ID")
 	private int homeId;
 
-	@Temporal(TemporalType.DATE)
 	@Column(name="HOME_AV_DATE_FIN")
 	private Date homeAvDateFin;
 
-	@Temporal(TemporalType.DATE)
 	@Column(name="HOME_AV_DATE_INIT")
 	private Date homeAvDateInit;
 
@@ -54,15 +51,12 @@ public class Home implements Serializable {
 	@Column(name="HOME_TYPE")
 	private String homeType;
 
-	//bi-directional many-to-one association to Booking
-	@OneToMany(mappedBy="home")
-	private List<Booking> bookings;
-
-	//bi-directional many-to-one association to User
+	//many-to-one association to User
 	@ManyToOne
-	@JoinColumn(name="HOME_EMAIL")
+	@JoinColumn(name="HOME_EMAIL", referencedColumnName="USER_EMAIL")
 	private User user;
 
+	
 	public Home() {
 	}
 
@@ -154,28 +148,6 @@ public class Home implements Serializable {
 		this.homeType = homeType;
 	}
 
-	public List<Booking> getBookings() {
-		return this.bookings;
-	}
-
-	public void setBookings(List<Booking> bookings) {
-		this.bookings = bookings;
-	}
-
-	public Booking addBooking(Booking booking) {
-		getBookings().add(booking);
-		booking.setHome(this);
-
-		return booking;
-	}
-
-	public Booking removeBooking(Booking booking) {
-		getBookings().remove(booking);
-		booking.setHome(null);
-
-		return booking;
-	}
-
 	public User getUser() {
 		return this.user;
 	}
@@ -183,5 +155,6 @@ public class Home implements Serializable {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
 
 }
