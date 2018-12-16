@@ -25,7 +25,7 @@ public class Booking implements Serializable {
 	private int bookingId;
 
 	@Column(name="BOOKING_CARD_NUM")
-	private BigInteger bookingCardNum;
+	private String bookingCardNum;
 
 	@Column(name="BOOKING_CONFIRMED")
 	private String bookingConfirmed;
@@ -65,11 +65,11 @@ public class Booking implements Serializable {
 		this.bookingId = bookingId;
 	}
 
-	public BigInteger getBookingCardNum() {
+	public String getBookingCardNum() {
 		return this.bookingCardNum;
 	}
 
-	public void setBookingCardNum(BigInteger bookingCardNum) {
+	public void setBookingCardNum(String bookingCardNum) {
 		this.bookingCardNum = bookingCardNum;
 	}
 

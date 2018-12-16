@@ -2,8 +2,8 @@ package model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
 import java.util.Date;
-import java.math.BigInteger;
 
 
 /**
@@ -22,7 +22,7 @@ public class Booking implements Serializable {
 	private int bookingId;
 
 	@Column(name="BOOKING_CARD_NUM")
-	private BigInteger bookingCardNum;
+	private String bookingCardNum;
 
 	@Column(name="BOOKING_CONFIRMED")
 	private String bookingConfirmed;
@@ -41,15 +41,15 @@ public class Booking implements Serializable {
 	@Column(name="BOOKING_EXP_CODE")
 	private String bookingExpCode;
 
-	// many-to-one association to User
+	//bi-directional many-to-one association to Home
 	@ManyToOne
-	@JoinColumn(name="BOOKING_USER_ID", referencedColumnName="USER_ID")
-	private User user;
-
-	// many-to-one association to Home
-	@ManyToOne
-	@JoinColumn(name="BOOKING_HOME_ID", referencedColumnName="HOME_ID")
+	@JoinColumn(name="BOOKING_HOME_ID")
 	private Home home;
+
+	//bi-directional many-to-one association to User
+	@ManyToOne
+	@JoinColumn(name="BOOKING_USER_ID")
+	private User user;
 
 	public Booking() {
 	}
@@ -62,11 +62,11 @@ public class Booking implements Serializable {
 		this.bookingId = bookingId;
 	}
 
-	public BigInteger getBookingCardNum() {
+	public String getBookingCardNum() {
 		return this.bookingCardNum;
 	}
 
-	public void setBookingCardNum(BigInteger bookingCardNum) {
+	public void setBookingCardNum(String bookingCardNum) {
 		this.bookingCardNum = bookingCardNum;
 	}
 
@@ -110,20 +110,20 @@ public class Booking implements Serializable {
 		this.bookingExpCode = bookingExpCode;
 	}
 
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
 	public Home getHome() {
 		return this.home;
 	}
 
 	public void setHome(Home home) {
 		this.home = home;
+	}
+
+	public User getUser() {
+		return this.user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

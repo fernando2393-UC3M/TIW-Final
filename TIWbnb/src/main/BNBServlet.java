@@ -569,7 +569,6 @@ public class BNBServlet extends HttpServlet {
 	
 					dateInit = formatter.parse("04/12/2100");
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -578,7 +577,6 @@ public class BNBServlet extends HttpServlet {
 				try {
 					dateEnd = formatter.parse("04/12/2010");
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -721,87 +719,44 @@ public class BNBServlet extends HttpServlet {
 		//------------------------BOOKING------------------------
 		
 		else if(requestURL.toString().equals(path+"booking")) {
-			/*
-			<form class="form-sendmsg" METHOD="POST" ACTION="booking">
-         	<input type="hidden" id="userid" name="userid"  value=<%= home.getUser().getUserId() %> />
-         	<input type="hidden" id="homeid" name="homeid"  value=<%= home.getHomeId() %> />
-			<label for="date-start">Date Start:</label>
-			<input type="text" name="homeIda" class="form-control" id="date-start" placeholder="mm/dd/yyyy"/>
-			<label for="date-end">Date End:</label>
-			<input type="text" name="homeVuelta"  class="form-control" id="date-end" placeholder="mm/dd/yyyy"/>
-			<label for="message">Card Number:</label>
-			<textarea id="cardnum" class="text" rows="1" cols="25" name="cardnum" >1234567890123456</textarea>
-			<label for="message">Exp. Code:</label>
-			<textarea id="expcode" class="text" rows="1" cols="25" name="expcode" >MMyyyy</textarea>
-			<label for="message">CV2:</label>
-			<textarea id="cv2" class="text" rows="1" cols="25" name="cv2" >123</textarea>
-			<button type="submit" formmethod="post">Book</button>
-			 */
 			
-			// Obtain sender
-			/*int id = (int) session.getAttribute("user");
-			// Obtain host
-			Home aux = em.find(Home.class, Integer.parseInt(req.getParameter("home_id")));
-
-			@SuppressWarnings("deprecation")
-			Date bookingDateIn = new Date(2000, 01, 01);
-			@SuppressWarnings("deprecation")
-			Date bookingDateOut = new Date(2000, 01, 02);
+			// Get Parameters from request
+			String userId = req.getParameter("userid");
+			String homeId = req.getParameter("homeid");
+			String date_in = req.getParameter("date-start");
+			String date_out = req.getParameter("date-end");
+			String card_num = req.getParameter("cardnum");
+			String exp_code = req.getParameter("expcode");
+			String cv2 = req.getParameter("cv2");
+			
+			// REST for User and Home
+			Client client = ClientBuilder.newClient();
+			WebTarget webResource = client.target(USERS_API_URL).path(userId.toString());
+			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+			Response resp = invocationBuilder.get();
+			
+			WebTarget webResource2 = client.target(HOMES_API_URL).path(homeId.toString());
+			Invocation.Builder invocationBuilder2 = webResource2.request(MediaType.APPLICATION_JSON);
+			Response resp2 = invocationBuilder2.get();
+			
+			// Create new Booking in Pending status
+			Booking pbooking = new Booking();
+			pbooking.setUser(resp.readEntity(User.class));
+			pbooking.setHome(resp2.readEntity(Home.class));
 			try {
-				bookingDateIn = new Date((new SimpleDateFormat("yyyy-MM-dd")).parse(req.getParameter("date_in")).getTime());
-				bookingDateOut = new Date((new SimpleDateFormat("yyyy-MM-dd")).parse(req.getParameter("date_out")).getTime());
-			} catch (ParseException e2) {
-				// Error parsing date
+				pbooking.setBookingDateIn(new SimpleDateFormat("MM/dd/yyyy").parse(date_in));
+				pbooking.setBookingDateOut(new SimpleDateFormat("MM/dd/yyyy").parse(date_out));
+			} catch (ParseException e) {
 			}
+			pbooking.setBookingCardNum(card_num);
+			pbooking.setBookingExpCode(exp_code);
+			pbooking.setBookingCv2(Integer.parseInt(cv2));
+			pbooking.setBookingConfirmed("Pending");
 			
-			// Add Booking to Database from POST request
-			Booking obj = new Booking();
-			obj.setUser(em.find(User.class, id));
-			obj.setHome(aux);
-			obj.setBookingDateIn(bookingDateIn);
-			obj.setBookingDateOut(bookingDateOut);
-			obj.setBookingCardNum(Integer.parseInt(req.getParameter("card")));
-			obj.setBookingExpCode(req.getParameter("exp"));
-			obj.setBookingCv2(Integer.parseInt(req.getParameter("cv2")));
-			obj.setBookingConfirmed(false);
-			
-			try {
-				ut.begin();
-				em.persist(obj);
-				ut.commit();
-			} catch (NotSupportedException | SystemException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException e1) {
-				// JPA Error
-			}			
-			*/
-			
-			//Get Booking id into message
-			
-			/*String content = ""+obj.getBookingId();
-
-			
-			Connection _connection = null;
-			
-			try {
-				_connection = cf.createConnection();
-				// Creates transaction, needs to be committed when booking request happens
-				transaction = _connection.createSession(true, javax.jms.TopicSession.AUTO_ACKNOWLEDGE);
-
-				// Send Message
-				SendMessages.sendTransaction(id, aux.getUser().getUserId(), content, queue, transaction);
-				
-			} catch (JMSException e) {
-				// Error JMS
-			} finally {
-	            if (_connection != null) {
-	            	try {
-						_connection.close();
-					} catch (JMSException e) {
-						// Error JMS close
-					}
-	            }
-	        }
-
-			// TODO: Redirect back to casa*/
+			// Save it in db
+			WebTarget webResource3 = client.target(RENT_API_URL).path("rents");
+			Invocation.Builder invocationBuilder3 = webResource3.request(MediaType.APPLICATION_JSON);
+			invocationBuilder3.post(Entity.entity(pbooking, MediaType.APPLICATION_JSON));
 			
 			res.sendRedirect("mensajes");
 			
@@ -821,16 +776,14 @@ public class BNBServlet extends HttpServlet {
 			Response response = invocationBuilder.get();
 			
 			model.Booking bk = response.readEntity(model.Booking.class);
+			String exp_date = bk.getBookingExpCode().replaceAll("/", "-");	// Avoid / in the url
 			
-			if(bk != null){
-				// TODO: creating object to send to bank
-				
+			if(bk != null){				
 				// Call bank microservice to process confirmation
-				WebTarget webResourceBank = client.target(BANK_API_URL);
+				WebTarget webResourceBank = client.target(BANK_API_URL).path(bk.getBookingCardNum()).path(bk.getBookingCv2()+"").path(exp_date);
 				Invocation.Builder invocationBuilderBank = webResourceBank.request(MediaType.APPLICATION_JSON);
-				// TODO: send object to bank
 				Response responseBank = invocationBuilderBank.post(null);
-				
+
 				int status_code = responseBank.getStatus();
 				
 				// Confirm Booking with final result

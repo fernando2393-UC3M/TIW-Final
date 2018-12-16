@@ -90,8 +90,10 @@ public class BookingController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value="/rents")
-	public @ResponseBody Booking saveBooking(@Validated Booking pbooking){
-		return daoBk.save(pbooking);
+	public ResponseEntity<Booking> saveBooking(@RequestBody @Validated Booking pbooking){
+		daoBk.save(pbooking);
+		
+		return (new ResponseEntity<>(HttpStatus.OK));
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value="/rents/{id}")
@@ -121,9 +123,10 @@ public class BookingController {
 		ResponseEntity response;
 		if(bk != null){
 			bk.setBookingConfirmed("Accepted");
-			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		} else {
+			daoBk.save(bk);
 			response = new ResponseEntity<>(HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return response;
 	}
@@ -137,9 +140,10 @@ public class BookingController {
 		ResponseEntity response;
 		if(bk != null){
 			bk.setBookingConfirmed("Cancelled by the host");
-			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		} else {
+			daoBk.save(bk);
 			response = new ResponseEntity<>(HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return response;
 	}
@@ -153,9 +157,10 @@ public class BookingController {
 		ResponseEntity response;
 		if(bk != null){
 			bk.setBookingConfirmed("Cancelled by the bank");
-			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		} else {
+			daoBk.save(bk);
 			response = new ResponseEntity<>(HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return response;
 	}

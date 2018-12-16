@@ -210,7 +210,8 @@
 										<%
 										List<model.Booking> bookingList = (List<model.Booking>) session.getAttribute("bookingList");
 										if(bookingList != null){
-											for(model.Booking obj: bookingList){										
+											for(model.Booking obj: bookingList){
+												if(!obj.getBookingConfirmed().equals("Pending")) continue;
 												%> <tr>
 												<td>User <%= obj.getUser().getUserEmail() %> </td>
 												<td>Wants to book your home <%= obj.getHome().getHomeName() %> </td>

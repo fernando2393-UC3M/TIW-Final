@@ -182,9 +182,9 @@
 				         	<input type="hidden" id="userid" name="userid"  value=<%= home.getUser().getUserId() %> />
 				         	<input type="hidden" id="homeid" name="homeid"  value=<%= home.getHomeId() %> />
 							<label for="date-start">Date Start:</label>
-							<input type="text" name="homeIda" class="form-control" id="date-start" placeholder="mm/dd/yyyy"/>
+							<input type="text" name="date-start" class="form-control" id="date-start" placeholder="mm/dd/yyyy"/>
 							<label for="date-end">Date End:</label>
-							<input type="text" name="homeVuelta"  class="form-control" id="date-end" placeholder="mm/dd/yyyy"/>
+							<input type="text" name="date-end"  class="form-control" id="date-end" placeholder="mm/dd/yyyy"/>
 							<label for="message">Card Number:</label>
 							<textarea id="cardnum" class="text" rows="1" cols="25" name="cardnum" >1234567890123456</textarea>
 							<label for="message">Exp. Code:</label>
