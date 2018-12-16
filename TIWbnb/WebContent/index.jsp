@@ -129,35 +129,35 @@
 								   <!-- Tab panes -->
 									<div class="tab-content">
 									 <div role="tabpanel" class="tab-pane active" id="hotels">
+									 <form class="form-signin" METHOD="POST" ACTION="queryhome">
 									 	<div class="row">
 											<div class="col-xxs-12 col-xs-12 mt">
 												<div class="input-field">
 													<label for="from">Ciudad:</label>
-													<input type="text" class="form-control" id="from-place" placeholder="Madrid, SPAIN"/>
+													<input type="text" name="homeCiudad" class="form-control" id="from-place" placeholder="Madrid, SPAIN"/>
 												</div>
 											</div>
 											<div class="col-xxs-12 col-xs-6 mt alternate">
 												<div class="input-field">
 													<label for="date-start">Ida:</label>
-													<input type="text" class="form-control" id="date-start" placeholder="mm/dd/yyyy"/>
+													<input type="text" name="homeIda" class="form-control" id="date-start" placeholder="mm/dd/yyyy"/>
 												</div>
 											</div>
 											<div class="col-xxs-12 col-xs-6 mt alternate">
 												<div class="input-field">
 													<label for="date-end">Vuelta:</label>
-													<input type="text" class="form-control" id="date-end" placeholder="mm/dd/yyyy"/>
+													<input type="text" name="homeVuelta"  class="form-control" id="date-end" placeholder="mm/dd/yyyy"/>
 												</div>
 											</div>
 
 											<div class="col-sm-12 mt">
 												<section>
 													<label for="class">Precio</label>
-													<select class="cs-select cs-skin-border">
-														<option value="" disabled selected>Hasta 35€</option>
-														<option value="P1">Hasta 35€</option>
-														<option value="P2">36€ - 69€</option>
-														<option value="P3">70€ - 130€</option>
-														<option value="P4">131€ o más</option>
+													<select class="cs-select cs-skin-border" name="homePrecio">
+														<option value="Hasta 35€">Hasta 35€</option>
+														<option value="36€ - 69€">36€ - 69€</option>
+														<option value="70€ - 130€">70€ - 130€</option>
+														<option value="131€ o más">131€ o más</option>
 													</select>
 												</section>
 											</div>
@@ -165,11 +165,11 @@
         									<div class="col-sm-12 mt">
 												<section>
 													<label for="class">Tipo de alojamiento</label>
-													<select class="cs-select cs-skin-border">
-														<option value="" disabled selected>Alojamiento entero</option>
-														<option value="entero">Alojamiento entero</option>
-														<option value="privada">Habitación privada</option>
-														<option value="compartida">Habitación compartida</option>
+													<select class="cs-select cs-skin-border" name="homeTipo">
+												
+														<option value="Alojamiento entero">Alojamiento entero</option>
+														<option value="Habitacion privada">Habitacion privada</option>
+														<option value="Habitacion compartida">Habitación compartida</option>
 													</select>
 												</section>
 											</div>
@@ -177,8 +177,8 @@
 											<div class="col-xxs-12 col-xs-6 mt">
 												<section>
 													<label for="class">Adultos:</label>
-													<select class="cs-select cs-skin-border">
-														<option value="" disabled selected>1</option>
+													<select class="cs-select cs-skin-border" name="homeAdultos">
+														
 														<option value="1">1</option>
 														<option value="2">2</option>
 														<option value="3">3</option>
@@ -189,8 +189,8 @@
 											<div class="col-xxs-12 col-xs-6 mt">
 												<section>
 													<label for="class">Niños:</label>
-													<select class="cs-select cs-skin-border">
-														<option value="" disabled selected>1</option>
+													<select class="cs-select cs-skin-border" name="homeNinios">
+														
 														<option value="1">1</option>
 														<option value="2">2</option>
 														<option value="3">3</option>
@@ -199,9 +199,10 @@
 												</section>
 											</div>
 											<div class="col-xs-12">
-												<input onclick="location.href='resultados'" type="submit" class="btn btn-primary btn-block" value="Buscar">
+												<input type="submit" class="btn btn-primary btn-block" value="Buscar">
 											</div>
                                         </div>
+                                        </form>
 				                    </div>
 								 </div>
 
