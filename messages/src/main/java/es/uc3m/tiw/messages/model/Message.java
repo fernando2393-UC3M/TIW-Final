@@ -35,15 +35,15 @@ public class Message implements Serializable {
 	private byte messageRead;
 
 	//bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="MESSAGE_SENDER_ID")
-	@JsonBackReference
+	@JsonBackReference(value="sender")
 	private User user1;
 
 	//bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="MESSAGE_RECEIVER_ID")
-	@JsonBackReference
+	@JsonBackReference(value="receiver")
 	private User user2;
 
 	public Message() {

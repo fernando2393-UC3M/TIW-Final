@@ -105,8 +105,8 @@ public class ReadMessages {
 		ret.setUser(user);
 		ret.setMessageContent(msg.getText());
 		ret.setMessageDate(new Date(msg.getJMSTimestamp()));
-		ret.setMessageFromAdmin(false);
-		ret.setMessageRead(false);
+		ret.setMessageFromAdmin((byte) 0);
+		ret.setMessageRead((byte) 0);
 		  
 		return ret;
 	}

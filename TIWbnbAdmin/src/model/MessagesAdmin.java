@@ -6,11 +6,11 @@ import java.util.Date;
 
 
 /**
- * The persistent class for the MESSAGES_ADMIN database table.
+ * The persistent class for the messages_admin database table.
  * 
  */
 @Entity
-@Table(name="MESSAGES_ADMIN")
+@Table(name="messages_admin")
 @NamedQuery(name="MessagesAdmin.findAll", query="SELECT m FROM MessagesAdmin m")
 public class MessagesAdmin implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -29,10 +29,10 @@ public class MessagesAdmin implements Serializable {
 	private Date messageDate;
 
 	@Column(name="MESSAGE_FROM_ADMIN")
-	private boolean messageFromAdmin;
+	private byte messageFromAdmin;
 
 	@Column(name="MESSAGE_READ")
-	private boolean messageRead;
+	private byte messageRead;
 
 	//bi-directional many-to-one association to Admin
 	@ManyToOne
@@ -71,19 +71,19 @@ public class MessagesAdmin implements Serializable {
 		this.messageDate = messageDate;
 	}
 
-	public boolean getMessageFromAdmin() {
+	public byte getMessageFromAdmin() {
 		return this.messageFromAdmin;
 	}
 
-	public void setMessageFromAdmin(boolean messageFromAdmin) {
+	public void setMessageFromAdmin(byte messageFromAdmin) {
 		this.messageFromAdmin = messageFromAdmin;
 	}
 
-	public boolean getMessageRead() {
+	public byte getMessageRead() {
 		return this.messageRead;
 	}
 
-	public void setMessageRead(boolean messageRead) {
+	public void setMessageRead(byte messageRead) {
 		this.messageRead = messageRead;
 	}
 

@@ -42,17 +42,17 @@ public class User implements Serializable {
 
 	//bi-directional many-to-one association to Message
 	@OneToMany(mappedBy="user1")
-    @JsonManagedReference
+    @JsonManagedReference(value="sender")
 	private List<Message> messages1;
 
 	//bi-directional many-to-one association to Message
 	@OneToMany(mappedBy="user2")
-    @JsonManagedReference
+    @JsonManagedReference(value="receiver")
 	private List<Message> messages2;
 
 	//bi-directional many-to-one association to MessagesAdmin
 	@OneToMany(mappedBy="user")
-    @JsonManagedReference
+    @JsonManagedReference(value="user")
 	private List<MessagesAdmin> messagesAdmins;
 
 	public User() {

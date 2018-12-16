@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,6 +18,8 @@ import es.uc3m.tiw.messages.model.Message;
 import es.uc3m.tiw.messages.model.MessagesAdmin;
 import es.uc3m.tiw.messages.model.User;
 import es.uc3m.tiw.messages.dao.MessagesDao;
+import es.uc3m.tiw.messages.dao.UsersDao;
+import es.uc3m.tiw.messages.dao.AdminDao;
 import es.uc3m.tiw.messages.dao.MessagesAdminDao;
 
 @Controller
@@ -27,6 +30,10 @@ public class MessagesController {
 	private MessagesDao daoMs;
 	@Autowired
 	private MessagesAdminDao daoAd;
+	@Autowired
+	private UsersDao daoUs;
+	@Autowired
+	private AdminDao daoAdmin;
 
 	@RequestMapping(method=RequestMethod.GET, value="/test")
 	public ResponseEntity<List<Message>> getMessages(){
@@ -54,9 +61,10 @@ public class MessagesController {
 	}
 	
 	/* Get Message between users from a user*/
-	@RequestMapping(method=RequestMethod.GET, value="/user")
-	public ResponseEntity<List<Message>> getMessagesByUser2(@RequestBody @Validated User pUser) {	
-		List<Message> list = daoMs.findByUser2(pUser);
+	@RequestMapping(method=RequestMethod.GET, value="/user/{id}")
+	public ResponseEntity<List<Message>> getMessagesByUser2(@PathVariable @Validated int id) {	
+		User user = daoUs.findById(id).orElse(null);
+		List<Message> list = daoMs.findByUser2(user);
 		ResponseEntity<List<Message>> response;
 		
 		if(list.size() == 0) {
@@ -69,9 +77,11 @@ public class MessagesController {
 	}
 
 	/* Get AdminMessage to a user */
-	@RequestMapping(method=RequestMethod.GET, value="/admin/user")
-	public ResponseEntity<List<MessagesAdmin>> getMessagesAdminByUser(@RequestBody @Validated User pUser) {	
-		List<MessagesAdmin> list = daoAd.findByUserAndMessageFromAdmin(pUser, (byte) 0);
+	@RequestMapping(method=RequestMethod.GET, value="/admin/user/{id}")
+	public ResponseEntity<List<MessagesAdmin>> getMessagesAdminByUser(@PathVariable @Validated int id) {	
+		User user = daoUs.findById(id).orElse(null);
+		List<MessagesAdmin> list = daoAd.findByUserAndMessageFromAdmin(user, (byte) 0);
+		
 		ResponseEntity<List<MessagesAdmin>> response;
 		
 		if(list.size() == 0) {
@@ -84,9 +94,10 @@ public class MessagesController {
 	}
 
 	/* Get AdminMessage to an admin */
-	@RequestMapping(method=RequestMethod.GET, value="/admin/admin")
-	public ResponseEntity<List<MessagesAdmin>> getMessagesAdminByAdmin(@RequestBody @Validated Admin pAdmin) {	
-		List<MessagesAdmin> list = daoAd.findByAdminAndMessageFromAdmin(pAdmin, (byte) 1);
+	@RequestMapping(method=RequestMethod.GET, value="/admin/admin/{id}")
+	public ResponseEntity<List<MessagesAdmin>> getMessagesAdminByAdmin(@PathVariable @Validated int id) {	
+		Admin admin = daoAdmin.findById(id).orElse(null);
+		List<MessagesAdmin> list = daoAd.findByAdminAndMessageFromAdmin(admin, (byte) 1);
 		ResponseEntity<List<MessagesAdmin>> response;
 		
 		if(list.size() == 0) {
@@ -114,9 +125,10 @@ public class MessagesController {
 
 	/* Set User received messages to read */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(method=RequestMethod.GET, value="/user/setRead")
-	public ResponseEntity setReadMessage(@RequestBody @Validated User pUser){
-		List<Message> aux = daoMs.findByUser2AndMessageRead(pUser, (byte) 0);
+	@RequestMapping(method=RequestMethod.GET, value="/setRead/{id}")
+	public ResponseEntity setReadMessage(@PathVariable @Validated int id){
+		User user = daoUs.findById(id).orElse(null);		
+		List<Message> aux = daoMs.findByUser2AndMessageRead(user, (byte) 0);
 		ResponseEntity response;
 		
 		if(aux.size() == 0) {

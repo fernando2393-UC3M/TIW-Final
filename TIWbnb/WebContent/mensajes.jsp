@@ -137,7 +137,7 @@
 										if(messageList != null){
 											for(model.Message obj: messageList){
 												%> <tr> <%
-												if(obj.getMessageRead() == false){
+												if(obj.getMessageRead() == (byte) 0){
 													%> <tr data-status="no-leido" class="no-leido"> <%
 												}
 												else{
@@ -146,14 +146,13 @@
 												%>
 												<td>
 												<div class="media">
-													<h4 class="title"> <%= obj.getUser1().getUserEmail() %>
+													<h4 class="title"> user mail
 													</h4>
 												</div>
 												</td>
 												<td>      
 												<div class="media">
-													<p class="summary"><%= obj.getMessageContent() %></p>
-													<p class="meta"><%= (new SimpleDateFormat("yyyy-MM-dd")).format(obj.getMessageDate())  %></p>                                                
+													<p class="summary"><%= obj.getMessageContent() %></p>                                              
 												</div>
 												</td>
 												</tr> 
@@ -176,7 +175,7 @@
 										if(adminList != null){
 											for(model.MessagesAdmin obj: adminList){										
 												%> <tr> <%
-												if(obj.getMessageRead() == false){
+												if(obj.getMessageRead() == (byte) 0){
 													%> <tr data-status="no-leido" class="no-leido"> <%
 												}
 												else{
@@ -185,14 +184,13 @@
 												%>
 												<td>
 												<div class="media">
-													<h4 class="title"> <%= obj.getAdmin().getAdminEmail() %>
+													<h4 class="title"> admin mail
 													</h4>
 												</div>
 												</td>
 												<td>      
 												<div class="media">
-													<p class="summary"><%= obj.getMessageContent() %></p>
-													<p class="meta"><%= (new SimpleDateFormat("yyyy-MM-dd")).format(obj.getMessageDate())  %></p>                                                
+													<p class="summary"><%= obj.getMessageContent() %></p>                                               
 												</div>
 												</td>
 												</tr> 
@@ -251,6 +249,13 @@
 					
 							<!-- end:Send Message -->
 							
+					     	<div class="col-xxs-12 col-xs-6 mt">
+					         	<form class="form-sendmsg" METHOD="POST" ACTION="SendMessage">
+						     	<input type="email" id="receiver" name="receiver" placeholder=test>
+								<textarea id="message" class="text" rows="4" cols="50" name="message" >Enter text here...</textarea>
+								<button type="submit" formmethod="post">Contactar</button>
+								</form>
+                        	</div>
 						</div>
 					</div>
 				</div>

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.Resource;
@@ -52,32 +53,17 @@ import model.User;
 public class AdminServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 6176032171079275384L;
-	
+
+	private static final String MESSAGES_API_URL = "http://localhost:10006/";
 	private static final String ADMIN_API_URL = "http://localhost:10005/admin";
 	private static final String HOME_API_URL = "http://localhost:10002/homes";
 	private static final String USER_API_URL = "http://localhost:10001/users";
 
-	/*
-	@PersistenceContext(unitName="TIWbnbAdmin")
-	protected EntityManager em;
-	
-	@Resource
-	private UserTransaction ut;
-	*/
 	String path = "http://localhost:8080/TIWbnbAdmin/";
 		
 	ServletContext context;
 	
 	HttpSession session;
-
-	/* Attributes */
-	/*
-	@Resource(mappedName="tiwconnectionfactory")
-	ConnectionFactory cf;
-
-	@Resource(mappedName="tiwqueue")
-	Queue adminQueue;	
-	*/
 	
 	public void init() {
 
@@ -92,6 +78,7 @@ public class AdminServlet extends HttpServlet {
 
 		RequestDispatcher ReqDispatcher;
 
+
 		String requestURL = req.getRequestURL().toString();
 
 		if(requestURL.toString().equals(path+"admin")){
@@ -100,27 +87,28 @@ public class AdminServlet extends HttpServlet {
 	
 		//------------------------READ MESSAGES------------------------
 		
-		else if(requestURL.equals(path+"mensajes")){		
-			//Get adminId from session (need parameter name to access)
-			/*int adminId = (Integer) session.getAttribute("admin"); 
+		else if(requestURL.equals(path+"mensajes")){
+			//Get adminId to query for admin
+			Integer adminId = (Integer) session.getAttribute("admin"); 
+			
 			
 			List<MessagesAdmin> messageList = null;
-			try {
-				ut.begin();
-				//List<MessagesAdmin> messageList;
-				messageList = ReadMessages.getMessages(adminId, em, cf, adminQueue);
-				ReadMessages.setRead(adminId, em);
-				ut.commit();
-				
-				// Save messages in user session
-				if(messageList.size() > 0)
-					req.setAttribute("AdminMessages", messageList); 
-				
-			} catch (JMSException | NotSupportedException | SystemException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
-				// Treat JMS/JPA Exception
-			}*/
-			ReqDispatcher =req.getRequestDispatcher("mensajes.jsp");
+
+			Client client = ClientBuilder.newClient();
+			WebTarget webResource = client.target(MESSAGES_API_URL).path("admin/admin").path(adminId.toString());
+			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+			Response response = invocationBuilder.get();
 			
+			if(response.getStatus() == 200){
+				MessagesAdmin[] temp = response.readEntity(MessagesAdmin[].class);
+				messageList = Arrays.asList(temp);
+				
+				if(messageList.size() > 0){
+					session.setAttribute("AdminMessages", messageList);					
+				}				
+			}
+			
+			ReqDispatcher =req.getRequestDispatcher("mensajes.jsp");
 			
 		}
 		

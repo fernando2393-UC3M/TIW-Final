@@ -182,7 +182,11 @@
                             <input type="button" class="btn btn-primary btn-block" value="Reservar">
                         </div>
                         <div class="col-xxs-12 col-xs-6 mt">
-                            <input type="button" class="btn btn-primary btn-block" value="Contactar">
+				         	<form class="form-sendmsg" METHOD="POST" ACTION="SendMessage">
+					     	<input type="email" id="receiver" name="receiver" placeholder=<%= home.getUser().getUserEmail() %>>
+							<textarea id="message" class="text" rows="4" cols="50" name="message" >Enter text here...</textarea>
+							<button type="submit" formmethod="post">Contactar</button>
+							</form>
                         </div>
                                                                         
                     </div>

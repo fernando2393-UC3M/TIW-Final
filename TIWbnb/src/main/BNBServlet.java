@@ -23,9 +23,15 @@ import javax.servlet.ServletContext;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
+import model.Admin;
 import model.Home;
+import model.Message;
+import model.MessagesAdmin;
 import model.User;
 
 /**
@@ -43,21 +49,8 @@ public class BNBServlet extends HttpServlet {
 	
 	private static final String USERS_API_URL = "http://localhost:10001/users";
 	private static final String HOMES_API_URL = "http://localhost:10002/homes";
+	private static final String MESSAGES_API_URL = "http://localhost:10006";
 	
-	/*
-	@PersistenceContext(unitName="TIWbnb")
-	protected EntityManager em;
-	
-	@Resource
-	private UserTransaction ut;
-	
-	@Resource(mappedName="tiwconnectionfactory")
-	ConnectionFactory cf;
-
-	@Resource(mappedName="tiwqueue")
-	Queue queue;
-	Session transaction;
-	*/
 	String path = "http://localhost:8080/TIWbnb/";
 	
 	ServletContext context;
@@ -112,51 +105,52 @@ public class BNBServlet extends HttpServlet {
 		else if(requestURL.equals(path+"mensajes")){
 			
 			//------------------------READ MESSAGES------------------------
-					
-			// Get userId from session (need parameter name to access)
-			/*int userId = (Integer) session.getAttribute("user"); 
+			//Get userId to query for user
+			Integer userId = (Integer) session.getAttribute("user"); 
 			
-			try {
-				ut.begin();
-				List<model.Message> messageList;
-				messageList = ReadMessages.getMessages(userId, em, cf, queue);
-				ReadMessages.setRead(userId, em);
-				ut.commit();
 
-				ut.begin();
-				List<MessagesAdmin> messageAdminList;
-				messageAdminList = ReadMessages.getMessagesAdmin(userId, em, cf, queue);
-				ReadMessages.setRead(userId, em);
-				ut.commit();
+			List<Message> msgList = null;
+			List<MessagesAdmin> adminList = null;
+
+			// Get user messages
+			Client client = ClientBuilder.newClient();
+			WebTarget webResource = client.target(MESSAGES_API_URL).path("user").path(userId.toString());
+			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+			Response response = invocationBuilder.get();
+			
+			if(response.getStatus() == 200){
+				Message[] temp = response.readEntity(Message[].class);
+				msgList = Arrays.asList(temp);
 				
-				//Query messages from DB 
-				Query query = em.createQuery(
-					      "SELECT b "
-					      + " FROM Booking b "
-					      + " JOIN b.home h "
-					      + " JOIN h.user u " +
-					      " WHERE u.userId = :p "
-					      + " AND b.bookingConfirmed = :c");
-					      
-				@SuppressWarnings({ "unchecked" })
-				List<Booking> bookingList = query.setParameter("p", userId).setParameter("c", false).getResultList();
-				*/
-				// Save messages in user session
-				/*
-				if(messageList.size() > 0)
-					session.setAttribute("UserMessages", messageList); 
+				if(msgList.size() > 0){
+					session.setAttribute("UserMessages", msgList);					
+				}				
+			}
+			
+			// Set messages as Read
+			WebTarget webResource1 = client.target(MESSAGES_API_URL).path("setRead").path(userId.toString());
+			Invocation.Builder invocationBuilder1 = webResource1.request(MediaType.APPLICATION_JSON);
+			invocationBuilder1.get();
+
+			// Get admin messages
+			WebTarget webResource2 = client.target(MESSAGES_API_URL).path("admin/user").path(userId.toString());
+			Invocation.Builder invocationBuilder2 = webResource2.request(MediaType.APPLICATION_JSON);
+			Response response2 = invocationBuilder2.get();
+			
+			if(response2.getStatus() == 200){
+				MessagesAdmin[] temp = response2.readEntity(MessagesAdmin[].class);
+				adminList = Arrays.asList(temp);
 				
-				// Save admin messages in user session
-				if(messageAdminList.size() > 0)
-					session.setAttribute("AdminMessages", messageAdminList); 
-				
-				if(bookingList.size() > 0)
-					session.setAttribute("bookingList", bookingList); 
-				
-				
-			} catch (JMSException | NotSupportedException | SystemException | SecurityException | IllegalStateException | RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
-				// Treat JMS/JPA Exception
-			}*/
+				if(adminList.size() > 0){
+					session.setAttribute("AdminMessages", adminList);					
+				}				
+			}
+			
+			/*
+			if(bookingList.size() > 0)
+				session.setAttribute("bookingList", bookingList); 
+			*/
+			
 			ReqDispatcher =req.getRequestDispatcher("mensajes.jsp");				
 			
 				
@@ -545,63 +539,79 @@ public class BNBServlet extends HttpServlet {
 		//-----------------------SEND MESSAGE-------------------------------		
 		
 		
-		/*else if(requestURL.toString().equals(path+"SendMessage")){
+		else if(requestURL.toString().equals(path+"SendMessage")){
+
+			Integer userId = (Integer) session.getAttribute("user"); 
 			
-			//Get content from POST message
 			String email = req.getParameter("receiver");
 			String content = req.getParameter("message");
 			
-			// Get userId from session
-			int id = (int) session.getAttribute("user");
-			
-			
-			//Query user using email from DB
-			Query query = em.createQuery("SELECT u "
-				      + " FROM User u "
-				      + " WHERE u.userEmail = :p");
-			
-			@SuppressWarnings("rawtypes")
-			List results = query.setParameter("p", email).getResultList();
-			if (results.isEmpty()){
-				// TODO: Error handling for invalid email
-			}
-			// Email is unique so we can get first result		
-			User userReceiver = (User) results.get(0);
-						
-			// Send message to queue
-			try {
-				SendMessages.sendMessage(id, userReceiver.getUserId(), content, cf, queue);
-			} catch (JMSException e) {
-				// TODO: Error handling for sending message
-			}
+			Client client = ClientBuilder.newClient();
+			WebTarget webResource = client.target("http://localhost:10001/").path("users").path(userId.toString());
+			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+			Response resp = invocationBuilder.get();		
 
+			WebTarget webResource2 = client.target("http://localhost:10001/").path("mail").path(email);
+			Invocation.Builder invocationBuilder2 = webResource2.request(MediaType.APPLICATION_JSON);
+			Response resp2 = invocationBuilder2.get();
+			
+		    User sender = resp.readEntity(User.class);
+		    User receiver = resp2.readEntity(User.class);
+			
+			Message aux = new Message();
+			aux.setMessageContent(content);
+			Date date = new Date();
+			aux.setMessageDate( new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+			aux.setMessageRead((byte) 0);
+			aux.setUser1(sender);
+			aux.setUser2(receiver);
+			
+
+			WebTarget webResource3 = client.target("http://localhost:10006/sendMessage");
+			Invocation.Builder invocationBuilder3 = webResource3.request(MediaType.APPLICATION_JSON);
+			Response resp3 = invocationBuilder3.post(Entity.entity(aux, MediaType.APPLICATION_JSON));
+			
+			// Redirect back to messages
 			res.sendRedirect("mensajes");
 			
-		}*/
+		}
 		
 		//------------------------MESSAGE ADMIN------------------------
 				
-		/*else if(requestURL.equals(path+"SendMessageAdmin")){
-			
-			//Get content from POST message 
+		else if(requestURL.equals(path+"SendMessageAdmin")){
+
+			Integer userId = (Integer) session.getAttribute("user"); 
 			String content = req.getParameter("message");
 			
-			// Get userId from session
-			int id = (int) session.getAttribute("user");
-			
-			// Look for the admin by id
-			Admin admin = em.find(Admin.class, 1);
-			
-			// Send message to queue
-			try {
-				SendMessages.sendMessageAdmin(admin.getAdminId(), id, content, cf, queue);
-			} catch (JMSException e) {
-				// TODO: Error handling for sending message
-			}
+			Client client = ClientBuilder.newClient();
+			WebTarget webResource = client.target("http://localhost:10001/").path("users").path(userId.toString());
+			Invocation.Builder invocationBuilder = webResource.request(MediaType.APPLICATION_JSON);
+			Response resp = invocationBuilder.get();		
 
-			res.sendRedirect("mensajes");
+			WebTarget webResource2 = client.target("http://localhost:10005/admin").path("1");
+			Invocation.Builder invocationBuilder2 = webResource2.request(MediaType.APPLICATION_JSON);
+			Response resp2 = invocationBuilder2.get();
 			
-		}*/
+		    User usr = resp.readEntity(User.class);
+		    Admin adm = resp2.readEntity(Admin.class);
+			
+			MessagesAdmin aux = new MessagesAdmin();
+			aux.setMessageContent(content);
+			Date date = new Date();
+			aux.setMessageDate( new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+			aux.setMessageFromAdmin((byte) 0);
+			aux.setMessageRead((byte) 0);
+			aux.setUser(usr);
+			aux.setAdmin(adm);
+			
+
+			WebTarget webResource3 = client.target("http://localhost:10006/sendAdminMessage");
+			Invocation.Builder invocationBuilder3 = webResource3.request(MediaType.APPLICATION_JSON);
+			Response resp3 = invocationBuilder3.post(Entity.entity(aux, MediaType.APPLICATION_JSON));
+			
+			// Redirect back to messages
+			res.sendRedirect("mensajes");
+		}
 
 		//------------------------BOOKING------------------------
 		

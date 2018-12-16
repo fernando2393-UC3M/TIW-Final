@@ -6,11 +6,11 @@ import java.util.List;
 
 
 /**
- * The persistent class for the ADMIN database table.
+ * The persistent class for the admin database table.
  * 
  */
 @Entity
-@Table(name="ADMIN")
+@Table(name="admin")
 @NamedQuery(name="Admin.findAll", query="SELECT a FROM Admin a")
 public class Admin implements Serializable {
 	private static final long serialVersionUID = 1L;

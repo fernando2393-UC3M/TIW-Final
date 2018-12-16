@@ -8,11 +8,11 @@ import java.util.List;
 
 
 /**
- * The persistent class for the HOME database table.
+ * The persistent class for the home database table.
  * 
  */
 @Entity
-@Table(name="HOME")
+@Table(name="home")
 @NamedQuery(name="Home.findAll", query="SELECT h FROM Home h")
 public class Home implements Serializable {
 	private static final long serialVersionUID = 1L;

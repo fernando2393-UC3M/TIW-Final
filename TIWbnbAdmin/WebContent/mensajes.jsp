@@ -133,7 +133,7 @@
 										if(adminList != null){
 											for(model.MessagesAdmin obj: adminList){												
 												%> <tr> <%
-												if(obj.getMessageRead() == false){
+												if(obj.getMessageRead() == (byte) 0){
 													%> <tr data-status="no-leido" class="no-leido"> <%
 												}
 												else{
@@ -142,20 +142,18 @@
 												%>
 												<td>
 												<div class="media">
-													<h4 class="title"> <%= obj.getUser().getUserEmail() %>
-													</h4>
+													<h4 class="title"> admin </h4>
 												</div>
 												</td>
 												<td>      
 												<div class="media">
-													<p class="summary"><%= obj.getMessageContent() %></p>
-													<p class="meta"><%= (new SimpleDateFormat("yyyy-MM-dd")).format(obj.getMessageDate())  %></p>                                                
+													<p class="summary"><%= obj.getMessageContent() %></p>                                           
 												</div>
 												</td>
 												</tr> 
 												<%
 											}
-										}								
+										}
 										%>                                       
 									</tbody>
 								</table>

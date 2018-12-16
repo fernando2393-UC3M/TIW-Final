@@ -3,6 +3,8 @@ package es.uc3m.tiw.users.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.Date;
 
 
@@ -33,13 +35,15 @@ public class Message implements Serializable {
 	private byte messageRead;
 
 	// many-to-one association to User
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name="MESSAGE_SENDER_ID")
+    @JsonManagedReference
 	private User user1;
 
 	// many-to-one association to User
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name="MESSAGE_RECEIVER_ID")
+    @JsonManagedReference
 	private User user2;
 
 	public Message() {

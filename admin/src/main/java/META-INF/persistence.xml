@@ -5,6 +5,10 @@
 		<jta-data-source>tiwbnb_ds</jta-data-source>
 		<class>es.uc3m.tiw.admin.model.Admin</class>
 		<class>es.uc3m.tiw.admin.model.MessagesAdmin</class>
+		<class>es.uc3m.tiw.admin.model.Booking</class>
+		<class>es.uc3m.tiw.admin.model.Home</class>
+		<class>es.uc3m.tiw.admin.model.User</class>
+		<class>es.uc3m.tiw.admin.model.Message</class>
 		<properties>
 			<property name="javax.persistence.schema-generation.database.action" value="create"/>
 			<property name="eclipselink.logging.level" value="FINE"/>

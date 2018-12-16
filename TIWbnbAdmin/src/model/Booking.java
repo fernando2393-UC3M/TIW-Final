@@ -3,14 +3,15 @@ package model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
+import java.math.BigInteger;
 
 
 /**
- * The persistent class for the BOOKING database table.
+ * The persistent class for the booking database table.
  * 
  */
 @Entity
-@Table(name="BOOKING")
+@Table(name="booking")
 @NamedQuery(name="Booking.findAll", query="SELECT b FROM Booking b")
 public class Booking implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -21,7 +22,7 @@ public class Booking implements Serializable {
 	private int bookingId;
 
 	@Column(name="BOOKING_CARD_NUM")
-	private int bookingCardNum;
+	private BigInteger bookingCardNum;
 
 	@Column(name="BOOKING_CONFIRMED")
 	private byte bookingConfirmed;
@@ -40,15 +41,15 @@ public class Booking implements Serializable {
 	@Column(name="BOOKING_EXP_CODE")
 	private String bookingExpCode;
 
-	//bi-directional many-to-one association to Home
-	@ManyToOne
-	@JoinColumn(name="BOOKING_HOME_ID")
-	private Home home;
-
 	//bi-directional many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="BOOKING_USER_ID")
 	private User user;
+
+	//bi-directional many-to-one association to Home
+	@ManyToOne
+	@JoinColumn(name="BOOKING_HOME_ID")
+	private Home home;
 
 	public Booking() {
 	}
@@ -61,11 +62,11 @@ public class Booking implements Serializable {
 		this.bookingId = bookingId;
 	}
 
-	public int getBookingCardNum() {
+	public BigInteger getBookingCardNum() {
 		return this.bookingCardNum;
 	}
 
-	public void setBookingCardNum(int bookingCardNum) {
+	public void setBookingCardNum(BigInteger bookingCardNum) {
 		this.bookingCardNum = bookingCardNum;
 	}
 
@@ -109,20 +110,20 @@ public class Booking implements Serializable {
 		this.bookingExpCode = bookingExpCode;
 	}
 
-	public Home getHome() {
-		return this.home;
-	}
-
-	public void setHome(Home home) {
-		this.home = home;
-	}
-
 	public User getUser() {
 		return this.user;
 	}
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public Home getHome() {
+		return this.home;
+	}
+
+	public void setHome(Home home) {
+		this.home = home;
 	}
 
 }

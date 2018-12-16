@@ -64,6 +64,20 @@ public class UsersController {
 		return response;
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value="/mail/{email}")
+	public ResponseEntity<User> getUserByUserEmail2(@PathVariable String email){
+		User user = daoUs.findByUserEmail(email).orElse(null);
+		ResponseEntity<User> response;
+		
+		if(user == null) {
+			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			response = new ResponseEntity<>(user, HttpStatus.ACCEPTED);
+		}
+		
+		return response;
+	}
+	
 	@RequestMapping(method=RequestMethod.GET, value="/users/{email}/{password}")
 	public ResponseEntity<User> getUserByUserEmailAndUserPassword(@PathVariable String email,
 											@PathVariable String password){

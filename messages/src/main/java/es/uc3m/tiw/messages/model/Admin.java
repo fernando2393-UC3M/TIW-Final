@@ -30,8 +30,8 @@ public class Admin implements Serializable {
 	private String adminPassword;
 
 	//bi-directional many-to-one association to MessagesAdmin
-	@OneToMany(mappedBy="admin")
-    @JsonManagedReference
+	@OneToMany(mappedBy="admin", fetch = FetchType.EAGER)
+    @JsonManagedReference(value="admin")
 	private List<MessagesAdmin> messagesAdmins;
 
 	public Admin() {
