@@ -31,19 +31,6 @@ public class HomesController {
 	
 	@Autowired
 	UsersDao daoUs;
-
-	/*@RequestMapping(method=RequestMethod.POST, value="/homes")
-	public ResponseEntity <List<Home>> getHomes(){
-		List<Home> homeList = daoHome.findAll();
-		ResponseEntity<List<Home>> response;
-		System.out.println("AQUI");
-		if(homeList.size() == 0) {
-			response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		} else {
-			response = new ResponseEntity<>(homeList, HttpStatus.OK);
-		}
-		return response;
-	}*/
 	
 	@RequestMapping(method=RequestMethod.GET, value="/homes/{id}")
 	public ResponseEntity<Home> getHomeByHomeId(@PathVariable int id){
@@ -66,14 +53,10 @@ public class HomesController {
 													@RequestParam(name="homeAdults", required=true) int adults,
 													@RequestParam(name="homeKids", required=true) int kids)
 	{	
-		//Main query get matching: city, type of home, guests
-		System.out.println("Home city is: " + city);
-		
-		
+			
 		if(city.equals("all")){
 			List<Home> homeList = daoHome.findAll();
 			ResponseEntity<List<Home>> response;
-			System.out.println("AQUI");
 			if(homeList.size() == 0) {
 				response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			} else {
