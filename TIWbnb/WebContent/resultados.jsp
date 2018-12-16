@@ -158,7 +158,7 @@
 							   	out.println("<label>" + curr.getHomeName() + "</label>");
 							   	out.println("<a class=\"info\" href=\"detail?id=" + curr.getHomeId() +"\"></a>");
 							   	out.println("<br>");
-							   	out.println("<a href=\"alojamiento?id=" + curr.getHomeId() + "\"><img alt=\"" + curr.getHomeName() + "\" src=\"" + curr.getHomePhotos() + "\" onerror=\"this.src='images/Airbnb.jpg'\" max></a>");
+							   	out.println("<a href=\"alojamiento?id=" + curr.getHomeId() + "\"><img height=\"400\" width=\"400\" alt=\"" + curr.getHomeName() + "\" src=\"" + curr.getHomePhotos() + "\" onerror=\"this.src='images/Airbnb.jpg'\" max></a>");
 							   	out.println("</div>");
 							   	out.println("<br>");
 							   	//out.println("<div class=\"col-xxs-12 col-xs-12 mt\">");
