@@ -154,7 +154,6 @@
 								int guests = home.getHomeGuests();
 								String type = home.getHomeType();
 								
-								
 								out.println("<div class=\"col-md-12 animate-box\">");
 								out.println("<h2 class=\"heading-title\">"+name+"</h2>");
 								out.println("</div>");
@@ -183,8 +182,8 @@
                         </div>
                         <div class="col-xxs-12 col-xs-6 mt">
 				         	<form class="form-sendmsg" METHOD="POST" ACTION="SendMessage">
-					     	<input type="email" id="receiver" name="receiver" placeholder=<%= home.getUser().getUserEmail() %>>
-							<textarea id="message" class="text" rows="4" cols="50" name="message" >Enter text here...</textarea>
+				         	<input type="hidden" id="receiver" name="receiver"  value=<%= home.getUser().getUserEmail() %> />
+							<textarea id="message" class="text" rows="4" cols="25" name="message" >Enter text here...</textarea>
 							<button type="submit" formmethod="post">Contactar</button>
 							</form>
                         </div>
